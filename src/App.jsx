@@ -1,22 +1,19 @@
-import { useState } from "react";
-import { SidebarContext } from "./contexts/sidebarContext";
+import AdminContext from "./contexts/SidebarContext";
 import "./index.css";
 import Navbar from "./layouts/navbar/Navbar";
 import Sidebar from "./layouts/sidebar/Sidebar";
 import Page from "./pages/Page";
 const App = () => {
-  const [openSidebar, setOpenSidebar] = useState(false);
-
   return (
-   <SidebarContext.Provider value={{openSidebar ,setOpenSidebar}}>
-    <div>
-    <Navbar/>
-    <div className="flex">
-      <Sidebar/>
-      <Page/>
-    </div>
-   </div>
-   </SidebarContext.Provider>
+    <AdminContext>
+      <div>
+        <Navbar />
+        <div className="flex">
+          <Sidebar />
+          <Page />
+        </div>
+      </div>
+    </AdminContext>
   );
 };
 

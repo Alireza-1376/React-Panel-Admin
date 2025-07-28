@@ -4,9 +4,9 @@ import Dashboard from "./dashboard/Dashboard";
 import Shop from "./shop/Shop";
 import Orders from "./orders/Orders";
 import Users from "./users/Users";
-import { SidebarContext } from "../../contexts/sidebarContext";
+import { SidebarContext } from "../../contexts/SidebarContext";
 const Sidebar = () => {
-  const {openSidebar,setOpenSidebar} =useContext(SidebarContext)
+  const { openSidebar, setOpenSidebar } = useContext(SidebarContext);
   return (
     <div
       className={`${
@@ -40,14 +40,14 @@ const Sidebar = () => {
           علیرضا حبیبی
         </p>
       </div>
-     
-      <Dashboard openSidebar={openSidebar}/>
-      
-      <Shop openSidebar={openSidebar}/>
-      
-      <Orders openSidebar={openSidebar}/>
-      
-      <Users openSidebar={openSidebar}/>
+
+      <Dashboard openSidebar={openSidebar} />
+
+      <Shop openSidebar={openSidebar} />
+
+      <Orders openSidebar={openSidebar} />
+
+      <Users openSidebar={openSidebar} />
     </div>
   );
 };
