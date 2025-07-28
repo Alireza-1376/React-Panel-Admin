@@ -6,7 +6,7 @@ import Page from "./pages/Page";
 const App = () => {
   return (
     <AdminContext>
-      <div>
+      <div className="overflow-hidden">
         <Navbar />
         <div className="flex">
           <Sidebar />
