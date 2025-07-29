@@ -4,7 +4,7 @@ import Table from "./Table";
 const Dashboard = () => {
     
   return (
-    <div className="p-4 space-y-6 h-[92vh] mt-[59.9px] overflow-y-auto overflow-x-hidden">
+    <div className="p-4 space-y-6 mt-[71.5px] overflow-y-auto overflow-x-hidden">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <ItemsDashboard
           name="basket"

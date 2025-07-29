@@ -11,7 +11,7 @@ const Navbar = () => {
       onClick={() => {
         setOpenSidebar(false);
       }}
-      className="bg-gray-800 flex justify-between items-center h-[8vh] px-4 fixed top-0 right-0 left-0"
+      className="bg-gray-800 flex justify-between items-center py-3 px-4 h-[8vh] fixed top-0 right-0 left-0"
     >
       <div className="flex items-center gap-3">
         <FaBars
