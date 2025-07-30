@@ -24,7 +24,7 @@ const ModalCategory = ({setCategoryModal}) => {
                 </div>
                 <div  className="flex justify-center">
                     <button className="bg-blue-300/50 border border-gray-400 w-24 py-2 px-4">تصویر</button>
-                    <input type="file" className=" file:bg-blue-300/50 file:border-0 file:py-2 focus:outline-none w-3/4 md:w-1/2 border border-gray-400"/>
+                    <input type="file" className=" file:bg-blue-300/50 file:border-0 file:py-[11px] focus:outline-none w-3/4 md:w-1/2 border border-gray-400"/>
                 </div>
                 <div>
                     <label class="inline-flex items-center mb-5 cursor-pointer">

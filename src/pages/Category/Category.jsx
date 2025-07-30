@@ -27,7 +27,7 @@ const Category = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="border border-gray-300">
+            <tr className="border hover:bg-gray-100 border-gray-300">
               <td className="border border-gray-300 text-center p-2">1</td>
               <td className="border border-gray-300 text-center p-2">دسته شماره فلان</td>
               <td className="border border-gray-300 text-center p-2">فعال</td>
@@ -46,7 +46,7 @@ const Category = () => {
                 </button>
               </td>
             </tr>
-            <tr className="border border-gray-300">
+            <tr className="border hover:bg-gray-100 border-gray-300">
               <td className="border border-gray-300 text-center p-2">1</td>
               <td className="border border-gray-300 text-center p-2">دسته شماره فلان</td>
               <td className="border border-gray-300 text-center p-2">فعال</td>
@@ -65,7 +65,7 @@ const Category = () => {
                 </button>
               </td>
             </tr>
-             <tr className="border border-gray-300">
+             <tr className="border hover:bg-gray-100 border-gray-300">
               <td className="border border-gray-300 text-center p-2">1</td>
               <td className="border border-gray-300 text-center p-2">دسته شماره فلان</td>
               <td className="border border-gray-300 text-center p-2">فعال</td>
@@ -84,7 +84,7 @@ const Category = () => {
                 </button>
               </td>
             </tr>
-             <tr className="border border-gray-300">
+             <tr className="border hover:bg-gray-100 border-gray-300">
               <td className="border border-gray-300 text-center p-2">1</td>
               <td className="border border-gray-300 text-center p-2">دسته شماره فلان</td>
               <td className="border border-gray-300 text-center p-2">فعال</td>

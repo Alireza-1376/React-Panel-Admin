@@ -1,12 +1,9 @@
-@import url('../public/fonts.css');
+@import url("../public/fonts.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-body{
+body {
   font-family: "BYekan";
 }
-/* .chart{
-  width: 50vw;
-} */
+
