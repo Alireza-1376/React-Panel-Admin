@@ -26,6 +26,12 @@ const Products = () => {
       title: "ccc",
       price: "333",
     },
+    {
+      id: 4,
+      category: "ddd",
+      title: "ddd",
+      price: "ddd",
+    },
   ];
 
   const dataInfo = [
@@ -70,25 +76,7 @@ const Products = () => {
         <Tabel data={data} dataInfo={dataInfo} tabelActions={tabelActions}/>
       </div>
 
-      <div className="p-4 flex justify-center">
-        <ul className="flex items-center border border-slate-300 bg-white divide-x-2" dir="ltr">
-            <li className="p-3 text-blue-500 font-bold cursor-pointer">
-                <Icon name="chevronLeft" size={14}/>
-            </li>
-            <li className="p-2 px-4 text-blue-500 font-bold cursor-pointer">
-                <a href="">1</a>
-            </li>
-            <li className="p-2 px-4 text-blue-500 font-bold cursor-pointer">
-                <a href="">2</a>
-            </li>
-            <li className="p-2 px-4 text-blue-500 font-bold cursor-pointer">
-                <a href="">3</a>
-            </li>
-            <li className="p-3 text-blue-500 font-bold cursor-pointer">
-                <Icon name="chevronRight" size={14}/>
-            </li>
-        </ul>
-      </div>
+      
       {showModal && <ModalProduct />}
     </div>
     );
