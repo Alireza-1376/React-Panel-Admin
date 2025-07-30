@@ -1,18 +1,12 @@
+import Modal from "../../components/Modal";
 import Icon from "../../layouts/sidebar/Icons";
 
-const ModalProduct = ({ setProductModal }) => {
+const ModalProduct = () => {
   return (
-    <div className="bg-gray-100 w-screen h-screen absolute overflow-x-hidden top-0 right-0 left-0 z-30 bottom-0">
-      <div className="flex justify-between items-center border-b border-gray-300 p-4">
-        <h2 className="text-2xl">افزودن محصول جدید</h2>
-        <button
-          onClick={() => {
-            setProductModal(false);
-          }}
-        >
-          <Icon name="xMark" size={30} />
-        </button>
-      </div>
+    <Modal
+    title="افزودن محصول جدید"
+    
+    >
       <form className="text-center space-y-4 mt-4 p-4">
         <div className="flex flex-col gap-1">
           <div className="flex justify-center">
@@ -141,7 +135,7 @@ const ModalProduct = ({ setProductModal }) => {
           </button>
         </div>
       </form>
-    </div>
+    </Modal>
   );
 };
 

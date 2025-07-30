@@ -1,14 +1,13 @@
-import Icon from "../../layouts/sidebar/Icons";
+import Modal from "../../components/Modal";
 
-const ModalCategory = ({setCategoryModal}) => {
+
+
+const ModalCategory = () => {
     return (
-        <div className="bg-gray-100 w-screen h-screen absolute top-0 right-0 left-0 z-30 bottom-0">
-            <div className="flex justify-between items-center border-b border-gray-300 p-4">
-                <h2 className="text-2xl">افزودن دسته محصولات</h2>
-                <button onClick={()=>{setCategoryModal(false)}}>
-                    <Icon name="xMark" size={30}/>
-                </button>
-            </div>
+        
+        <Modal 
+        title="افزودن دسته محصولات"
+        >
             <form className="text-center space-y-4 mt-4 p-4">
                 <div className="flex justify-center">
                     <button className="bg-blue-300/50 border border-gray-400 py-2 w-24 px-4">دسته والد</button>
@@ -27,7 +26,7 @@ const ModalCategory = ({setCategoryModal}) => {
                     <input type="file" className=" file:bg-blue-300/50 file:border-0 file:py-[11px] focus:outline-none w-3/4 md:w-1/2 border border-gray-400"/>
                 </div>
                 <div>
-                    <label class="inline-flex items-center mb-5 cursor-pointer">
+                    <label className="inline-flex items-center mb-5 cursor-pointer">
                         <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 pl-4">وضعیت فعال</span>
                         <input type="checkbox" value="" className="sr-only peer" />
                         <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
@@ -37,7 +36,8 @@ const ModalCategory = ({setCategoryModal}) => {
                     <button className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>
                 </div>
             </form>
-        </div>
+        </Modal>
+        
     );
 }
 
