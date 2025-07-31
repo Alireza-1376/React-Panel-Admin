@@ -6,29 +6,29 @@ import { ModalContext } from '../../contexts/ModalContext';
 import Tabel from '../../components/Tabel';
 
 const Products = () => {
-  const {showModal ,setShowModal} = useContext(ModalContext)
+  const { showModal, setShowModal } = useContext(ModalContext)
   const data = [
     {
       id: 1,
-      category: "aaa",
+      category: "alireza",
       title: "aaa",
       price: "111",
     },
     {
       id: 2,
-      category: "bbb",
+      category: "habibi",
       title: "bbb",
       price: "222",
     },
     {
       id: 3,
-      category: "ccc",
+      category: "mahsa",
       title: "ccc",
       price: "333",
     },
     {
       id: 4,
-      category: "ddd",
+      category: "sabeti",
       title: "ddd",
       price: "ddd",
     },
@@ -40,46 +40,36 @@ const Products = () => {
     { field: "title", value: "وضعیت" },
     { field: "price", value: "قیمت" },
   ];
-  const tabelActions ={
-    title :"عملیات" ,
-    icons :(id)=>{
+  const tabelActions = {
+    title: "عملیات",
+    icons: (id) => {
       return (
         <td className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-           <button onClick={()=>{console.log(id)}} className="text-yellow-500">
-              <Icon name="pen" size={16} />
-           </button>
-           <button className="text-green-500">
-              <Icon name="plus" size={16} />
-           </button>
-           <button className="text-red-500">
-              <Icon name="xMark" size={16} />
-           </button>
+          <button onClick={() => { console.log(id) }} className="text-yellow-500">
+            <Icon name="pen" size={16} />
+          </button>
+          <button className="text-green-500">
+            <Icon name="plus" size={16} />
+          </button>
+          <button className="text-red-500">
+            <Icon name="xMark" size={16} />
+          </button>
         </td>
       )
     }
   }
-    return (
-        <div className="mt-[72.5px] overflow-hidden">
+  return (
+    <div className="mt-[72.5px] overflow-hidden">
       <h2 className="text-center text-2xl py-6">مدیریت محصولات</h2>
 
-      <div className="flex justify-between p-4">
-        <div className="w-1/2 flex items-center">
-          <button className="bg-blue-300/50 border border-gray-400 py-2 px-4">جستجو</button>
-          <input placeholder="قسمتی از عنوان را وارد کنید" type="text" className="focus:outline-none p-2 w-4/5 md:w-1/2 border border-gray-400"/>
-        </div>
-        <div onClick={()=>{setShowModal(true)}} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
-          <Icon name="plus" size={18} />
-        </div>
-      </div>
-
       <div id="products-table" className="m-4 overflow-x-auto">
-        <Tabel data={data} dataInfo={dataInfo} tabelActions={tabelActions}/>
+        <Tabel numOfData={1} data={data} dataInfo={dataInfo} tabelActions={tabelActions} title="جستجو" placeholder="قسمتی از متن را وارد کنید"/>
       </div>
 
-      
+
       {showModal && <ModalProduct />}
     </div>
-    );
+  );
 }
 
 export default Products;
