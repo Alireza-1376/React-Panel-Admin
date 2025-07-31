@@ -1,16 +1,18 @@
 import { useContext } from "react";
 import Icon from "./Icons";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import { NavLink } from "react-router-dom";
 
-const Item = ({ text, name, size }) => {
+const Item = ({ text, name, size ,target}) => {
   const { openSidebar } = useContext(SidebarContext);
   return (
-    <div>
-      <a
+    <div className="">
+      <NavLink
+      to={target}
         href=""
         className={`${
           openSidebar == false ? "justify-center" : ""
-        }  flex items-center gap-4 text-sm`}
+        } flex items-center gap-4 text-sm px-4 py-0.5 transition-all duration-200`}
       >
         <Icon name={name} size={size} />
         <span
@@ -22,7 +24,7 @@ const Item = ({ text, name, size }) => {
         >
           {text}
         </span>
-      </a>
+      </NavLink>
     </div>
   );
 };

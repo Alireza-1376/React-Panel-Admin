@@ -7,3 +7,6 @@ body {
   font-family: "BYekan";
 }
 
+.active{
+  background-color: rgb(150, 150, 150);
+}
