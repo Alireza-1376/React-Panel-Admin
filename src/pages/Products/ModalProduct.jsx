@@ -5,7 +5,7 @@ const ModalProduct = () => {
   return (
     <Modal
     title="افزودن محصول جدید"
-    
+    screen={true}
     >
       <form className="text-center space-y-4 mt-4 p-4">
         <div className="flex flex-col gap-1">

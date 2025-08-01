@@ -3,7 +3,7 @@ import Icon from "../layouts/sidebar/Icons";
 import { ModalContext } from "../contexts/ModalContext";
 
 
-const Tabel = ({ numOfData, data, dataInfo, tabelActions, title, placeholder }) => {
+const Tabel = ({ numOfData, data, dataInfo, tabelActions,colors, title, placeholder , logos}) => {
   const { showModal, setShowModal } = useContext(ModalContext)
   const [currtPage, setCurrPage] = useState(1);
   const [dataRows, setDataRows] = useState([]);
@@ -38,7 +38,7 @@ const Tabel = ({ numOfData, data, dataInfo, tabelActions, title, placeholder }) 
 
   return (
     <>
-      <div className="flex justify-between p-4">
+      <div className="flex justify-between py-4">
         <div className="w-1/2 flex items-center">
           <button className="bg-blue-300/50 border border-gray-400 py-2 px-4">{title}</button>
           <input onChange={(e)=>{setSearchInput(e.target.value)}} placeholder={placeholder} type="text" className="focus:outline-none p-2 w-4/5 md:w-1/2 border border-gray-400" />
@@ -63,9 +63,15 @@ const Tabel = ({ numOfData, data, dataInfo, tabelActions, title, placeholder }) 
                 </th>
               );
             })}
-            <th className="border border-gray-300 text-center p-2">
+            {colors ? <th className="border border-gray-300 text-center p-2">
+              {colors.bgColor}
+            </th>: null}
+            {logos ? <th className="border border-gray-300 text-center p-2">
+              {logos.name}
+            </th>: null}
+            {tabelActions ? <th className="border border-gray-300 text-center p-2">
               {tabelActions.title}
-            </th>
+            </th>: null}
           </tr>
         </thead>
         <tbody>
@@ -85,7 +91,9 @@ const Tabel = ({ numOfData, data, dataInfo, tabelActions, title, placeholder }) 
                     </td>
                   );
                 })}
-                {tabelActions.icons(d.id)}
+                {colors ? <td className="p-2">{colors.colors(d.codeColor)}</td> : null}
+                {logos ? <td className="p-2">{logos.logos(d.logo)}</td> : null}
+                {tabelActions ? tabelActions.icons(d.id) : null}
               </tr>
             );
           })}

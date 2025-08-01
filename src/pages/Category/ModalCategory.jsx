@@ -7,6 +7,7 @@ const ModalCategory = () => {
         
         <Modal 
         title="افزودن دسته محصولات"
+        screen={true}
         >
             <form className="text-center space-y-4 mt-4 p-4">
                 <div className="flex justify-center">
