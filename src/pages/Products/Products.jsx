@@ -4,9 +4,11 @@ import Icon from '../../layouts/sidebar/Icons';
 import ModalProduct from './ModalProduct';
 import { ModalContext } from '../../contexts/ModalContext';
 import Tabel from '../../components/Tabel';
+import EditProduct from './EditProduct';
+import AddProduct from './AddProduct';
 
 const Products = () => {
-  const { showModal, setShowModal } = useContext(ModalContext)
+  const { showModal, setShowModal ,editModal ,setEditModal ,addProperty ,setAddProperty} = useContext(ModalContext)
   const data = [
     {
       id: 1,
@@ -44,17 +46,17 @@ const Products = () => {
     title: "عملیات",
     icons: (id) => {
       return (
-        <td className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-          <button onClick={() => { console.log(id) }} className="text-yellow-500">
+        <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
+          <button onClick={() => { setEditModal(true) }} className="text-yellow-500">
             <Icon name="pen" size={16} />
           </button>
-          <button className="text-green-500">
+          <button onClick={() => { setAddProperty(true) }} className="text-green-500">
             <Icon name="plus" size={16} />
           </button>
           <button className="text-red-500">
             <Icon name="xMark" size={16} />
           </button>
-        </td>
+        </div>
       )
     }
   }
@@ -66,8 +68,9 @@ const Products = () => {
         <Tabel numOfData={1} data={data} dataInfo={dataInfo} tabelActions={tabelActions} title="جستجو" placeholder="قسمتی از متن را وارد کنید"/>
       </div>
 
-
       {showModal && <ModalProduct />}
+      {editModal && <EditProduct />}
+      {addProperty && <AddProduct />}
     </div>
   );
 }

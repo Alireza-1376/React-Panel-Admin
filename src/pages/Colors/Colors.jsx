@@ -44,11 +44,11 @@ const Colors = () => {
 
         icons: (id) => {
             return (
-                <td className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
+                <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
                     <button className="text-red-500">
                         <Icon name="xMark" size={16} />
                     </button>
-                </td>
+                </div>
             )
         },
 

@@ -4,11 +4,11 @@ import Title from "../Title";
 const Users = () => {
   
   return (
-    <div className={`space-y-1.5`}>
+    <div className={`space-y-0.5`}>
       <Title title="کاربران و همکاران"/>
-      <Item text="مشاهده کاربران" size={18} name="people" target="/test"/>
-      <Item text="نقش ها" size={18} name="person" target="/test"/>
-      <Item text="مجوزها" size={18} name="shield" target="/test"/>
+      <Item text="مشاهده کاربران" size={18} name="people" target="/users"/>
+      <Item text="نقش ها" size={18} name="person" target="/roles"/>
+      <Item text="مجوزها" size={18} name="shield" target="/permissions"/>
     </div>
   );
 };

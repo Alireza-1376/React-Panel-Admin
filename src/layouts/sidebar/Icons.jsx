@@ -1,8 +1,8 @@
 import { IoIosPeople ,IoIosPerson ,IoIosCar } from "react-icons/io";
-import {  } from "react-icons/fa6";
 import { HiMiniShoppingCart ,HiOutlineXMark ,HiChevronDoubleLeft ,HiChevronDoubleRight } from "react-icons/hi2";
 import { VscDashboard } from "react-icons/vsc";
-import { FaBarsStaggered,FaPercent,FaPlus,FaPenToSquare ,FaShareNodes ,FaPalette,FaPagelines ,FaCube ,FaCopyright ,FaShieldHalved,FaBasketShopping ,FaMoneyCheckDollar } from "react-icons/fa6";
+import { BiSolidMessageRounded } from "react-icons/bi";
+import {FaCircleQuestion , FaCheck, FaBarsStaggered , FaPercent , FaPlus , FaPenToSquare ,FaShareNodes ,FaPalette,FaPagelines ,FaCube ,FaCopyright ,FaShieldHalved,FaBasketShopping ,FaMoneyCheckDollar } from "react-icons/fa6";
 const icons ={
     people : IoIosPeople ,
     person : IoIosPerson ,
@@ -24,6 +24,9 @@ const icons ={
     plus :FaPlus,
     chevronRight :HiChevronDoubleRight ,
     chevronLeft :HiChevronDoubleLeft ,
+    check : FaCheck,
+    question :FaCircleQuestion,
+    message :BiSolidMessageRounded 
 }
 const Icon = ({name , size}) => {
     const IconComponent =icons[name]

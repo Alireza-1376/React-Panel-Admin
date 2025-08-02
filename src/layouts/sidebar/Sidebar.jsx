@@ -6,6 +6,7 @@ import Orders from "./orders/Orders";
 import Users from "./users/Users";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import Icon from "./Icons";
+import Communications from "./communications/Communications";
 const Sidebar = () => {
   const { openSidebar, setOpenSidebar } = useContext(SidebarContext);
   return (
@@ -25,6 +26,7 @@ const Sidebar = () => {
       <Orders openSidebar={openSidebar} />
 
       <Users openSidebar={openSidebar} />
+      <Communications openSidebar={openSidebar}/>
     </div>
   );
 };

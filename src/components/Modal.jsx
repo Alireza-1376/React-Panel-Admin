@@ -3,7 +3,7 @@ import { ModalContext } from "../contexts/ModalContext";
 import Icon from "../layouts/sidebar/Icons";
 
 const Modal = ({ children, title ,screen}) => {
-    const { setShowModal } = useContext(ModalContext);
+    const { setShowModal ,setEditModal ,setAddProperty ,setShowDetail } = useContext(ModalContext);
     return (
         <>
         {screen==false ? <div onClick={()=>{setShowModal(false)}} className="w-screen h-screen bg-slate-600/50 z-20 right-0 left-0 absolute top-0"></div> : null}
@@ -13,6 +13,9 @@ const Modal = ({ children, title ,screen}) => {
                 <button
                     onClick={() => {
                         setShowModal(false);
+                        setEditModal(false);
+                        setAddProperty(false);
+                        setShowDetail(false)
                     }}
                 >
                     <Icon name="xMark" size={30} />

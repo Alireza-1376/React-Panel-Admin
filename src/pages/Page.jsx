@@ -7,6 +7,15 @@ import { Route, Routes } from "react-router-dom";
 import Colors from "./Colors/Colors";
 import Guranty from "./Gurantys/Gurantys";
 import Brands from "./Brands/Brands";
+import Discounts from "./Discounts/Discounts";
+import Baskets from "./Baskets/Baskets";
+import Orders from "./Orders/Orders";
+import Sends from "./Sends/Sends";
+import Users from "./Users/Users";
+import Roles from "./Roles/Roles";
+import Permissions from "./Permissions/Permissions";
+import Questions from "./Question/Question";
+import Comments from "./Comments/Comments";
 
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
@@ -19,6 +28,15 @@ const Page = () => {
         <Route path="/colors" element={<Colors />}/>
         <Route path="/gurantys" element={<Guranty />}/>
         <Route path="/brands" element={<Brands />}/>
+        <Route path="/discounts" element={<Discounts />}/>
+        <Route path="/baskets" element={<Baskets />}/>
+        <Route path="/orders" element={<Orders />}/>
+        <Route path="/sends" element={<Sends />}/>
+        <Route path="/users" element={<Users />}/>
+        <Route path="/roles" element={<Roles />}/>
+        <Route path="/permissions" element={<Permissions />}/>
+        <Route path="/questions" element={<Questions />}/>
+        <Route path="/comments" element={<Comments />}/>
         <Route path="*" element={<Dashboard />}/>
       </Routes>
     </div>
