@@ -1,23 +1,20 @@
-import { Toaster } from "react-hot-toast";
+import { Navigate, useLocation } from "react-router-dom";
 import Admin from "./Auth/Admin";
+import Login from "./Auth/Login";
 import ModalProvider from "./contexts/ModalContext";
 import AdminContext from "./contexts/SidebarContext";
 import "./index.css";
-import { Navigate, useLocation } from "react-router-dom";
-// import LogIn from "./Auth/Login";
-import Login from "./pages/Login/Login";
+import { Toaster } from "react-hot-toast";
 import useLogin from "./hooks/useLogin";
-
-
 const App = () => {
   const location =useLocation();
-  const [isLogin ,isLoading] =useLogin()
+  const [isLoading ,isLogin] =useLogin()
   return (
     <ModalProvider>
-      <AdminContext>
-        <Toaster />
-        {location.pathname.includes("/auth/login") ? (isLogin==true ? <Navigate to="/" /> : <Login/>)  : <Admin /> }
-      </AdminContext>
+    <AdminContext>
+      <Toaster />
+      {location.pathname.includes('/auth/login') ? <Login/> :<Admin />}
+    </AdminContext>
     </ModalProvider>
   );
 };

@@ -20,7 +20,7 @@ import Comments from "./Comments/Comments";
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
   return (
-    <div id="content" onClick={() => { setOpenSidebar(false) }} className="bg-[url('./public/images/background.jpg')] h-[100vh] overflow-x-auto bg-cover bg-yellow-100 w-full">
+    <div id="content" onClick={() => { setOpenSidebar(false) }} className="bg-[url('./public/images/background.jpg')] h-[100vh] overflow-x-auto bg-cover w-full">
       <Routes>
         <Route path="/" element={<Dashboard/>}/>
         <Route path="/categories" element={<Category />}/>
