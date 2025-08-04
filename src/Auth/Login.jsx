@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useLogin from "../hooks/useLogin";
 import { useEffect, useState } from "react";
 import { PuffLoader, PulseLoader } from "react-spinners";
+import { post } from "../services/httpRequest";
 
 
 
@@ -16,23 +17,25 @@ const initialValues = {
     password: "",
     remember: 0,
 }
-const onSubmit = (values, methods , navigate) => {
-    console.log()
-    axios.post("https://ecomadminapi.azhadev.ir/api/auth/login", values).then((res) => {
-        console.log(res)
-        if (res.status == 200) {
+const onSubmit = async (values, methods, navigate) => {
+    try {
+        const response = await post("/auth/login", values)
+        if (response.status == 200) {
             toast.success("ورود با موفقیت انجام شد")
-            localStorage.setItem('token', JSON.stringify(res.data.token))
+            localStorage.setItem('token', JSON.stringify(response.data.token))
             navigate("/")
             methods.setSubmitting(false)
-        } else if (res.status == 202) {
-            return toast.error(res.data.phone)
+        } else if (response.status == 202) {
+            toast.error(response.data.phone)
             methods.setSubmitting(false)
-        } else if (res.status == 203) {
-            toast.error(res.data.message)
+        } else if (response.status == 203) {
+            toast.error(response.data.message)
             methods.setSubmitting(false)
         }
-    })
+    } catch (error) {
+        toast.error("متاسفانه مشکلی از سمت سرور رخ داده است")
+    }
+    
 }
 const validationSchema = object({
     phone: string().required('لطفا شماره موبایل خود را وارد کنید'),
@@ -50,7 +53,7 @@ const Login = () => {
         }
     }, [isLoading])
     if (isLoading) {
-        return <div className="flex justify-center items-center h-screen"><PuffLoader color="purple" size={100}/></div> ;
+        return <div className="flex justify-center items-center h-screen"><PuffLoader color="purple" size={100} /></div>;
     }
     if (checkedLogin == "loading") {
         return null;
@@ -62,11 +65,10 @@ const Login = () => {
         return (
             <Formik
                 initialValues={initialValues}
-                onSubmit={(values , methods) => onSubmit(values, methods, navigate)}
+                onSubmit={(values, methods) => onSubmit(values, methods, navigate)}
                 validationSchema={validationSchema}
             >
                 {formik => {
-                    console.log(formik)
                     return <div className="bg-[url('../public/images/background.jpg')] bg-cover w-screen h-screen flex items-center justify-center">
                         <div className="flex items-start justify-center bg-white/40 w-5/6 md:w-4/5 max-w-screen-lg h-4/5 rounded-lg shadow-md">
                             <div className="md:w-1/2 w-full">
@@ -106,8 +108,8 @@ const Login = () => {
                                     </label>
 
                                     <div className="flex justify-center items-center">
-                                        {formik.isSubmitting==false ? <button className="bg-purple-500 text-white w-full py-2 rounded-3xl text-lg mt-4 transition-all duration-200 hover:shadow-md hover:shadow-purple-300">ورود</button> : <PulseLoader className="mt-4
-                                        " color="purple"/>}
+                                        {formik.isSubmitting == false ? <button className="bg-purple-500 text-white w-full py-2 rounded-3xl text-lg mt-4 transition-all duration-200 hover:shadow-md hover:shadow-purple-300">ورود</button> : <PulseLoader className="mt-4
+                                        " color="purple" />}
                                     </div>
 
                                 </Form>
