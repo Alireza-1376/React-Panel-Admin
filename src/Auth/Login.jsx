@@ -4,9 +4,10 @@ import { ErrorMessage, FastField, Form, Formik } from "formik";
 import { object, string } from "yup";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useLogin from "../hooks/useLogin";
 import { useEffect, useState } from "react";
+import { PuffLoader, PulseLoader } from "react-spinners";
 
 
 
@@ -15,17 +16,21 @@ const initialValues = {
     password: "",
     remember: 0,
 }
-const onSubmit = (values, navigate) => {
+const onSubmit = (values, methods , navigate) => {
+    console.log()
     axios.post("https://ecomadminapi.azhadev.ir/api/auth/login", values).then((res) => {
         console.log(res)
         if (res.status == 200) {
             toast.success("ورود با موفقیت انجام شد")
             localStorage.setItem('token', JSON.stringify(res.data.token))
             navigate("/")
+            methods.setSubmitting(false)
         } else if (res.status == 202) {
             return toast.error(res.data.phone)
+            methods.setSubmitting(false)
         } else if (res.status == 203) {
             toast.error(res.data.message)
+            methods.setSubmitting(false)
         }
     })
 }
@@ -45,7 +50,7 @@ const Login = () => {
         }
     }, [isLoading])
     if (isLoading) {
-        return null ;
+        return <div className="flex justify-center items-center h-screen"><PuffLoader color="purple" size={100}/></div> ;
     }
     if (checkedLogin == "loading") {
         return null;
@@ -57,11 +62,11 @@ const Login = () => {
         return (
             <Formik
                 initialValues={initialValues}
-                onSubmit={(values) => onSubmit(values, navigate)}
+                onSubmit={(values , methods) => onSubmit(values, methods, navigate)}
                 validationSchema={validationSchema}
             >
                 {formik => {
-
+                    console.log(formik)
                     return <div className="bg-[url('../public/images/background.jpg')] bg-cover w-screen h-screen flex items-center justify-center">
                         <div className="flex items-start justify-center bg-white/40 w-5/6 md:w-4/5 max-w-screen-lg h-4/5 rounded-lg shadow-md">
                             <div className="md:w-1/2 w-full">
@@ -100,8 +105,9 @@ const Login = () => {
                                         <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">من را به خاطر بسپار</span>
                                     </label>
 
-                                    <div>
-                                        <button className="bg-purple-500 text-white w-full py-2 rounded-3xl text-lg mt-4 transition-all duration-200 hover:shadow-md hover:shadow-purple-300">ورود</button>
+                                    <div className="flex justify-center items-center">
+                                        {formik.isSubmitting==false ? <button className="bg-purple-500 text-white w-full py-2 rounded-3xl text-lg mt-4 transition-all duration-200 hover:shadow-md hover:shadow-purple-300">ورود</button> : <PulseLoader className="mt-4
+                                        " color="purple"/>}
                                     </div>
 
                                 </Form>

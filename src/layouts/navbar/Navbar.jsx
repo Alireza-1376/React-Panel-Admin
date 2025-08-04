@@ -2,10 +2,14 @@ import { FaGripVertical } from "react-icons/fa";
 import { FaRegBell } from "react-icons/fa6";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { FaBars } from "react-icons/fa6";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import Icon from "../sidebar/Icons";
+import { ModalContext } from "../../contexts/ModalContext";
+import { Link } from "react-router-dom";
 const Navbar = () => {
-  const { openSidebar, setOpenSidebar } = useContext(SidebarContext);
+  const { openSidebar, setOpenSidebar} = useContext(SidebarContext);
+  const {gripVertical , setGripVertical} = useContext(ModalContext)
   return (
     <nav
       onClick={() => {
@@ -39,8 +43,29 @@ const Navbar = () => {
             4
           </span>
         </li>
-        <li>
+        <li onClick={(e)=>{setGripVertical(!gripVertical);e.stopPropagation()}} className=" relative">
           <FaGripVertical size={24} className="text-white cursor-pointer" />
+          {gripVertical ? <div className="absolute bg-white w-40 left-0 top-[42px] rounded p-2 shadow-md">
+            <p className="text-center mb-4">علیرضا حبیبی</p>
+            <div className="flex items-center gap-6 hover:bg-gray-200 cursor-pointer mb-3">
+              <Icon name="dashboard" size={20} />
+              <span>داشبورد</span>
+            </div>
+            <div className="flex items-center gap-6 hover:bg-gray-200 cursor-pointer mb-3">
+              <Icon name="send" size={20} />
+              <span>تیکت ها</span>
+            </div>
+            <div className="flex items-center gap-6 hover:bg-gray-200 cursor-pointer mb-2">
+              <Icon name="message" size={20} />
+              <span>پیام ها</span>
+            </div>
+            <hr />
+            <Link to="/logout" className="flex items-center gap-6 hover:bg-gray-200 cursor-pointer mt-2">
+              <Icon name="power" size={20} />
+              <span>خروج</span>
+            </Link>
+          </div> : null}
+
         </li>
         <li>
           <img

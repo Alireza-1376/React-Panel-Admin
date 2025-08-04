@@ -16,11 +16,12 @@ import Roles from "./Roles/Roles";
 import Permissions from "./Permissions/Permissions";
 import Questions from "./Question/Question";
 import Comments from "./Comments/Comments";
+import LogOut from "./Logout/LogOut";
 
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
   return (
-    <div id="content" onClick={() => { setOpenSidebar(false) }} className="bg-[url('./public/images/background.jpg')] h-[100vh] overflow-x-auto bg-cover w-full">
+    <div id="content" onClick={() => { setOpenSidebar(false) }} className=" h-[100vh] overflow-x-auto bg-cover w-full">
       <Routes>
         <Route path="/" element={<Dashboard/>}/>
         <Route path="/categories" element={<Category />}/>
@@ -37,6 +38,7 @@ const Page = () => {
         <Route path="/permissions" element={<Permissions />}/>
         <Route path="/questions" element={<Questions />}/>
         <Route path="/comments" element={<Comments />}/>
+        <Route path="/logout" element={<LogOut />}/>
         <Route path="*" element={<Dashboard />}/>
       </Routes>
     </div>
