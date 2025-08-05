@@ -7,9 +7,9 @@ import { get } from "../../services/httpRequest";
 const LogOut = () => {
     const [isLoading, setIsLoading] = useState(true);
     const token = JSON.parse(localStorage.getItem("token"));
-    async function logout() {
+    async function logout(id) {
         try {
-            const response =await get("/auth/logout",{headers: {Authorization: `Bearer ${token}`}})
+            const response =await get("/auth/logout",id, {Authorization: `Bearer ${token}`})
             setIsLoading(false)
             if (response.status == 200) {
                 toast.success(response.data.message)

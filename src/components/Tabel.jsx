@@ -3,7 +3,7 @@ import Icon from "../layouts/sidebar/Icons";
 import { ModalContext } from "../contexts/ModalContext";
 
 
-const Tabel = ({ numOfData, data, dataInfo, status, tabelActions, colors, title, placeholder, logos }) => {
+const Tabel = ({ numOfData, data, dataInfo, status, addFields, colors, title, placeholder, logos }) => {
   const { showModal, setShowModal } = useContext(ModalContext)
   const [currtPage, setCurrPage] = useState(1);
   const [dataRows, setDataRows] = useState([]);
@@ -11,13 +11,13 @@ const Tabel = ({ numOfData, data, dataInfo, status, tabelActions, colors, title,
   const [numOfPages, setNumOfPages] = useState([]);
   const [seatchInput, setSearchInput] = useState("");
   const [newData, setNewData] = useState([]);
-
+ 
   useEffect(() => {
     let newDataArray = data.filter((item) => {
-      return item.category.includes(seatchInput)
+      return item.title.includes(seatchInput)
     })
     setNewData(newDataArray)
-  }, [seatchInput])
+  }, [seatchInput,data])
 
   useEffect(() => {
     setPages(newData.length / numOfData);
@@ -32,7 +32,7 @@ const Tabel = ({ numOfData, data, dataInfo, status, tabelActions, colors, title,
     let start = currtPage * numOfData - numOfData;
     let end = currtPage * numOfData;
     setDataRows(newData.slice(start, end));
-  }, [currtPage, numOfData, newData]);
+  }, [currtPage, numOfData, newData ]);
 
 
 
@@ -43,7 +43,7 @@ const Tabel = ({ numOfData, data, dataInfo, status, tabelActions, colors, title,
           <button className="bg-blue-300/50 border border-gray-400 py-2 px-4">{title}</button>
           <input onChange={(e) => { setSearchInput(e.target.value) }} placeholder={placeholder} type="text" className="focus:outline-none p-2 w-4/5 md:w-1/2 border border-gray-400" />
         </div>
-        {tabelActions ? <div onClick={() => { setShowModal(true) }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
+        {addFields ? <div onClick={() => { setShowModal(true) }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
           <Icon name="plus" size={18} />
         </div> : null}
       </div>
@@ -70,9 +70,9 @@ const Tabel = ({ numOfData, data, dataInfo, status, tabelActions, colors, title,
               {logos.name}
             </th> : null}
             {status ? <th className="border border-gray-300 text-center p-2">{status.status}</th> : null}
-            {tabelActions ? <th className="border border-gray-300 text-center p-2">
-              {tabelActions.title}
-            </th> : null}
+            {addFields ? addFields.map((item,index)=>{
+              return <th key={index+1} className="border border-gray-300 text-center p-2">{item.title}</th>
+            }) : null}
           </tr>
         </thead>
         <tbody>
@@ -95,7 +95,9 @@ const Tabel = ({ numOfData, data, dataInfo, status, tabelActions, colors, title,
                 {colors ? <td className="p-2">{colors.colors(d.codeColor)}</td> : null}
                 {logos ? <td className="p-2 border border-gray-300">{logos.logos(d.logo)}</td> : null}
                 {status ? <td className="text-center pt-2 px-2">{status.statusToggle()}</td> : null}
-                {tabelActions ? <td className="border border-gray-300">{tabelActions.icons(d.id)}</td> : null}
+                {addFields ? addFields.map((item,index)=>{
+                  return <td key={index+1} className="border border-gray-300 text-center">{item.elements(d)}</td>
+                }) : null}
               </tr>
             );
           })}
@@ -134,7 +136,7 @@ const Tabel = ({ numOfData, data, dataInfo, status, tabelActions, colors, title,
           })}
 
           <button
-            disabled={currtPage == pages}
+            disabled={currtPage == Math.ceil(pages)}
             onClick={() => {
               setCurrPage((prev) => prev + 1);
             }}

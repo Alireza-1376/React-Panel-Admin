@@ -6,10 +6,10 @@ function useLogin() {
     const [isLoading, setIsLoading] = useState(true);
     const [isLogin, setIsLogin] = useState(false);
     const token = JSON.parse(localStorage.getItem('token'))
-    async function getLoginStatus() {
+    async function getLoginStatus(id) {
         if (token) {
             try {
-                const getStatus =await get("/auth/user", { headers: { Authorization: `Bearer ${token}` } })
+                const getStatus =await get("/auth/user", id, { Authorization: `Bearer ${token}` })
                 setIsLoading(false)
                 setIsLogin(getStatus.status == 200 ? true : false)
             } catch (error) {

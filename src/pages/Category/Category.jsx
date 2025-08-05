@@ -1,37 +1,39 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Icon from "../../layouts/sidebar/Icons";
 import ModalCategory from "./ModalCategory";
 import { ModalContext } from "../../contexts/ModalContext";
 import Tabel from "../../components/Tabel";
 import AddProperty from "./AddProperty";
 import EditCategory from "./EditCategory";
+import { get } from "../../services/httpRequest";
+import { elements } from "chart.js";
 
 const Category = () => {
   const { showModal, setShowModal, editModal, setEditModal ,addProperty ,setAddProperty } = useContext(ModalContext);
-  const data = [
-    {
-      id: 1,
-      category: "aaa",
-      title: "aaa",
-      price: "111",
-    },
-    {
-      id: 2,
-      category: "bbb",
-      title: "bbb",
-      price: "222",
-    },
-  ];
+  const [data ,setData] =useState([])
+  const token =JSON.parse(localStorage.getItem("token"))
+  async function getCategories(){
+    try {
+      const response =await get("/admin/categories" , "" ,{Authorization :`Bearer ${token}`})
+      if(response.status==200){
+        setData(response.data.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(()=>{
+    getCategories()
+  },[])
 
   const dataInfo = [
     { field: "id", value: "#" },
-    { field: "category", value: "عنوان" },
-    { field: "title", value: "وضعیت" },
+    { field: "title", value: "عنوان محصول" },
+    { field: "parent_id", value: "والد" },
+    { field: "created_at", value: "تاریخ" },
   ];
-  const tabelActions = {
-    title: "عملیات",
-    icons: () => {
-      return (
+  function icons(){
+    return (
         <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
           <button className="text-blue-500">
             <Icon name="share" size={16} />
@@ -49,14 +51,31 @@ const Category = () => {
           </button>
         </div>
       )
-    }
   }
+  function showInMenu(item){
+    
+    return <span className={`${item.show_in_menu==1 ? "text-green-600" : "text-red-600"}`}>
+      {item.show_in_menu==1 ? "هست" : "نیست"}
+    </span>
+  }
+  const addFields =[
+    {
+      title:"نمایش در منو",
+      elements :(item)=>showInMenu(item)
+    },
+    {
+      title:"عملیات",
+      elements :(item)=>icons(item) ,
+    }
+  ]
+
+  
   return (
     <div className="mt-[72.5px] overflow-hidden">
       <h2 className="text-center text-2xl py-6">مدیریت دسته بندی محصولات</h2>
 
       <div className="p-4">
-        <Tabel numOfData={2} data={data} dataInfo={dataInfo} tabelActions={tabelActions} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
+        <Tabel numOfData={2} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
 
       {showModal && <ModalCategory />}
