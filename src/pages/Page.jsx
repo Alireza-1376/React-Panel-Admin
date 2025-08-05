@@ -23,23 +23,25 @@ const Page = () => {
   return (
     <div id="content" onClick={() => { setOpenSidebar(false) }} className=" h-[100vh] overflow-x-auto bg-cover w-full">
       <Routes>
-        <Route path="/" element={<Dashboard/>}/>
-        <Route path="/categories" element={<Category />}/>
-        <Route path="/products" element={<Products />}/>
-        <Route path="/colors" element={<Colors />}/>
-        <Route path="/gurantys" element={<Guranty />}/>
-        <Route path="/brands" element={<Brands />}/>
-        <Route path="/discounts" element={<Discounts />}/>
-        <Route path="/baskets" element={<Baskets />}/>
-        <Route path="/orders" element={<Orders />}/>
-        <Route path="/sends" element={<Sends />}/>
-        <Route path="/users" element={<Users />}/>
-        <Route path="/roles" element={<Roles />}/>
-        <Route path="/permissions" element={<Permissions />}/>
-        <Route path="/questions" element={<Questions />}/>
-        <Route path="/comments" element={<Comments />}/>
-        <Route path="/logout" element={<LogOut />}/>
-        <Route path="*" element={<Dashboard />}/>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/categories" element={<Category />}>
+          <Route path=":id" />
+        </Route>
+        <Route path="/products" element={<Products />} />
+        <Route path="/colors" element={<Colors />} />
+        <Route path="/gurantys" element={<Guranty />} />
+        <Route path="/brands" element={<Brands />} />
+        <Route path="/discounts" element={<Discounts />} />
+        <Route path="/baskets" element={<Baskets />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/sends" element={<Sends />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/roles" element={<Roles />} />
+        <Route path="/permissions" element={<Permissions />} />
+        <Route path="/questions" element={<Questions />} />
+        <Route path="/comments" element={<Comments />} />
+        <Route path="/logout" element={<LogOut />} />
+        <Route path="*" element={<Dashboard />} />
       </Routes>
     </div>
   );
