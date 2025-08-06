@@ -6,15 +6,16 @@ import Tabel from "../../components/Tabel";
 import AddProperty from "./AddProperty";
 import EditCategory from "./EditCategory";
 import { get } from "../../services/httpRequest";
-import { elements } from "chart.js";
+import Tooltip from "@mui/material/Tooltip";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import CategoriesChildren from "./CategoriesChildren";
+import PrevPage from "../../components/PrevPage";
+import moment from "moment-jalaali";
 
 const Category = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const location =useLocation();
-  console.log(location)
+  const location = useLocation();
   const { showModal, setShowModal, editModal, setEditModal, addProperty, setAddProperty } = useContext(ModalContext);
   const [data, setData] = useState([])
   const token = JSON.parse(localStorage.getItem("token"))
@@ -36,15 +37,13 @@ const Category = () => {
     { field: "id", value: "#" },
     { field: "title", value: "عنوان محصول" },
     { field: "parent_id", value: "والد" },
-    { field: "created_at", value: "تاریخ" },
   ];
   function icons(item) {
-    console.log(item)
     return (
       <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-        {!item.parent_id ? <button title="زیر مجموعه" onClick={() => { navigate(`/categories/${item.id}`,{state:item.title}) }} className="text-blue-500">
+        {!item.parent_id ? <Tooltip title="زیر مجموعه" arrow><button onClick={() => { navigate(`/categories/${item.id}`, { state: item.title }) }} className="text-blue-500">
           <Icon name="share" size={16} />
-        </button> : null}
+        </button></Tooltip> : null}
         <button onClick={() => {
           setEditModal(true)
         }} className="text-yellow-500">
@@ -67,6 +66,10 @@ const Category = () => {
   }
   const addFields = [
     {
+      title: "تاریخ",
+      elements: (item) => moment(item.created_at).format('jYYYY/jM/jD')
+    },
+    {
       title: "نمایش در منو",
       elements: (item) => showInMenu(item)
     },
@@ -80,7 +83,10 @@ const Category = () => {
   return (
     <div className="mt-[72.5px] overflow-hidden">
       <h2 className="text-center text-2xl py-6">مدیریت دسته بندی محصولات</h2>
-      {params.id ?<h2 className="text-center">زیر گروه: {location.state}</h2> : null}
+      <div className="px-4 flex justify-between">
+        <CategoriesChildren />
+        <PrevPage />
+      </div>
       <div className="p-4">
         <Tabel numOfData={2} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
