@@ -10,26 +10,26 @@ const Guranty = () => {
     const data = [
         {
             id: 1,
-            category: "گارانتی 1",
+            title: "گارانتی 1",
             periodGuranty: "12 ماه",
             desc: "توضیحات اجمالی درباره این گارانتی",
         },
         {
             id: 2,
-            category: "گارانتی 1",
+            title: "گارانتی 1",
             periodGuranty: "12 ماه",
             desc: "توضیحات اجمالی درباره این گارانتی",
         },
         {
             id: 3,
-            category: "گارانتی 1",
+            title: "گارانتی 1",
             periodGuranty: "12 ماه",
             desc: "توضیحات اجمالی درباره این گارانتی",
         }
     ];
     const dataInfo = [
         { field: "id", value: "#" },
-        { field: "category", value: "عنوان گارانتی" },
+        { field: "title", value: "عنوان گارانتی" },
         { field: "periodGuranty", value: "مدت گارانتی" },
         { field: "desc", value: "توضیحات" },
     ];

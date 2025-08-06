@@ -15,7 +15,7 @@ const Sidebar = () => {
         <HiArrowSmallLeft size={24} className={`${openSidebar == true ? "rotate-180" : ""} transition-all duration-300 `}/>
       </div>
       <div className=" rounded-full mt-12 w-full flex items-center flex-col">
-        <img className="rounded-full w-14 h-14 border p-0.5 border-white" src="./public/images/alireza.jpg" alt=""/>
+        <img className="rounded-full w-14 h-14 border p-0.5 border-white" src="../public/images/alireza.jpg" alt=""/>
         <p className={`text-xs pt-1 transition-all duration-300 text-nowrap${openSidebar == false ? "w-0 overflow-hidden opacity-0" : "w-full"}`}>علیرضا حبیبی</p>
       </div>
 

@@ -7,7 +7,7 @@ import AddProperty from "./AddProperty";
 import EditCategory from "./EditCategory";
 import { get } from "../../services/httpRequest";
 import Tooltip from "@mui/material/Tooltip";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import CategoriesChildren from "./CategoriesChildren";
 import PrevPage from "../../components/PrevPage";
 import moment from "moment-jalaali";
@@ -84,7 +84,7 @@ const Category = () => {
     <div className="mt-[72.5px] overflow-hidden">
       <h2 className="text-center text-2xl py-6">مدیریت دسته بندی محصولات</h2>
       <div className="px-4 flex justify-between">
-        <CategoriesChildren />
+        <Outlet />
         <PrevPage />
       </div>
       <div className="p-4">

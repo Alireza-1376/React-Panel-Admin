@@ -4,7 +4,7 @@ const CategoriesChildren = () => {
     const location =useLocation();
     return (
         <div>
-            {location.state ? <h2 className="text-xl">زیر گروه: {location.state}</h2> : null}
+            <h2 className="text-xl">زیر گروه: {location.state}</h2>
         </div>
     );
 }

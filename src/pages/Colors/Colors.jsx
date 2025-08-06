@@ -10,24 +10,24 @@ const Colors = () => {
     const data = [
         {
             id: 1,
-            category: "مشکی",
+            title: "مشکی",
             codeColor: "green",
             color: "black",
         },
         {
             id: 2,
-            category: "قرمز",
+            title: "قرمز",
             codeColor: "#f44336",
         },
         {
             id: 3,
-            category: "قرمز",
+            title: "قرمز",
             codeColor: "blue",
         },
     ];
     const dataInfo = [
         { field: "id", value: "#" },
-        { field: "category", value: "نام رنگ" },
+        { field: "title", value: "نام رنگ" },
         { field: "codeColor", value: "کد رنگ" },
     ];
     const colors = {

@@ -11,7 +11,7 @@ const Brands = () => {
     const data = [
         {
             id: 1,
-            category: "brand 1",
+            title: "brand 1",
             persianCategory: "برند شماره 1",
             desc: "توضیحات اجمالی درباره این برند",
             logo :"./public/images/admin.jpg"
@@ -20,7 +20,7 @@ const Brands = () => {
     ];
     const dataInfo = [
         { field: "id", value: "#" },
-        { field: "category", value: "عنوان " },
+        { field: "title", value: "عنوان " },
         { field: "persianCategory", value: "عنوان فارسی" },
         { field: "desc", value: "توضیحات" },
     ];

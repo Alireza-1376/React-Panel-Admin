@@ -29,7 +29,7 @@ const Navbar = () => {
         />
         <img
           className="w-12 h-12 hidden md:inline rounded-full"
-          src="./public/images/admin.jpg"
+          src="../public/images/admin.jpg"
           alt=""
         />
       </div>

@@ -11,7 +11,7 @@ const Discounts = () => {
     const data = [
         {
             id: 1,
-            category: "تخفیف شماره 1",
+            title: "تخفیف شماره 1",
             code: "takhfif 1",
             percentDiscount: "39%",
             toDate: "1400/10/12",
@@ -21,7 +21,7 @@ const Discounts = () => {
     ];
     const dataInfo = [
         { field: "id", value: "#" },
-        { field: "category", value: "عنوان" },
+        { field: "title", value: "عنوان" },
         { field: "code", value: "کد" },
         { field: "percentDiscount", value: "درصد تخفیف" },
         { field: "toDate", value: "تا تاریخ" },
