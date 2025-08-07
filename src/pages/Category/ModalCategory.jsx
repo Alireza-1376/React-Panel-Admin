@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { get, post } from "../../services/httpRequest";
 import toast from "react-hot-toast";
 import { PulseLoader } from "react-spinners";
+import { useParams } from "react-router-dom";
 const initialValue = {
     title: "",
     descriptions: "",
@@ -13,7 +14,9 @@ const initialValue = {
     show_in_menu: 0,
     image: "",
 }
+
 const onSubmit = async (values, props) => {
+    console.log(values)
     const token = JSON.parse(localStorage.getItem("token"));
     const formData = new FormData();
     formData.append("title", values.title)
@@ -45,6 +48,8 @@ const validationSchema = object({
 const ModalCategory = () => {
     const token = JSON.parse(localStorage.getItem('token'))
     const [parents, setParents] = useState([]);
+    const [reInitialValue, setReInitialValue] = useState(null)
+    const params = useParams();
     async function getParents() {
         try {
             const response = await get("/admin/categories", "", { Authorization: `Bearer ${token}` })
@@ -58,11 +63,20 @@ const ModalCategory = () => {
     useEffect(() => {
         getParents()
     }, [])
+    useEffect(() => {
+        if (params.id) {
+            setReInitialValue({
+                ...initialValue,
+                parent_id: params.id,
+            })
+        }
+    }, [params])
     return (
         <Formik
-            initialValues={initialValue}
+            initialValues={reInitialValue || initialValue}
             onSubmit={onSubmit}
             validationSchema={validationSchema}
+            enableReinitialize
         >
             {formik => {
                 return <Modal
@@ -72,7 +86,8 @@ const ModalCategory = () => {
                     <Form className="text-center space-y-4 mt-4 p-4">
                         {parents.length > 0 ? <div className="flex justify-center">
                             <button className="bg-blue-300/50 border border-gray-400 py-2 w-24 px-4">دسته والد</button>
-                            <FastField as="select" name="select" className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400">
+                            <FastField as="select" onChange={(e) => { formik.setFieldValue("parent_id", e.target.value) }} name="parent_id" className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400">
+                                <option className="bg-yellow-100">دسته ی والد را انتخاب کنید</option>
                                 {parents.map((item) => {
                                     return <option key={item.id} value={item.id} className="bg-yellow-100">{item.value}</option>
                                 })}
