@@ -2,7 +2,8 @@ import { ErrorMessage, FastField, Form, Formik } from "formik";
 import Modal from "../../components/Modal";
 import { mixed, object, string } from "yup"
 import { useEffect, useState } from "react";
-import { get } from "../../services/httpRequest";
+import { get, post } from "../../services/httpRequest";
+import toast from "react-hot-toast";
 const initialValue = {
     title: "",
     descriptions: "",
@@ -10,10 +11,27 @@ const initialValue = {
     is_active: 0,
     show_in_menu: 0,
     image: "",
-    select: "",
 }
-const onSubmit = (values) => {
-    console.log(values)
+const onSubmit = async (values) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const formData =new FormData();
+    formData.append("title",values.title)
+    formData.append("descriptions",values.descriptions)
+    formData.append("parent_id",values.parent_id)
+    formData.append("is_active",values.is_active)
+    formData.append("show_in_menu",values.show_in_menu)
+    formData.append("image",values.image)
+    values = formData;
+    try {
+        const response = await post("/admin/categories", values, { Authorization: `Bearer ${token}` })
+        if(response.status==201){
+            toast.success(response.data.message)
+        }if(response.status==202){
+            toast.error(response.data.title)
+        }
+    } catch (error) {
+        toast.error("متاسفانه مشکلی رخ داده است")
+    }
 }
 const validationSchema = object({
     title: string().required("لطفا عنوان دسته را وارد کنید"),
@@ -38,7 +56,6 @@ const ModalCategory = () => {
     useEffect(() => {
         getParents()
     }, [])
-    console.log(parents)
     return (
         <Formik
             initialValues={initialValue}

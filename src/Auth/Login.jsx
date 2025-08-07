@@ -35,7 +35,6 @@ const onSubmit = async (values, methods, navigate) => {
     } catch (error) {
         toast.error("متاسفانه مشکلی از سمت سرور رخ داده است")
     }
-    
 }
 const validationSchema = object({
     phone: string().required('لطفا شماره موبایل خود را وارد کنید'),
