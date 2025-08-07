@@ -11,8 +11,10 @@ import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import CategoriesChildren from "./CategoriesChildren";
 import PrevPage from "../../components/PrevPage";
 import moment from "moment-jalaali";
+import { PulseLoader } from "react-spinners";
 
 const Category = () => {
+  const [loading ,setLoading]=useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
@@ -20,13 +22,16 @@ const Category = () => {
   const [data, setData] = useState([])
   const token = JSON.parse(localStorage.getItem("token"))
   async function getCategories() {
+    setLoading(true)
     try {
       const response = await get("/admin/categories", params ? params.id : "", { Authorization: `Bearer ${token}` })
       if (response.status == 200) {
         setData(response.data.data)
       }
+      setLoading(false)
     } catch (error) {
       console.log(error)
+      setLoading(false)
     }
 
   }
@@ -88,7 +93,7 @@ const Category = () => {
         <PrevPage />
       </div>
       <div className="p-4">
-        <Tabel numOfData={5} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
+        <Tabel loading={loading} numOfData={5} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
 
       {showModal && <ModalCategory />}

@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import Icon from "../layouts/sidebar/Icons";
 import { ModalContext } from "../contexts/ModalContext";
+import { PulseLoader } from "react-spinners";
 
 
-const Tabel = ({ numOfData, data, dataInfo, status, addFields, colors, title, placeholder, logos }) => {
+const Tabel = ({loading , numOfData, data, dataInfo, status, addFields, colors, title, placeholder, logos }) => {
   const { showModal, setShowModal } = useContext(ModalContext)
   const [currtPage, setCurrPage] = useState(1);
   const [dataRows, setDataRows] = useState([]);
@@ -50,6 +51,8 @@ const Tabel = ({ numOfData, data, dataInfo, status, addFields, colors, title, pl
 
 
 
+      {loading ?  <PulseLoader className="text-center mt-4" size={30} color="purple" /> : 
+      <>
       <table className="w-full bg-white shadow-md border border-gray-300">
         <thead className="border border-gray-300 bg-gray-200">
           <tr>
@@ -103,10 +106,6 @@ const Tabel = ({ numOfData, data, dataInfo, status, addFields, colors, title, pl
           })}
         </tbody>
       </table>
-
-
-
-
       {pages > 1 ? <div className="p-4 flex justify-center">
         <ul
           className="flex items-center border border-slate-300 bg-white divide-x-2"
@@ -146,6 +145,9 @@ const Tabel = ({ numOfData, data, dataInfo, status, addFields, colors, title, pl
           </button>
         </ul>
       </div> : null}
+      </>
+      
+      }
     </>
   );
 };

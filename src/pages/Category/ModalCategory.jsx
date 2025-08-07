@@ -4,6 +4,7 @@ import { mixed, object, string } from "yup"
 import { useEffect, useState } from "react";
 import { get, post } from "../../services/httpRequest";
 import toast from "react-hot-toast";
+import { PulseLoader } from "react-spinners";
 const initialValue = {
     title: "",
     descriptions: "",
@@ -12,21 +13,22 @@ const initialValue = {
     show_in_menu: 0,
     image: "",
 }
-const onSubmit = async (values) => {
+const onSubmit = async (values, props) => {
     const token = JSON.parse(localStorage.getItem("token"));
-    const formData =new FormData();
-    formData.append("title",values.title)
-    formData.append("descriptions",values.descriptions)
-    formData.append("parent_id",values.parent_id)
-    formData.append("is_active",values.is_active)
-    formData.append("show_in_menu",values.show_in_menu)
-    formData.append("image",values.image)
+    const formData = new FormData();
+    formData.append("title", values.title)
+    formData.append("descriptions", values.descriptions)
+    formData.append("parent_id", values.parent_id)
+    formData.append("is_active", values.is_active)
+    formData.append("show_in_menu", values.show_in_menu)
+    formData.append("image", values.image)
     values = formData;
     try {
         const response = await post("/admin/categories", values, { Authorization: `Bearer ${token}` })
-        if(response.status==201){
+        if (response.status == 201) {
             toast.success(response.data.message)
-        }if(response.status==202){
+            props.resetForm()
+        } if (response.status == 202) {
             toast.error(response.data.title)
         }
     } catch (error) {
@@ -63,7 +65,6 @@ const ModalCategory = () => {
             validationSchema={validationSchema}
         >
             {formik => {
-
                 return <Modal
                     title="افزودن دسته محصولات"
                     screen={true}
@@ -128,7 +129,7 @@ const ModalCategory = () => {
                             </label>
                         </div>
                         <div>
-                            <button className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>
+                            {formik.isSubmitting ? <PulseLoader size={30} color="purple" /> : <button className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>}
                         </div>
                     </Form>
                 </Modal>
