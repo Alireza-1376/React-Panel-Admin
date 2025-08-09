@@ -12,3 +12,7 @@ export function get(url,id,header){
 export function put(url,values,header){
     return axios.put(`${BASE_URL}${url}`,values,{headers:header})
 }
+
+export function Delete(url ,header){
+    return axios.delete(`${BASE_URL}${url}`,{headers:header})
+}

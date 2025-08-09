@@ -4,21 +4,22 @@ import { ModalContext } from "../contexts/ModalContext";
 import { PulseLoader } from "react-spinners";
 
 
-const Tabel = ({loading , numOfData, data, dataInfo, status, addFields, colors, title, placeholder, logos }) => {
+
+const Tabel = ({ loading, numOfData, data, dataInfo, status, addFields, colors, title, placeholder, logos }) => {
   const { showModal, setShowModal } = useContext(ModalContext)
   const [currtPage, setCurrPage] = useState(1);
   const [dataRows, setDataRows] = useState([]);
-  const [pages, setPages] = useState();
+  const [pages, setPages] = useState(1);
   const [numOfPages, setNumOfPages] = useState([]);
   const [seatchInput, setSearchInput] = useState("");
   const [newData, setNewData] = useState([]);
- 
+
   useEffect(() => {
     let newDataArray = data.filter((item) => {
       return item.title.includes(seatchInput)
     })
     setNewData(newDataArray)
-  }, [seatchInput,data])
+  }, [seatchInput, data])
 
   useEffect(() => {
     setPages(newData.length / numOfData);
@@ -30,10 +31,16 @@ const Tabel = ({loading , numOfData, data, dataInfo, status, addFields, colors, 
   }, [pages, numOfData, newData]);
 
   useEffect(() => {
+    if(pages!=0 && pages < currtPage){
+      setCurrPage((prev)=>{return prev-1})
+    }
+  },[data])
+
+  useEffect(() => {
     let start = currtPage * numOfData - numOfData;
     let end = currtPage * numOfData;
     setDataRows(newData.slice(start, end));
-  }, [currtPage, numOfData, newData ]);
+  }, [currtPage, numOfData, newData]);
 
 
 
@@ -51,102 +58,102 @@ const Tabel = ({loading , numOfData, data, dataInfo, status, addFields, colors, 
 
 
 
-      {loading ?  <PulseLoader className="text-center mt-4" size={30} color="purple" /> : 
-      <>
-      <table className="w-full bg-white shadow-md border border-gray-300">
-        <thead className="border border-gray-300 bg-gray-200">
-          <tr>
-            {dataInfo.map((item, i) => {
-              return (
-                <th
-                  key={i + 1}
-                  className="border border-gray-300 text-center p-2"
-                >
-                  {item.value}
-                </th>
-              );
-            })}
-            {colors ? <th className="border border-gray-300 text-center p-2">
-              {colors.bgColor}
-            </th> : null}
-            {logos ? <th className="border border-gray-300 text-center p-2">
-              {logos.name}
-            </th> : null}
-            {status ? <th className="border border-gray-300 text-center p-2">{status.status}</th> : null}
-            {addFields ? addFields.map((item,index)=>{
-              return <th key={index+1} className="border border-gray-300 text-center p-2">{item.title}</th>
-            }) : null}
-          </tr>
-        </thead>
-        <tbody>
-          {dataRows.map((d) => {
-            return (
-              <tr
-                key={d.id}
-                className="border hover:bg-gray-100 border-gray-300"
-              >
-                {dataInfo.map((i, index) => {
+      {loading ? <PulseLoader className="text-center mt-4" size={30} color="purple" /> :
+        <>
+          <table className="w-full bg-white shadow-md border border-gray-300">
+            <thead className="border border-gray-300 bg-gray-200">
+              <tr>
+                {dataInfo.map((item, i) => {
                   return (
-                    <td
-                      key={index + 1}
+                    <th
+                      key={i + 1}
                       className="border border-gray-300 text-center p-2"
                     >
-                      {d[i.field]}
-                    </td>
+                      {item.value}
+                    </th>
                   );
                 })}
-                {colors ? <td className="p-2">{colors.colors(d.codeColor)}</td> : null}
-                {logos ? <td className="p-2 border border-gray-300">{logos.logos(d.logo)}</td> : null}
-                {status ? <td className="text-center pt-2 px-2">{status.statusToggle()}</td> : null}
-                {addFields ? addFields.map((item,index)=>{
-                  return <td key={index+1} className="border border-gray-300 text-center">{item.elements(d)}</td>
+                {colors ? <th className="border border-gray-300 text-center p-2">
+                  {colors.bgColor}
+                </th> : null}
+                {logos ? <th className="border border-gray-300 text-center p-2">
+                  {logos.name}
+                </th> : null}
+                {status ? <th className="border border-gray-300 text-center p-2">{status.status}</th> : null}
+                {addFields ? addFields.map((item, index) => {
+                  return <th key={index + 1} className="border border-gray-300 text-center p-2">{item.title}</th>
                 }) : null}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      {pages > 1 ? <div className="p-4 flex justify-center">
-        <ul
-          className="flex items-center border border-slate-300 bg-white divide-x-2"
-          dir="ltr"
-        >
-          <button
-            disabled={currtPage == 1}
-            onClick={() => {
-              setCurrPage((prev) => prev - 1);
-            }}
-            className="p-3 text-blue-500 font-bold cursor-pointer"
-          >
-            <Icon name="chevronLeft" size={14} />
-          </button>
-          {numOfPages.map((page) => {
-            return (
-              <li
-                key={page}
-                className="p-2 px-4 text-blue-500 font-bold cursor-pointer"
+            </thead>
+            <tbody>
+              {dataRows.map((d) => {
+                return (
+                  <tr
+                    key={d.id}
+                    className="border hover:bg-gray-100 border-gray-300"
+                  >
+                    {dataInfo.map((i, index) => {
+                      return (
+                        <td
+                          key={index + 1}
+                          className="border border-gray-300 text-center p-2"
+                        >
+                          {d[i.field]}
+                        </td>
+                      );
+                    })}
+                    {colors ? <td className="p-2">{colors.colors(d.codeColor)}</td> : null}
+                    {logos ? <td className="p-2 border border-gray-300">{logos.logos(d.logo)}</td> : null}
+                    {status ? <td className="text-center pt-2 px-2">{status.statusToggle()}</td> : null}
+                    {addFields ? addFields.map((item, index) => {
+                      return <td key={index + 1} className="border border-gray-300 text-center">{item.elements(d)}</td>
+                    }) : null}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {pages > 1 ? <div className="p-4 flex justify-center">
+            <ul
+              className="flex items-center border border-slate-300 bg-white divide-x-2"
+              dir="ltr"
+            >
+              <button
+                disabled={currtPage == 1}
                 onClick={() => {
-                  setCurrPage(page);
+                  setCurrPage((prev) => prev - 1);
                 }}
+                className="p-3 text-blue-500 font-bold cursor-pointer"
               >
-                <span>{page}</span>
-              </li>
-            );
-          })}
+                <Icon name="chevronLeft" size={14} />
+              </button>
+              {numOfPages.map((page) => {
+                return (
+                  <li
+                    key={page}
+                    className="p-2 px-4 text-blue-500 font-bold cursor-pointer"
+                    onClick={() => {
+                      setCurrPage(page);
+                    }}
+                  >
+                    <span>{page}</span>
+                  </li>
+                );
+              })}
 
-          <button
-            disabled={currtPage == Math.ceil(pages)}
-            onClick={() => {
-              setCurrPage((prev) => prev + 1);
-            }}
-            className="p-3 text-blue-500 font-bold cursor-pointer"
-          >
-            <Icon name="chevronRight" size={14} />
-          </button>
-        </ul>
-      </div> : null}
-      </>
-      
+              <button
+                disabled={currtPage == Math.ceil(pages)}
+                onClick={() => {
+                  setCurrPage((prev) => prev + 1);
+                }}
+                className="p-3 text-blue-500 font-bold cursor-pointer"
+              >
+                <Icon name="chevronRight" size={14} />
+              </button>
+            </ul>
+          </div> : null}
+        </>
+
       }
     </>
   );
