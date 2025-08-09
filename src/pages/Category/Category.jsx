@@ -14,7 +14,9 @@ import moment from "moment-jalaali";
 import { PulseLoader } from "react-spinners";
 
 const Category = () => {
-  const [loading ,setLoading]=useState(false);
+  const [editId , setEditId]=useState();
+  const [parents, setParents] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
@@ -38,22 +40,39 @@ const Category = () => {
   useEffect(() => {
     getCategories()
   }, [params])
+  async function getParents() {
+        try {
+            const response = await get("/admin/categories", "", { Authorization: `Bearer ${token}` })
+            setParents(response.data.data.map((item) => {
+                return { id: item.id, value: item.title }
+            }))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        getParents()
+    }, [])
   const dataInfo = [
     { field: "id", value: "#" },
     { field: "title", value: "عنوان محصول" },
     { field: "parent_id", value: "والد" },
   ];
   function icons(item) {
+    
     return (
       <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
         {!item.parent_id ? <Tooltip title="زیر مجموعه" arrow><button onClick={() => { navigate(`/categories/${item.id}`, { state: item.title }) }} className="text-blue-500">
           <Icon name="share" size={16} />
         </button></Tooltip> : null}
-        <button onClick={() => {
-          setEditModal(true)
-        }} className="text-yellow-500">
-          <Icon name="pen" size={16} />
-        </button>
+        <Tooltip title="ویرایش" arrow>
+          <button onClick={() => {
+            setEditModal(true)
+            setEditId(item.id)
+          }} className="text-yellow-500">
+            <Icon name="pen" size={16} />
+          </button>
+        </Tooltip>
         <button onClick={() => { setAddProperty(true) }} className="text-green-500">
           <Icon name="plus" size={16} />
         </button>
@@ -96,8 +115,8 @@ const Category = () => {
         <Tabel loading={loading} numOfData={5} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
 
-      {showModal && <ModalCategory />}
-      {editModal && <EditCategory />}
+      {showModal && <ModalCategory parents={parents} setParents={setParents}/>}
+      {editModal && <EditCategory editId={editId} parents={parents}/>}
       {addProperty && <AddProperty />}
     </div>
   );
