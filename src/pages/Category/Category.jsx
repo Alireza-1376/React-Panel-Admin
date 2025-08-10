@@ -18,11 +18,11 @@ const Category = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
-  
+
   const { showModal, editModal, setEditModal } = useContext(ModalContext);
   const [data, setData] = useState([])
   const token = JSON.parse(localStorage.getItem("token"))
-  const [update ,setUpdate] =useState(0)
+  const [update, setUpdate] = useState(0)
   async function getCategories() {
     setLoading(true)
     try {
@@ -38,7 +38,7 @@ const Category = () => {
   }
   useEffect(() => {
     getCategories()
-  }, [params.id ,update])
+  }, [params.id, update])
 
   async function getParents() {
     try {
@@ -76,7 +76,7 @@ const Category = () => {
             return item.id != id;
           })
           setData(filteredData)
-          setUpdate((prev)=>{return prev+1})
+
           Swal.fire({
             text: "با موفقیت حذف شد",
             icon: "success"
@@ -88,12 +88,12 @@ const Category = () => {
     });
 
   }
-
   function icons(item) {
 
     return (
       <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-        {!item.parent_id ? <Tooltip title="زیر مجموعه" arrow><button type="button" onClick={() => { navigate(`/categories/${item.id}`, { state: item.title }) ;
+        {!item.parent_id ? <Tooltip title="زیر مجموعه" arrow><button type="button" onClick={() => {
+          navigate(`/categories/${item.id}`, { state: item.title });
         }} className="text-blue-500">
           <Icon name="share" size={16} />
         </button></Tooltip> : null}
@@ -107,7 +107,7 @@ const Category = () => {
         </Tooltip>
         {params.id ? (
           <Tooltip title="افزودن ویژگی" arrow>
-            <button onClick={() => { navigate(`/categories/${item.id}/attributes`,{state :item}) }} className="text-green-500">
+            <button onClick={() => { navigate(`/categories/${item.id}/attributes`, { state: item }) }} className="text-green-500">
               <Icon name="plus" size={16} />
             </button>
           </Tooltip>

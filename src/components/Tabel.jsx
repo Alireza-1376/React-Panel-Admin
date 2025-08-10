@@ -31,18 +31,19 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
     }
     setNumOfPages(newArr);
   }, [pages, numOfData, newData]);
-  console.log(data)
+
   useEffect(() => {
     if (Math.ceil(pages) != 0 && Math.ceil(pages) < currtPage) {
       setCurrPage((prev) => { return prev - 1 })
     }
-
-    if (data.length / numOfData >= 1 || data.length / numOfData < 1) {
+    // if(data.length > 1){
+    //   setCurrPage(1)
+    // }
+    if ( data.length / numOfData <= 1 ) {
       setCurrPage(1)
     }
-
-  }, [data])
-
+   
+  }, [data , pages])
 
   useEffect(() => {
     let start = currtPage * numOfData - numOfData;
@@ -51,7 +52,7 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
   }, [currtPage, numOfData, newData]);
 
 
-
+// console.log(data)
   return (
     <>
       <div className="flex justify-between py-4">
