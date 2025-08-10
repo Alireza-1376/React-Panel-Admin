@@ -12,12 +12,13 @@ const initialValue = {
     show_in_menu: 0,
     image: "",
 }
-const onSubmit = async (values, editId) => {
+const onSubmit = async (values, editId ,setUpdate) => {
     const token = JSON.parse(localStorage.getItem('token'))
     try {
         const response = await put(`/admin/categories/${editId}`, values, { Authorization: `Bearer ${token}` })
         if(response.status==200){
             toast.success(response.data.message)
+            setUpdate(prev => prev+1)
         }
     } catch (error) {
         console.log("خطا در ویرایش")
@@ -29,7 +30,7 @@ const validationSchema = object({
         return !value ? true : value.size < 100 * 1024;
     }),
 })
-const EditCategory = ({ editId, parents }) => {
+const EditCategory = ({ editId, parents ,setUpdate}) => {
     const token = JSON.parse(localStorage.getItem("token"))
     const [reInitialValue, setReInitialValue] = useState();
     async function getOneCategory() {
@@ -56,7 +57,7 @@ const EditCategory = ({ editId, parents }) => {
     return (
         <Formik
             initialValues={reInitialValue || initialValue}
-            onSubmit={(values) => onSubmit(values, editId)}
+            onSubmit={(values) => onSubmit(values, editId ,setUpdate)}
             validationSchema={validationSchema}
             enableReinitialize
         >

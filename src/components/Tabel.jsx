@@ -2,10 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import Icon from "../layouts/sidebar/Icons";
 import { ModalContext } from "../contexts/ModalContext";
 import { PulseLoader } from "react-spinners";
+import { useLocation } from "react-router-dom";
+import PrevPage from "./PrevPage";
 
 
 
-const Tabel = ({ loading, numOfData, data, dataInfo, status, addFields, colors, title, placeholder, logos }) => {
+const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, colors, title, placeholder, logos }) => {
   const { showModal, setShowModal } = useContext(ModalContext)
   const [currtPage, setCurrPage] = useState(1);
   const [dataRows, setDataRows] = useState([]);
@@ -29,12 +31,18 @@ const Tabel = ({ loading, numOfData, data, dataInfo, status, addFields, colors, 
     }
     setNumOfPages(newArr);
   }, [pages, numOfData, newData]);
-
+  console.log(data)
   useEffect(() => {
-    if(pages!=0 && pages < currtPage){
-      setCurrPage((prev)=>{return prev-1})
+    if (Math.ceil(pages) != 0 && Math.ceil(pages) < currtPage) {
+      setCurrPage((prev) => { return prev - 1 })
     }
-  },[data])
+
+    if (data.length / numOfData >= 1 || data.length / numOfData < 1) {
+      setCurrPage(1)
+    }
+
+  }, [data])
+
 
   useEffect(() => {
     let start = currtPage * numOfData - numOfData;
@@ -51,7 +59,7 @@ const Tabel = ({ loading, numOfData, data, dataInfo, status, addFields, colors, 
           <button className="bg-blue-300/50 border border-gray-400 py-2 px-4">{title}</button>
           <input onChange={(e) => { setSearchInput(e.target.value) }} placeholder={placeholder} type="text" className="focus:outline-none p-2 w-4/5 md:w-1/2 border border-gray-400" />
         </div>
-        {addFields ? <div onClick={() => { setShowModal(true) }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
+        {prev == true ? <PrevPage /> : addFields ? <div onClick={() => { setShowModal(true) }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
           <Icon name="plus" size={18} />
         </div> : null}
       </div>

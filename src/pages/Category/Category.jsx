@@ -3,15 +3,12 @@ import Icon from "../../layouts/sidebar/Icons";
 import ModalCategory from "./ModalCategory";
 import { ModalContext } from "../../contexts/ModalContext";
 import Tabel from "../../components/Tabel";
-import AddProperty from "./AddProperty";
 import EditCategory from "./EditCategory";
 import { Delete, get } from "../../services/httpRequest";
 import Tooltip from "@mui/material/Tooltip";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import CategoriesChildren from "./CategoriesChildren";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import PrevPage from "../../components/PrevPage";
 import moment from "moment-jalaali";
-import { PulseLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 
@@ -21,11 +18,11 @@ const Category = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
-  const location = useLocation();
-  const { showModal, setShowModal, editModal, setEditModal, addProperty, setAddProperty } = useContext(ModalContext);
+  
+  const { showModal, editModal, setEditModal } = useContext(ModalContext);
   const [data, setData] = useState([])
   const token = JSON.parse(localStorage.getItem("token"))
-
+  const [update ,setUpdate] =useState(0)
   async function getCategories() {
     setLoading(true)
     try {
@@ -41,8 +38,7 @@ const Category = () => {
   }
   useEffect(() => {
     getCategories()
-  }, [params])
-
+  }, [params.id ,update])
 
   async function getParents() {
     try {
@@ -56,13 +52,12 @@ const Category = () => {
   }
   useEffect(() => {
     getParents()
-  }, [])
+  }, [data])
   const dataInfo = [
     { field: "id", value: "#" },
     { field: "title", value: "عنوان محصول" },
     { field: "parent_id", value: "والد" },
   ];
-
   function handleDeleteCategory(id, title) {
     Swal.fire({
       title: "حذف کردن",
@@ -77,10 +72,11 @@ const Category = () => {
       if (result.isConfirmed) {
         try {
           Delete(`/admin/categories/${id}`, { Authorization: `Bearer ${token}` })
-          const filteredData =data.filter((item)=>{
-            return item.id!=id ;
+          const filteredData = data.filter((item) => {
+            return item.id != id;
           })
           setData(filteredData)
+          setUpdate((prev)=>{return prev+1})
           Swal.fire({
             text: "با موفقیت حذف شد",
             icon: "success"
@@ -97,7 +93,8 @@ const Category = () => {
 
     return (
       <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-        {!item.parent_id ? <Tooltip title="زیر مجموعه" arrow><button onClick={() => { navigate(`/categories/${item.id}`, { state: item.title }) }} className="text-blue-500">
+        {!item.parent_id ? <Tooltip title="زیر مجموعه" arrow><button type="button" onClick={() => { navigate(`/categories/${item.id}`, { state: item.title }) ;
+        }} className="text-blue-500">
           <Icon name="share" size={16} />
         </button></Tooltip> : null}
         <Tooltip title="ویرایش" arrow>
@@ -108,9 +105,13 @@ const Category = () => {
             <Icon name="pen" size={16} />
           </button>
         </Tooltip>
-        <button onClick={() => { setAddProperty(true) }} className="text-green-500">
-          <Icon name="plus" size={16} />
-        </button>
+        {params.id ? (
+          <Tooltip title="افزودن ویژگی" arrow>
+            <button onClick={() => { navigate(`/categories/${item.id}/attributes`,{state :item}) }} className="text-green-500">
+              <Icon name="plus" size={16} />
+            </button>
+          </Tooltip>
+        ) : null}
         <Tooltip title="حذف" arrow>
           <button type="submit" onClick={() => { handleDeleteCategory(item.id, item.title) }} className="text-red-500">
             <Icon name="xMark" size={16} />
@@ -149,12 +150,11 @@ const Category = () => {
         <PrevPage />
       </div>
       <div className="p-4">
-        <Tabel loading={loading} numOfData={5} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
+        <Tabel update={update} loading={loading} numOfData={5} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
 
-      {showModal && <ModalCategory parents={parents} setParents={setParents} />}
-      {editModal && <EditCategory editId={editId} parents={parents} />}
-      {addProperty && <AddProperty />}
+      {showModal && <ModalCategory setUpdate={setUpdate} parents={parents} setParents={setParents} />}
+      {editModal && <EditCategory setUpdate={setUpdate} editId={editId} parents={parents} />}
     </div>
   );
 };

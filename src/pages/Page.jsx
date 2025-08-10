@@ -18,7 +18,7 @@ import Questions from "./Question/Question";
 import Comments from "./Comments/Comments";
 import LogOut from "./Logout/LogOut";
 import CategoriesChildren from "./Category/CategoriesChildren";
-
+import AddProperty from "./Category/AddProperty"
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
   return (
@@ -28,6 +28,7 @@ const Page = () => {
         <Route path="/categories" element={<Category />}>
           <Route path=":id" element={<CategoriesChildren />}/>
         </Route>
+        <Route path="/categories/:id/attributes" element={<AddProperty />}/>
         <Route path="/products" element={<Products />} />
         <Route path="/colors" element={<Colors />} />
         <Route path="/gurantys" element={<Guranty />} />

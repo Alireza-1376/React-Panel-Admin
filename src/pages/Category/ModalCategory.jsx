@@ -15,7 +15,7 @@ const initialValue = {
     image: "",
 }
 
-const onSubmit = async (values, props) => {
+const onSubmit = async (values, props ,setUpdate) => {
     const token = JSON.parse(localStorage.getItem("token"));
     const formData = new FormData();
     formData.append("title", values.title)
@@ -30,6 +30,7 @@ const onSubmit = async (values, props) => {
         if (response.status == 201) {
             toast.success(response.data.message)
             props.resetForm()
+            setUpdate((prev)=>{return prev+1})
         } if (response.status == 202) {
             toast.error(response.data.title)
         }
@@ -44,7 +45,7 @@ const validationSchema = object({
     }),
 })
 
-const ModalCategory = ({parents , setParents}) => {
+const ModalCategory = ({parents , setUpdate}) => {
     const token = JSON.parse(localStorage.getItem('token'))
     const [reInitialValue, setReInitialValue] = useState(null)
     const params = useParams();
@@ -60,7 +61,7 @@ const ModalCategory = ({parents , setParents}) => {
     return (
         <Formik
             initialValues={reInitialValue || initialValue}
-            onSubmit={onSubmit}
+            onSubmit={(values , props)=>onSubmit(values , props ,setUpdate)}
             validationSchema={validationSchema}
             enableReinitialize
         >
@@ -130,7 +131,7 @@ const ModalCategory = ({parents , setParents}) => {
                             </label>
                         </div>
                         <div>
-                            {formik.isSubmitting ? <PulseLoader size={30} color="purple" /> : <button className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>}
+                            {formik.isSubmitting ? <PulseLoader size={30} color="purple" /> : <button type="submit" className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>}
                         </div>
                     </Form>
                 </Modal>

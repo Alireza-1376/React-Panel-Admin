@@ -5,7 +5,7 @@ const PrevPage = () => {
     const location =useLocation();
     return (
         <>
-        {location.state ? <button onClick={()=>{navigate(-1)}} className="text-white bg-gray-600 px-6 rounded-md py-1">بازگشت</button> : null}
+        {location.state ? <button type="button" onClick={()=>{navigate(-1)}} className="text-white bg-gray-600 px-6 rounded-md py-1">بازگشت</button> : null}
         </>
     );
 }
