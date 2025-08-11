@@ -36,9 +36,7 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
     if (Math.ceil(pages) != 0 && Math.ceil(pages) < currtPage) {
       setCurrPage((prev) => { return prev - 1 })
     }
-    // if(data.length > 1){
-    //   setCurrPage(1)
-    // }
+    
     if ( data.length / numOfData <= 1 ) {
       setCurrPage(1)
     }
@@ -140,7 +138,7 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
                 return (
                   <li
                     key={page}
-                    className="p-2 px-4 text-blue-500 font-bold cursor-pointer"
+                    className={`p-2 px-4 border border-gray-100 text-blue-500 font-bold cursor-pointer ${page==currtPage ? "bg-gray-300 shadow" : ""}`}
                     onClick={() => {
                       setCurrPage(page);
                     }}

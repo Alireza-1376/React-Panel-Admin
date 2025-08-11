@@ -3,18 +3,18 @@ import Tabel from "../../components/Tabel";
 import Icon from "../../layouts/sidebar/Icons";
 import { useLocation } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
-import { get, post, put } from "../../services/httpRequest";
+import { Delete, get, post, put } from "../../services/httpRequest";
 import { ErrorMessage, FastField, Form, Formik } from "formik";
 import { object, string } from "yup";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const initialValue = {
     title: "",
     unit: "",
     in_filter: 0,
 }
-const onSubmit = async (values, id, setData, editData, setEditData, data) => {
-
+const onSubmit = async (values,props, id, setData, editData, setEditData, data) => {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!editData) {
         try {
@@ -24,6 +24,7 @@ const onSubmit = async (values, id, setData, editData, setEditData, data) => {
                 setData((prev) => {
                     return [...prev, response.data.data]
                 })
+                props.resetForm();
             }
         } catch (error) {
             console.log(error)
@@ -32,11 +33,11 @@ const onSubmit = async (values, id, setData, editData, setEditData, data) => {
         try {
             const response = await put(`/admin/categories/attributes/${editData.id}`, values, { Authorization: `Bearer ${token}` })
 
-            const newData =[...data]
-            const findIndex =data.findIndex((i)=>{
-                return i.id==response.data.data.id
+            const newData = [...data]
+            const findIndex = data.findIndex((i) => {
+                return i.id == response.data.data.id
             })
-            newData[findIndex]=response.data.data ;
+            newData[findIndex] = response.data.data;
 
             if (response.status == 200) {
                 toast.success(response.data.message)
@@ -75,7 +76,33 @@ const AddProperty = () => {
     function handleEdit(item) {
         setEditData(item)
     }
-
+    function handleDelete(item) {
+        Swal.fire({
+            title: "حذف کردن",
+            text: `آیا از حذف ${item.title} مطمئن هستید ؟`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "بله",
+            cancelButtonText: "خیر"
+        }).then( async(result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response =await Delete(`/admin/categories/attributes/${item.id}`, { Authorization: `Bearer ${token}` })
+                    console.log(response)
+                    if (response.status == 200) {
+                        toast.success(response.data.message)
+                        setData(data.filter((item) => {
+                            return item.id != response.data.deletedId;
+                        }))
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        });
+    }
 
     const dataInfo = [
         { field: "id", value: "#" },
@@ -104,7 +131,7 @@ const AddProperty = () => {
                             </button>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button type="submit" className="text-red-500">
+                            <button onClick={() => { handleDelete(item) }} type="submit" className="text-red-500">
                                 <Icon name="xMark" size={16} />
                             </button>
                         </Tooltip>
@@ -116,7 +143,7 @@ const AddProperty = () => {
     return (
         <Formik
             initialValues={editData || initialValue}
-            onSubmit={(values) => onSubmit(values, location.state.id, setData, editData, setEditData, data)}
+            onSubmit={(values,props) => onSubmit(values,props, location.state.id, setData, editData, setEditData, data)}
             validationSchema={validationSchema}
             enableReinitialize
         >
