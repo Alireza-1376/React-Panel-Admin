@@ -83,9 +83,6 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
                 {colors ? <th className="border border-gray-300 text-center p-2">
                   {colors.bgColor}
                 </th> : null}
-                {logos ? <th className="border border-gray-300 text-center p-2">
-                  {logos.name}
-                </th> : null}
                 {status ? <th className="border border-gray-300 text-center p-2">{status.status}</th> : null}
                 {addFields ? addFields.map((item, index) => {
                   return <th key={index + 1} className="border border-gray-300 text-center p-2">{item.title}</th>
@@ -110,7 +107,6 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
                       );
                     })}
                     {colors ? <td className="p-2">{colors.colors(d.codeColor)}</td> : null}
-                    {logos ? <td className="p-2 border border-gray-300">{logos.logos(d.logo)}</td> : null}
                     {status ? <td className="text-center pt-2 px-2">{status.statusToggle()}</td> : null}
                     {addFields ? addFields.map((item, index) => {
                       return <td key={index + 1} className="border border-gray-300 text-center">{item.elements(d)}</td>

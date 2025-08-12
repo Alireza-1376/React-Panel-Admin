@@ -150,7 +150,7 @@ const Category = () => {
         <PrevPage />
       </div>
       <div className="p-4">
-        <Tabel update={update} loading={loading} numOfData={5} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
+        <Tabel update={update} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
 
       {showModal && <ModalCategory setUpdate={setUpdate} parents={parents} setParents={setParents} />}
