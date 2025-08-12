@@ -3,16 +3,21 @@ import { ModalContext } from "../../contexts/ModalContext";
 import Tabel from "../../components/Tabel";
 import Icon from "../../layouts/sidebar/Icons";
 import ModalBrands from "./ModalBrands";
-import { get } from "../../services/httpRequest";
+import { Delete, get } from "../../services/httpRequest";
 import { PulseLoader } from "react-spinners";
+import EditBrands from "./EditBrands";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 
 
 const Brands = () => {
     const token = JSON.parse(localStorage.getItem('token'));
-    const { showModal, setShowModal } = useContext(ModalContext)
+    const { showModal, setShowModal, editModal, setEditModal } = useContext(ModalContext)
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
+    const [editData, setEditData] = useState();
+    const [update, setUpdate] = useState(0)
     async function getBrandsData() {
         setIsLoading(true)
         try {
@@ -30,7 +35,7 @@ const Brands = () => {
     }
     useEffect(() => {
         getBrandsData();
-    }, [])
+    }, [update])
 
     const dataInfo = [
         { field: "id", value: "#" },
@@ -39,6 +44,42 @@ const Brands = () => {
         { field: "descriptions", value: "توضیحات" },
     ];
 
+    function handleEdit(item) {
+        setEditData(item)
+    }
+    async function handlDelete(item) {
+        Swal.fire({
+            title: "حذف کردن",
+            text: `آیا از حذف ${item.title} مطمئن هستید ؟`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "بله",
+            cancelButtonText: "خیر"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await Delete(`/admin/brands/${item.id}`, { Authorization: `Bearer ${token}` })
+                    toast.success(response.data.message)
+                    const filteredData = data.filter((i) => {
+                        return item.id != i.id
+                    })
+                    setData(filteredData)
+
+                    Swal.fire({
+                        text: "با موفقیت حذف شد",
+                        icon: "success"
+                    });
+                } catch (error) {
+                    toast("خطا در حذف دسته بندی")
+                }
+            }
+        });
+
+
+
+    }
     const addFields = [
         {
             title: "لوگو",
@@ -55,10 +96,10 @@ const Brands = () => {
             elements: (id) => {
                 return (
                     <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-                        <button className="text-yellow-500 flex justify-center items-center">
+                        <button onClick={() => { setEditModal(true); handleEdit(id) }} className="text-yellow-500 flex justify-center items-center">
                             <Icon name="pen" size={16} />
                         </button>
-                        <button className="text-red-500 flex justify-center items-center">
+                        <button onClick={() => { handlDelete(id) }} className="text-red-500 flex justify-center items-center">
                             <Icon name="xMark" size={16} />
                         </button>
                     </div>
@@ -67,7 +108,7 @@ const Brands = () => {
         }
 
     ]
-
+    console.log(data)
     return (
         <div>
             <div className="mt-[72.5px] overflow-hidden">
@@ -77,7 +118,7 @@ const Brands = () => {
                 </div>
 
                 {showModal && <ModalBrands setData={setData} />}
-
+                {editModal && <EditBrands setUpdate={setUpdate} data={data} setData={setData} editData={editData} />}
             </div>
         </div>
     );
