@@ -1,31 +1,105 @@
+import { ErrorMessage, FastField, Form, Formik } from 'formik';
 import Modal from '../../components/Modal';
-
-const ModalGurantys = () => {
+import { object, string } from 'yup';
+import { post, put } from '../../services/httpRequest';
+import { PulseLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { useEffect, useState } from 'react';
+const initialValues = {
+    title: "",
+    descriptions: "",
+    length: "",
+    length_unit: ""
+}
+const onSubmit = async (values, props, setData, reInitialValue,data) => {
+    const token = JSON.parse(localStorage.getItem('token'))
+    if (reInitialValue) {
+        try {
+            const response =await put(`/admin/guarantees/${values.id}`,values ,{ Authorization: `Bearer ${token}` })
+            // console.log(response)
+            if(response.status==200){
+                toast.success(response.data.message)
+                let newArr =[...data]
+                const findItem =data.findIndex((item)=>{
+                    return item.id==response.data.data.id ;
+                })
+                newArr[findItem]=response.data.data ;
+                setData(newArr)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    } else {
+        try {
+            const response = await post("/admin/guarantees", values, { Authorization: `Bearer ${token}` })
+            if (response.status == 201) {
+                toast.success(response.data.message)
+                props.setSubmitting(false)
+                props.resetForm();
+                setData((prev) => {
+                    return [...prev, response.data.data]
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+const validationSchema = object({
+    title: string().required("لطفا عنوان گارانتی را وارد کنید")
+})
+const ModalGurantys = ({ setData, editData, setEditData ,data}) => {
+    const [reInitialValue, setReInitialValue] = useState();
+    useEffect(() => {
+        if (editData) {
+            setReInitialValue(editData)
+            setEditData(null)
+        }
+    }, [])
     return (
-        <Modal 
-        title="افزودن گارانتی"
-        screen={false}
+        <Formik
+            initialValues={reInitialValue || initialValues}
+            onSubmit={(values, props) => onSubmit(values, props, setData, reInitialValue,data)}
+            validationSchema={validationSchema}
+            enableReinitialize
         >
-            <form className="text-center space-y-6 mt-4 p-4">
-                <div className="flex justify-center">
-                    <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">نام گارانتی</button>
-                    <input placeholder="" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400"/>
-                </div>
-                <div className="flex justify-center">
-                    <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">توضیحات گارانتی</button>
-                    <input placeholder="" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400"/>
-                </div>
-                <div className="flex justify-center">
-                    <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">مدت گارانتی</button>
-                    <input placeholder="به ماه" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400"/>
-                </div>
-                
-                
-                <div>
-                    <button className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>
-                </div>
-            </form>
-        </Modal>
+            {formik => {
+                return <Modal
+                    title={reInitialValue ? "ویرایش گارانتی" : "افزودن گارانتی"}
+                    screen={false}
+                >
+                    <Form className="text-center space-y-6 mt-4 p-4">
+                        <div className="flex flex-col justify-center">
+                            <div className='flex'>
+                                <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">نام گارانتی</button>
+                                <FastField placeholder="" name='title' type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
+                            </div>
+                            <ErrorMessage name='title'>
+                                {error => {
+                                    return <span className='text-sm text-red-500'>{error}</span>
+                                }}
+                            </ErrorMessage>
+                        </div>
+                        <div className="flex justify-center">
+                            <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">توضیحات گارانتی</button>
+                            <FastField name="descriptions" placeholder="" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
+                        </div>
+                        <div className="flex justify-center">
+                            <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">مدت گارانتی</button>
+                            <FastField name="length" placeholder="فقط اعداد" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
+                        </div>
+                        <div className="flex justify-center">
+                            <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">واحد</button>
+                            <FastField name="length_unit" placeholder="فقط حروف" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
+                        </div>
+
+                        <div>
+                            {formik.isSubmitting ? <PulseLoader size={30} color="purple" /> : <button type='submit' className="bg-blue-600 text-white px-10 py-2 rounded-md">{reInitialValue ? "ویرایش" : "ذخیره"}</button>}
+                        </div>
+                    </Form>
+                </Modal>
+            }}
+        </Formik>
     );
 }
 
