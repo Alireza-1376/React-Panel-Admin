@@ -6,14 +6,15 @@ import ModalGurantys from "./ModalGurantys";
 import { Delete, get } from "../../services/httpRequest";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import Tooltip from "@mui/material/Tooltip";
 
 
 const Guranty = () => {
     const token = JSON.parse(localStorage.getItem('token'));
     const { showModal, setShowModal } = useContext(ModalContext);
     const [data, setData] = useState([]);
-    const [loading ,setLoading] =useState(false);
-    const [editData , setEditData] =useState(null);
+    const [loading, setLoading] = useState(false);
+    const [editData, setEditData] = useState(null);
     async function getGurantyData() {
         setLoading(true)
         try {
@@ -37,7 +38,7 @@ const Guranty = () => {
         { field: "length_unit", value: "واحد" },
     ];
 
-    function handleDelete(item){
+    function handleDelete(item) {
         Swal.fire({
             title: "حذف کردن",
             text: `آیا از حذف ${item.title} مطمئن هستید ؟`,
@@ -69,23 +70,27 @@ const Guranty = () => {
     }
 
 
-    function handleEdit(item){
+    function handleEdit(item) {
         return setEditData(item)
     }
-    
-    
+
+
     const addFields = [
         {
             title: "عملیات",
             elements: (item) => {
                 return (
                     <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-                        <button onClick={()=>{setShowModal(true) ;handleEdit(item)}} className="text-yellow-500">
-                            <Icon name="pen" size={16} />
-                        </button>
-                        <button onClick={()=>{handleDelete(item)}} className="text-red-500">
-                            <Icon name="xMark" size={16} />
-                        </button>
+                        <Tooltip title="ویرایش" arrow>
+                            <button onClick={() => { setShowModal(true); handleEdit(item) }} className="text-yellow-500">
+                                <Icon name="pen" size={16} />
+                            </button>
+                        </Tooltip>
+                        <Tooltip title="حذف" arrow>
+                            <button onClick={() => { handleDelete(item) }} className="text-red-500">
+                                <Icon name="xMark" size={16} />
+                            </button>
+                        </Tooltip>
                     </div>
                 )
             },
@@ -100,7 +105,7 @@ const Guranty = () => {
                     <Tabel loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
                 </div>
 
-                {showModal && <ModalGurantys data={data} setEditData={setEditData} editData={editData} setData={setData}/>}
+                {showModal && <ModalGurantys data={data} setEditData={setEditData} editData={editData} setData={setData} />}
 
             </div>
         </div>

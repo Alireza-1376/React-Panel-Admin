@@ -8,6 +8,7 @@ import { PulseLoader } from "react-spinners";
 import EditBrands from "./EditBrands";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import Tooltip from "@mui/material/Tooltip";
 
 
 
@@ -96,19 +97,23 @@ const Brands = () => {
             elements: (id) => {
                 return (
                     <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-                        <button onClick={() => { setEditModal(true); handleEdit(id) }} className="text-yellow-500 flex justify-center items-center">
-                            <Icon name="pen" size={16} />
-                        </button>
-                        <button onClick={() => { handlDelete(id) }} className="text-red-500 flex justify-center items-center">
-                            <Icon name="xMark" size={16} />
-                        </button>
+                        <Tooltip title="ویرایش" arrow>
+                            <button onClick={() => { setEditModal(true); handleEdit(id) }} className="text-yellow-500 flex justify-center items-center">
+                                <Icon name="pen" size={16} />
+                            </button>
+                        </Tooltip>
+                        <Tooltip title="حذف" arrow>
+                            <button onClick={() => { handlDelete(id) }} className="text-red-500 flex justify-center items-center">
+                                <Icon name="xMark" size={16} />
+                            </button>
+                        </Tooltip>
                     </div>
                 )
             }
         }
 
     ]
-    console.log(data)
+
     return (
         <div>
             <div className="mt-[72.5px] overflow-hidden">

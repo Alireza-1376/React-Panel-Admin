@@ -11,19 +11,19 @@ const initialValues = {
     length: "",
     length_unit: ""
 }
-const onSubmit = async (values, props, setData, reInitialValue,data) => {
+const onSubmit = async (values, props, setData, reInitialValue, data) => {
     const token = JSON.parse(localStorage.getItem('token'))
     if (reInitialValue) {
         try {
-            const response =await put(`/admin/guarantees/${values.id}`,values ,{ Authorization: `Bearer ${token}` })
+            const response = await put(`/admin/guarantees/${values.id}`, values, { Authorization: `Bearer ${token}` })
             // console.log(response)
-            if(response.status==200){
+            if (response.status == 200) {
                 toast.success(response.data.message)
-                let newArr =[...data]
-                const findItem =data.findIndex((item)=>{
-                    return item.id==response.data.data.id ;
+                let newArr = [...data]
+                const findItem = data.findIndex((item) => {
+                    return item.id == response.data.data.id;
                 })
-                newArr[findItem]=response.data.data ;
+                newArr[findItem] = response.data.data;
                 setData(newArr)
             }
         } catch (error) {
@@ -48,18 +48,20 @@ const onSubmit = async (values, props, setData, reInitialValue,data) => {
 const validationSchema = object({
     title: string().required("لطفا عنوان گارانتی را وارد کنید")
 })
-const ModalGurantys = ({ setData, editData, setEditData ,data}) => {
+const ModalGurantys = ({ setData, editData, setEditData, data }) => {
     const [reInitialValue, setReInitialValue] = useState();
     useEffect(() => {
         if (editData) {
             setReInitialValue(editData)
+            // setEditData(null)
+        }else{
             setEditData(null)
         }
     }, [])
     return (
         <Formik
             initialValues={reInitialValue || initialValues}
-            onSubmit={(values, props) => onSubmit(values, props, setData, reInitialValue,data)}
+            onSubmit={(values, props) => onSubmit(values, props, setData, reInitialValue, data)}
             validationSchema={validationSchema}
             enableReinitialize
         >
@@ -82,15 +84,15 @@ const ModalGurantys = ({ setData, editData, setEditData ,data}) => {
                         </div>
                         <div className="flex justify-center">
                             <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">توضیحات گارانتی</button>
-                            <FastField name="descriptions" placeholder="" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
+                            <FastField value={formik.values.descriptions ? formik.values.descriptions : ""} name="descriptions" placeholder="" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
                         </div>
                         <div className="flex justify-center">
                             <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">مدت گارانتی</button>
-                            <FastField name="length" placeholder="فقط اعداد" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
+                            <FastField value={formik.values.length ?  formik.values.length: ""} name="length" placeholder="فقط اعداد" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
                         </div>
                         <div className="flex justify-center">
                             <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 w-44 px-4">واحد</button>
-                            <FastField name="length_unit" placeholder="فقط حروف" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
+                            <FastField value={formik.values.length_unit ? formik.values.length_unit: ""} name="length_unit" placeholder="فقط حروف" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
                         </div>
 
                         <div>
