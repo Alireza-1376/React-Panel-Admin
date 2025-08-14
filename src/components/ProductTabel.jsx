@@ -2,9 +2,9 @@ import { PulseLoader } from "react-spinners";
 import Icon from "../layouts/sidebar/Icons";
 import { Fragment, useEffect, useState } from "react";
 
-const ProductTabel = ({ loading, data, numOfPage, currentPage, setCurrentPage, addFields, setSearchInput, placeholder, title, setShowModal, dataInfo ,handleSearchData}) => {
+const ProductTabel = ({ loading, data, numOfPage, currentPage, setCurrentPage, addFields, setSearchInput, placeholder, title, setShowModal, dataInfo, handleSearchData }) => {
     const [numOfPages, setNumOfPages] = useState([]);
-
+    const pageRange = 2;
     useEffect(() => {
         let newArr = [];
         for (let i = 1; i <= numOfPage; i++) {
@@ -13,12 +13,12 @@ const ProductTabel = ({ loading, data, numOfPage, currentPage, setCurrentPage, a
         setNumOfPages(newArr)
     }, [data])
 
-    let timeout ;
-    const hanldeSearch =(value)=>{
+    let timeout;
+    const hanldeSearch = (value) => {
         clearTimeout(timeout)
-        timeout = setTimeout(()=>{
+        timeout = setTimeout(() => {
             handleSearchData(value)
-        },2000)
+        }, 2000)
     }
 
 
@@ -66,20 +66,20 @@ const ProductTabel = ({ loading, data, numOfPage, currentPage, setCurrentPage, a
                                     >
                                         {dataInfo.map((i, index) => {
                                             return (
-                                                <Fragment key={index+1}>
-                                                {i.field ? <td
-                                                    key={index + 1}
-                                                    className="border border-gray-300 text-center p-2"
-                                                >
-                                                    {d[i.field]}
-                                                </td> : 
-                                                <td
-                                                    key={index + 1}
-                                                    className="border border-gray-300 text-center p-2"
-                                                >
-                                                    {i.elements(d)}
-                                                </td>
-                                                }
+                                                <Fragment key={index + 1}>
+                                                    {i.field ? <td
+                                                        key={index + 1}
+                                                        className="border border-gray-300 text-center "
+                                                    >
+                                                        {d[i.field]}
+                                                    </td> :
+                                                        <td
+                                                            key={index + 1}
+                                                            className="border border-gray-300 text-center "
+                                                        >
+                                                            {i.elements(d)}
+                                                        </td>
+                                                    }
                                                 </Fragment>
                                             );
                                         })}
@@ -95,9 +95,10 @@ const ProductTabel = ({ loading, data, numOfPage, currentPage, setCurrentPage, a
 
                     {numOfPage > 1 ? <div className="p-4 flex justify-center">
                         <ul
-                            className="flex items-center border border-slate-300 bg-white divide-x-2"
+                            className="flex items-center border border-slate-300  divide-x-2 bg-white"
                             dir="ltr"
                         >
+
                             <button
                                 disabled={currentPage == 1}
                                 onClick={() => {
@@ -107,9 +108,21 @@ const ProductTabel = ({ loading, data, numOfPage, currentPage, setCurrentPage, a
                             >
                                 <Icon name="chevronLeft" size={14} />
                             </button>
+
+                            {currentPage > pageRange ? (<li
+                                className={`p-2 px-4 border border-gray-100 text-blue-500 font-bold cursor-pointer`}
+                                onClick={() => {
+                                    setCurrentPage(1);
+                                }}
+                            >
+                                <span>1</span>
+                            </li>) : null
+                            }
+
+
                             {numOfPages.map((page) => {
-                                return (
-                                    <li
+                                return page < currentPage + pageRange && page > currentPage - pageRange ?
+                                    (<li
                                         key={page}
                                         className={`p-2 px-4 border border-gray-100 text-blue-500 font-bold cursor-pointer ${page == currentPage ? "bg-gray-300 shadow" : ""}`}
                                         onClick={() => {
@@ -117,9 +130,19 @@ const ProductTabel = ({ loading, data, numOfPage, currentPage, setCurrentPage, a
                                         }}
                                     >
                                         <span>{page}</span>
-                                    </li>
-                                );
+                                    </li>)
+                                    : null
                             })}
+
+                            {currentPage < numOfPage-1 ? (<li
+                                className={`p-2 px-4 border border-gray-100 text-blue-500 font-bold cursor-pointer`}
+                                onClick={() => {
+                                    setCurrentPage(numOfPage);
+                                }}
+                            >
+                                <span>6</span>
+                            </li>) : null
+                            }
 
                             <button
                                 disabled={currentPage == numOfPage}

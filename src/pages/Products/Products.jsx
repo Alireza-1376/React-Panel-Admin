@@ -5,9 +5,12 @@ import { ModalContext } from '../../contexts/ModalContext';
 import Tabel from '../../components/Tabel';
 import EditProduct from './EditProduct';
 import AddProduct from './AddProduct';
-import { get } from '../../services/httpRequest';
+import { Delete, get } from '../../services/httpRequest';
 import ProductTabel from '../../components/ProductTabel';
 import { elements } from 'chart.js';
+import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
+import Tooltip from '@mui/material/Tooltip';
 
 const Products = () => {
   const token = JSON.parse(localStorage.getItem('token'))
@@ -15,7 +18,7 @@ const Products = () => {
   const [loading, setLoading] = useState(false)
   const [searchInput, setSearchInput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [countInPage, setCountInPage] = useState(5);
+  const [countInPage, setCountInPage] = useState(6);
   const [numOfPage, setNumOfPage] = useState();
 
   const { showModal, setShowModal, editModal, setEditModal, addProperty, setAddProperty } = useContext(ModalContext)
@@ -39,13 +42,40 @@ const Products = () => {
 
   useEffect(() => {
     getProductData(currentPage, countInPage, searchInput)
-  }, [currentPage ])
+  }, [currentPage])
 
-  const handleSearchData=(value)=>{
+  const handleSearchData = (value) => {
     getProductData(1, countInPage, value)
   }
 
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: "حذف کردن",
+      text: `آیا از حذف ${item.title} مطمئن هستید ؟`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "بله",
+      cancelButtonText: "خیر"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await Delete(`/admin/products/${item.id}`, { Authorization: `Bearer ${token}` })
+          console.log(response)
+          toast.success(response.data.message)
+          getProductData(currentPage, countInPage, searchInput)
+          Swal.fire({
+            text: "با موفقیت حذف شد",
+            icon: "success"
+          });
 
+        } catch (error) {
+          toast.error("خطا در حذف رنگ ")
+        }
+      }
+    });
+  }
 
   const dataInfo = [
     { field: "id", value: "#" },
@@ -76,9 +106,11 @@ const Products = () => {
             <button className="text-green-500">
               <Icon name="plus" size={16} />
             </button>
-            <button className="text-red-500">
-              <Icon name="xMark" size={16} />
-            </button>
+            <Tooltip title="حذف" arrow>
+              <button onClick={() => handleDelete(item)} className="text-red-500">
+                <Icon name="xMark" size={16} />
+              </button>
+            </Tooltip>
           </div>
         )
       }
