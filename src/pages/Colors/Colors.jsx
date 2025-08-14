@@ -14,15 +14,19 @@ const Colors = () => {
     const token = JSON.parse(localStorage.getItem('token'))
     const { showModal, setShowModal } = useContext(ModalContext)
     const [data, setData] = useState([]);
+    const [loading ,setLoading] =useState(false)
     const [editData, setEditData] = useState(null);
     async function getColorsData() {
+        setLoading(true)
         try {
             const response = await get("/admin/colors", "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 setData(response.data.data)
             }
+            setLoading(false)
         } catch (error) {
             console.log(error)
+            setLoading(false)
         }
     }
     useEffect(() => {
@@ -109,7 +113,7 @@ const Colors = () => {
                 <h2 className="text-center text-2xl py-6">مدیریت رنگ ها</h2>
 
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام رنگ را وارد کنید" />
+                    <Tabel loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام رنگ را وارد کنید" />
                 </div>
 
                 {showModal && <ModalColors editData={editData} setEditData={setEditData} data={data} setData={setData} />}
