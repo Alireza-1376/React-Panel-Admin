@@ -21,8 +21,6 @@ const Products = () => {
   const [countInPage, setCountInPage] = useState(6);
   const [numOfPage, setNumOfPage] = useState();
 
-  const { showModal, setShowModal, editModal, setEditModal, addProperty, setAddProperty } = useContext(ModalContext)
-
 
   async function getProductData(currentPage, countInPage, searchInput) {
     setLoading(true)
@@ -131,13 +129,12 @@ const Products = () => {
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
           numOfPage={numOfPage}
-          setShowModal={setShowModal}
           dataInfo={dataInfo}
           handleSearchData={handleSearchData}
         />
       </div>
 
-      {showModal && <ModalProduct />}
+      
       {/* {editModal && <EditProduct />}
       {addProperty && <AddProduct />} */}
     </div>
