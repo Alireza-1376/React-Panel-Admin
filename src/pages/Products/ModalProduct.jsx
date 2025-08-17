@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import Icon from "../../layouts/sidebar/Icons";
 import { FastField, Formik, Form, ErrorMessage, Field } from "formik";
-import { number, object, string } from "yup";
+import { mixed, number, object, string } from "yup";
 import { useEffect, useState } from "react";
-import { get } from "../../services/httpRequest";
+import { get, post } from "../../services/httpRequest";
 import { PulseLoader } from "react-spinners";
 import SelectItems from "./SelectItems";
-
+import toast from "react-hot-toast";
+const token = JSON.parse(localStorage.getItem('token'));
 const initialValues = {
   parent_ids: "",
   category_ids: "",
@@ -25,26 +26,47 @@ const initialValues = {
   stock: "",
   discount: ""
 }
-const onSubmit = (values) => {
-  console.log(values)
+const onSubmit = async (values ) => {
+
+  if (values.image) {
+    const formData = new FormData();
+    for (let key in values) {
+      formData.append(key, values[key])
+    }
+    values = formData;
+  }
+  try {
+    const response = await post("/admin/products", values, { Authorization: `Bearer ${token}` })
+    if (response.status == 201) {
+      toast.success(response.data.message)
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 const validationSchema = object({
   parent_ids: string().required("لطفا دسته ی والد را انتخاب کنبد"),
   category_ids: string().required("لطفا دسته ی محصول را انتخاب کنبد"),
   title: string().required('لطفا عنوان محصول را وارد کنید'),
   price: string().required("لطفا قیمت محصول را وارد کنید").matches(/^-?\d+\.?\d*$/, "لطفا عدد وارد کنید"),
+  image: mixed().test("size", "سایز عکس بادید کمتر از 100 کیلوبایت باشد", (value) => {
+    return !value ? true : value.size < 100 * 1024;
+  })
 })
 
 
 
 const ModalProduct = () => {
   const navigate = useNavigate();
-  const token = JSON.parse(localStorage.getItem('token'));
+
   const [categoryParents, setCategoryParents] = useState([]);
   const [categoryChildrens, setCategoryChildrens] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [guarantee, setGuarantee] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(false)
 
-  async function getCategoriesParents(e, form) {
+  async function getCategoriesParents() {
     try {
       const response = await get("/admin/categories", "", { Authorization: `Bearer ${token}` })
       setCategoryParents(response.data.data)
@@ -52,33 +74,54 @@ const ModalProduct = () => {
       console.log(error)
     }
   }
-
+  async function getAllColors() {
+    try {
+      const response = await get("/admin/colors", "", { Authorization: `Bearer ${token}` })
+      setColors(response.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async function getAllGuarantee() {
+    try {
+      const response = await get("/admin/guarantees", "", { Authorization: `Bearer ${token}` })
+      setGuarantee(response.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async function getAllBrands() {
+    try {
+      const response = await get("/admin/brands", "", { Authorization: `Bearer ${token}` })
+      setBrands(response.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
-    getCategoriesParents()
+    getCategoriesParents();
+    getAllColors();
+    getAllGuarantee();
+    getAllBrands();
   }, [])
 
   async function getCategoryChildrens(e) {
-        setLoading(true)
-        if (e.target.value == "") {
-            setCategoryChildrens([])
-            setLoading(false)
-            return null;
-        }
-        try {
-            setCategoryChildrens([])
-            const response = await get("/admin/categories", e.target.value, { Authorization: `Bearer ${token}` })
-            setCategoryChildrens(response.data.data);
-            setLoading(false)
-        } catch (error) {
-            console.log(error)
-            setLoading(false)
-        }
+    setLoading(true)
+    if (e.target.value == "") {
+      setCategoryChildrens([])
+      setLoading(false)
+      return null;
     }
-
-
-  
-
-  
+    try {
+      setCategoryChildrens([])
+      const response = await get("/admin/categories", e.target.value, { Authorization: `Bearer ${token}` })
+      setCategoryChildrens(response.data.data);
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
 
   return (
     <Formik
@@ -87,7 +130,6 @@ const ModalProduct = () => {
       validationSchema={validationSchema}
     >
       {formik => {
-        console.log(formik.values)
         return <Form className="text-center space-y-4 mt-4 p-4">
           <h2 className="text-center text-2xl pt-6 mt-10">افزودن محصول جدید</h2>
 
@@ -118,14 +160,14 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <SelectItems 
-            childeArray={categoryChildrens} 
-            loading={loading} 
-            form={formik.setFieldValue}
-            title="دسته اصلی"
-            selectValue="دسته ی مورد نظر را انتخاب کنید"
-            formValue="category_ids"
-            setChildArray={setCategoryChildrens}
+            <SelectItems
+              childeArray={categoryChildrens}
+              loading={loading}
+              form={formik.setFieldValue}
+              title="دسته اصلی"
+              selectValue="دسته ی مورد نظر را انتخاب کنید"
+              formValue="category_ids"
+              setChildArray={setCategoryChildrens}
             />
           </div>
 
@@ -177,55 +219,50 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex justify-center">
-            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
-              برند
-            </span>
-            <div className=" w-3/4 flex md:w-1/2 border border-gray-400 bg-white">
-              <FastField name=" brand_id"
-                placeholder="قسمتی از نام برند را انتخاب کنید"
-                type="text"
-                className="focus:outline-none flex-1 px-2"
-              />
-              <button className="bg-blue-300/50 border p-2 px-4">+</button>
-            </div>
+            {brands.length > 0 ?
+              <>
+                <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+                  برند
+                </span>
+                <div className=" w-3/4 flex md:w-1/2 border border-gray-400 bg-white">
+                  <FastField name="brand_id" >
+                    {prop => {
+                      return (
+                        <select onChange={(e) => { prop.form.setFieldValue("brand_id", e.target.value) }} className="focus:outline-none appearance-none flex-1 px-2">
+                          <option value="">برند مورد نظر را انتخاب کنید</option>
+                          {brands.map((item) => {
+                            return <option key={item.id} value={item.id}>{item.original_name}</option>
+                          })}
+                        </select>
+                      )
+                    }}
+                  </FastField>
+                  <button className="bg-blue-300/50 border p-2 px-4">+</button>
+                </div>
+              </>
+              : null}
           </div>
 
           <div>
-            <div className="flex justify-center">
-              <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
-                رنگ
-              </span>
-              <FastField name="color_ids"
-                placeholder="قسمتی از نام رنگ را انتخاب کنید"
-                type="text"
-                className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400"
-              />
-            </div>
+            <SelectItems
+              childeArray={colors}
+              loading={loading}
+              form={formik.setFieldValue}
+              title="رنگ"
+              selectValue="رنگ مورد نظر را انتخاب کنید"
+              formValue="color_ids"
+            />
           </div>
 
           <div className="flex flex-col gap-1">
-            <div className="flex justify-center">
-              <span className="bg-blue-300/50 border border-gray-400 py-2 w-1/4 md:w-28 px-4">
-                گارانتی
-              </span>
-              <FastField name="guarantee_ids"
-                placeholder="قسمتی از نام گارانتی را وارد کنید"
-                type="text"
-                className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400"
-              />
-            </div>
-            <div className="flex justify-center">
-              <div className="flex justify-start gap-1 w-full md:w-5/6 lg:w-3/4 md:pr-[11.5%] lg:pr-[9%]">
-                <span className="flex items-center bg-green-200 py-1 px-4 rounded-full">
-                  <Icon name="xMark" />
-                  <span>گارانتی فلان</span>
-                </span>
-                <span className="flex items-center bg-green-200 py-1 px-4 rounded-full">
-                  <Icon name="xMark" />
-                  <span>گارانتی فلان</span>
-                </span>
-              </div>
-            </div>
+            <SelectItems
+              childeArray={guarantee}
+              loading={loading}
+              form={formik.setFieldValue}
+              title="گارانتی"
+              selectValue="گارانتی مورد نظر را انتخاب کنید"
+              formValue="guarantee_ids"
+            />
           </div>
 
           <div className="flex justify-center">
@@ -235,16 +272,102 @@ const ModalProduct = () => {
             <FastField name="descriptions"
               as="textarea"
               placeholder="توضیحات"
-              rows={5}
+              rows={2}
               type="text"
               className="focus:outline-none w-3/4 md:w-1/2 border border-gray-400 p-2"
             ></FastField>
           </div>
 
-          <div className="flex justify-center gap-4">
-            <button className="bg-blue-600 text-white px-10 py-2 rounded-md">
+          <div className="flex justify-center">
+            <span className="bg-blue-300/50 border flex justify-center items-center border-gray-400 w-1/4 md:w-28 py-2 px-4">
+              توضیحات کوتاه
+            </span>
+            <FastField name="short_descriptions"
+              as="textarea"
+              placeholder="توضیحات"
+              rows={2}
+              type="text"
+              className="focus:outline-none w-3/4 md:w-1/2 border border-gray-400 p-2"
+            ></FastField>
+          </div>
+
+          <div className="flex justify-center">
+            <span className="bg-blue-300/50 border flex justify-center items-center border-gray-400 w-1/4 md:w-28 py-2 px-4">
+              توضیحات سبد
+            </span>
+            <FastField name="cart_descriptions"
+              as="textarea"
+              placeholder="توضیحات"
+              rows={2}
+              type="text"
+              className="focus:outline-none w-3/4 md:w-1/2 border border-gray-400 p-2"
+            ></FastField>
+          </div>
+
+          <div className="flex flex-col justify-center items-center">
+            <div className='flex  w-full justify-center'>
+              <button type='button' className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">تصویر</button>
+              <FastField name="image" >
+                {props => {
+                  return <input onChange={(e) => { props.form.setFieldValue("image", e.target.files[0]) }} type="file" className=" file:bg-blue-300/50    w-3/4 md:w-1/2 bg-white file:border-0  file:py-[11px] focus:outline-none border border-gray-400" />
+                }}
+              </FastField>
+            </div>
+            <ErrorMessage name='image'>
+              {(error) => {
+                return <span className="text-sm text-red-500 block">{error}</span>
+              }}
+            </ErrorMessage>
+          </div>
+
+          <div className="flex justify-center">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+              توضیح تصویر
+            </span>
+            <FastField name="alt_image"
+              placeholder="توضیح"
+              type="text"
+              className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400"
+            />
+          </div>
+
+          <div className="flex justify-center">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+              کلمات کلیدی
+            </span>
+            <FastField name="keywords"
+              placeholder="مثلا : تست1- تست2"
+              type="text"
+              className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400"
+            />
+          </div>
+
+          <div className="flex justify-center">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+              موجودی
+            </span>
+            <FastField name="stock"
+              placeholder="عدد"
+              type="text"
+              className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400"
+            />
+          </div>
+
+          <div className="flex justify-center">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+              درصد تخفیف
+            </span>
+            <FastField name="discount"
+              placeholder="عدد"
+              type="text"
+              className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400"
+            />
+          </div>
+
+          <div className="flex justify-center gap-4 items-center">
+            {formik.isSubmitting ? <PulseLoader size={20} color="purple" />: <button type="submit" className="bg-blue-600 text-white px-10 py-2 rounded-md">
               ذخیره
-            </button>
+            </button>}
             <button type="button" onClick={() => { navigate(-1) }} className="text-white bg-gray-600 px-8 rounded-md py-2">بازگشت</button>
           </div>
         </Form>
