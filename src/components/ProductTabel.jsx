@@ -141,7 +141,7 @@ const ProductTabel = ({ loading, data, numOfPage, currentPage, setCurrentPage, a
                                     setCurrentPage(numOfPage);
                                 }}
                             >
-                                <span>6</span>
+                                <span>{numOfPage}</span>
                             </li>) : null
                             }
 

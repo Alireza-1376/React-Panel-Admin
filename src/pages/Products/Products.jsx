@@ -18,7 +18,7 @@ const Products = () => {
   const [loading, setLoading] = useState(false)
   const [searchInput, setSearchInput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [countInPage, setCountInPage] = useState(6);
+  const [countInPage, setCountInPage] = useState(8);
   const [numOfPage, setNumOfPage] = useState();
 
 

@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import Icon from "../../layouts/sidebar/Icons";
-import { FastField, Formik, Form, ErrorMessage } from "formik";
+import { FastField, Formik, Form, ErrorMessage, Field } from "formik";
 import { number, object, string } from "yup";
 import { useEffect, useState } from "react";
 import { get } from "../../services/httpRequest";
 import { PulseLoader } from "react-spinners";
+import SelectItems from "./SelectItems";
 
 const initialValues = {
   parent_ids: "",
@@ -41,7 +42,6 @@ const ModalProduct = () => {
   const token = JSON.parse(localStorage.getItem('token'));
   const [categoryParents, setCategoryParents] = useState([]);
   const [categoryChildrens, setCategoryChildrens] = useState([]);
-  const [selectChildren, setSelectChildren] = useState([]);
   const [loading, setLoading] = useState(false)
 
   async function getCategoriesParents(e, form) {
@@ -58,57 +58,27 @@ const ModalProduct = () => {
   }, [])
 
   async function getCategoryChildrens(e) {
-    setLoading(true)
-    if (e.target.value == "") {
-      setCategoryChildrens([])
-      setLoading(false)
-      return null;
-    }
-    try {
-      setCategoryChildrens([])
-      const response = await get("/admin/categories", e.target.value, { Authorization: `Bearer ${token}` })
-      setCategoryChildrens(response.data.data);
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
-    }
-  }
-
-
-  function selectChildrenCategory(e ,form) {
-    if (e.target.value != "") {
-      const filter = categoryChildrens.filter((item) => {
-        return item.id == e.target.value;
-      })
-      setSelectChildren((prev) => {
-        if (prev.findIndex((item) => { return item.id == e.target.value }) == -1) {
-          const newData =[...prev, filter[0]]
-          const selectId =newData.map((item)=>{
-            return item.id; 
-          })
-          form.setFieldValue("category_ids" ,selectId.join("-"))
-          return newData ; 
-        } else {
-          return [...prev]
+        setLoading(true)
+        if (e.target.value == "") {
+            setCategoryChildrens([])
+            setLoading(false)
+            return null;
         }
-      })
+        try {
+            setCategoryChildrens([])
+            const response = await get("/admin/categories", e.target.value, { Authorization: `Bearer ${token}` })
+            setCategoryChildrens(response.data.data);
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
     }
 
-    
 
-  }
+  
 
-  function deleteSelectChildren(id , form) {
-    const filter = selectChildren.filter((item) => {
-      return item.id != id;
-    })
-    setSelectChildren(filter);
-    const filterId =filter.map((item)=>{
-      return item.id
-    })
-    form.setFieldValue("category_ids" ,filterId.join("-"))
-  }
+  
 
   return (
     <Formik
@@ -118,29 +88,28 @@ const ModalProduct = () => {
     >
       {formik => {
         console.log(formik.values)
-       return <Form className="text-center space-y-4 mt-4 p-4">
+        return <Form className="text-center space-y-4 mt-4 p-4">
           <h2 className="text-center text-2xl pt-6 mt-10">افزودن محصول جدید</h2>
 
           <div className="flex flex-col justify-center">
-            {categoryParents.length > 0 ?
-              <div className="flex flex-1 justify-center">
-                <span className="bg-blue-300/50 border border-gray-400 py-2 w-1/4 md:w-28 px-4">
-                  دسته والد
-                </span>
-                <FastField name="parent_ids">
-                  {props => {
-                    return (
-                      <select onChange={(e) => { getCategoryChildrens(e); props.form.setFieldValue("parent_ids", e.target.value) }} className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400">
-                        <option value="">انتخاب دسته والد</option>
-                        {categoryParents.map((item) => {
-                          return <option key={item.id} value={item.id}>{item.title}</option>
-                        })}
-                      </select>
-                    )
-                  }}
-                </FastField>
-              </div>
-              : null}
+            <div className="flex flex-1 justify-center">
+              <span className="bg-blue-300/50 border border-gray-400 py-2 w-1/4 md:w-28 px-4">
+                دسته والد
+              </span>
+              <Field name="parent_ids">
+                {props => {
+                  return (
+                    <select onChange={(e) => { getCategoryChildrens(e); props.form.setFieldValue("parent_ids", e.target.value) }} className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400">
+                      <option value="">انتخاب دسته والد</option>
+                      {categoryParents.map((item) => {
+                        return <option key={item.id} value={item.id}>{item.title}</option>
+                      })}
+                    </select>
+                  )
+                }}
+              </Field>
+            </div>
+
             <ErrorMessage name="parent_ids">
               {error => {
                 return <span className="text-sm text-red-500">{error}</span>
@@ -149,51 +118,15 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex flex-col gap-1">
-
-            {categoryChildrens.length > 0 ?
-              <>
-                <div className="flex flex-col justify-center">
-                  <div className="flex flex-1 justify-center">
-                    <span className="bg-blue-300/50 border border-gray-400 py-2 w-1/4 md:w-28 px-4">
-                      دسته اصلی
-                    </span>
-                    <FastField name="category_ids" >
-                      {props => {
-                        return (
-                          <select onChange={(e) => { selectChildrenCategory(e ,props.form) }} className="focus:outline-none p-2 w-3/4 md:w-1/2 border border-gray-400">
-                            <option value="">دسته ی مورد نظر را انتخاب کنید</option>
-                            {categoryChildrens.map((item) => {
-                              return <option key={item.id} value={item.id}>{item.title}</option>
-                            })}
-                          </select>
-                        )
-                      }}
-                    </FastField>
-                  </div>
-
-                  <ErrorMessage name="category_ids">
-                    {error => {
-                      return <span className="text-sm text-red-500">{error}</span>
-                    }}
-                  </ErrorMessage>
-                </div>
-                <div className="flex justify-center">
-                  <div className="flex justify-start gap-1 w-full md:w-5/6 lg:w-3/4 md:pr-[10%] lg:pr-[8.5%]">
-                    {selectChildren.map((item) => {
-                      return (
-                        <span key={item.id} className="flex items-center bg-green-200 py-1 px-4 rounded-full">
-                          <button type="button" onClick={() => { deleteSelectChildren(item.id ,formik) }}>
-                            <Icon name="xMark" />
-                          </button>
-                          <span>{item.title}</span>
-                        </span>
-                      )
-                    })}
-
-                  </div>
-                </div>
-              </>
-              : loading ? <div className="text-center"><PulseLoader size={20} color="purple" /></div> : null}
+            <SelectItems 
+            childeArray={categoryChildrens} 
+            loading={loading} 
+            form={formik.setFieldValue}
+            title="دسته اصلی"
+            selectValue="دسته ی مورد نظر را انتخاب کنید"
+            formValue="category_ids"
+            setChildArray={setCategoryChildrens}
+            />
           </div>
 
           <div className="flex flex-col justify-center">
