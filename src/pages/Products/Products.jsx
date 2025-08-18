@@ -11,8 +11,10 @@ import { elements } from 'chart.js';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import Tooltip from '@mui/material/Tooltip';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Products = () => {
+  const navigation =useNavigate();
   const token = JSON.parse(localStorage.getItem('token'))
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false)
@@ -36,7 +38,6 @@ const Products = () => {
       setLoading(false)
     }
   }
-
 
   useEffect(() => {
     getProductData(currentPage, countInPage, searchInput)
@@ -98,7 +99,7 @@ const Products = () => {
       elements: (item) => {
         return (
           <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-            <button className="text-yellow-500">
+            <button onClick={()=>{navigation('/products/add-product' ,{state:item})}} className="text-yellow-500">
               <Icon name="pen" size={16} />
             </button>
             <button className="text-green-500">

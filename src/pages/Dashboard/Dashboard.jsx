@@ -2,7 +2,7 @@ import Chart from "./Chart";
 import ItemsDashboard from "./ItemsDashboard";
 import Table from "./Table";
 const Dashboard = () => {
-    
+
   return (
     <div className="p-4 pt-2 space-y-6 mt-[71.5px] overflow-y-auto overflow-x-hidden">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -47,8 +47,8 @@ const Dashboard = () => {
         <div className="w-full">
           <Table />
         </div>
-        <div className="w-full flex justify-center mt-4">
-          <Chart/>
+        <div className="w-full flex justify-center mt-4 ">
+          <Chart />
         </div>
       </div>
     </div>

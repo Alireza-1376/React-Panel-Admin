@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Icon from "../../layouts/sidebar/Icons";
 import { FastField, Formik, Form, ErrorMessage, Field } from "formik";
 import { mixed, number, object, string } from "yup";
 import { useEffect, useState } from "react";
-import { get, post } from "../../services/httpRequest";
+import { get, post, put } from "../../services/httpRequest";
 import { PulseLoader } from "react-spinners";
 import SelectItems from "./SelectItems";
 import toast from "react-hot-toast";
@@ -26,24 +26,38 @@ const initialValues = {
   stock: "",
   discount: ""
 }
-const onSubmit = async (values ) => {
+const onSubmit = async (values, props, location) => {
+  if (location.state != null) {
+    delete values.image ;
+    try {
+      const response = await put(`/admin/products/${values.id}`, values, { Authorization: `Bearer ${token}` })
+      if (response.status == 200) {
+        toast.success(response.data.message)
+      }
+    } catch (error) {
+      console.log(error)
+    }
 
-  if (values.image) {
+  } else {
     const formData = new FormData();
     for (let key in values) {
       formData.append(key, values[key])
     }
-    values = formData;
-  }
-  try {
-    const response = await post("/admin/products", values, { Authorization: `Bearer ${token}` })
-    if (response.status == 201) {
-      toast.success(response.data.message)
+    if (values.image) {
+      const response = await post("/admin/products", formData, { Authorization: `Bearer ${token}` })
+      if (response.status == 201) {
+        toast.success(response.data.message)
+      }
+    } else {
+      const response = await post("/admin/products", values, { Authorization: `Bearer ${token}` })
+      if (response.status == 201) {
+        toast.success(response.data.message)
+      }
     }
-  } catch (error) {
-    console.log(error)
+
   }
 }
+
 const validationSchema = object({
   parent_ids: string().required("لطفا دسته ی والد را انتخاب کنبد"),
   category_ids: string().required("لطفا دسته ی محصول را انتخاب کنبد"),
@@ -54,17 +68,19 @@ const validationSchema = object({
   })
 })
 
-
-
 const ModalProduct = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const [reInitialValue, setReInitialValue] = useState(null);
   const [categoryParents, setCategoryParents] = useState([]);
   const [categoryChildrens, setCategoryChildrens] = useState([]);
   const [colors, setColors] = useState([]);
   const [guarantee, setGuarantee] = useState([]);
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(false)
+  const [editColors, setEditColors] = useState([]);
+  const [editGuatantee, setEditGuarantie] = useState([]);
+  const [editCategorieChildren, setEditCategoreChildren] = useState([]);
 
   async function getCategoriesParents() {
     try {
@@ -103,8 +119,25 @@ const ModalProduct = () => {
     getAllColors();
     getAllGuarantee();
     getAllBrands();
-  }, [])
-
+    if (location.state != null) {
+      for (let key in location.state) {
+        if (location.state[key] == null) {
+          location.state[key] = ""
+        }
+      }
+      setReInitialValue({
+        ...location.state,
+        category_ids: location.state.categories.map((item) => item.id).join("-"),
+        color_ids: location.state.colors.map((item) => item.id).join("-"),
+        guarantee_ids: location.state.guarantees.map((item) => item.id).join("-"),
+        parent_ids: location.state.parent_ids = "",
+        image: "",
+      })
+      setEditColors(location.state.colors)
+      setEditGuarantie(location.state.guarantees)
+      setEditCategoreChildren(location.state.categories)
+    }
+  }, [location.state])
   async function getCategoryChildrens(e) {
     setLoading(true)
     if (e.target.value == "") {
@@ -125,13 +158,14 @@ const ModalProduct = () => {
 
   return (
     <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
+      initialValues={reInitialValue || initialValues}
+      onSubmit={(values, props) => onSubmit(values, props, location)}
       validationSchema={validationSchema}
+      enableReinitialize
     >
       {formik => {
         return <Form className="text-center space-y-4 mt-4 p-4">
-          <h2 className="text-center text-2xl pt-6 mt-10">افزودن محصول جدید</h2>
+          <h2 className="text-center text-2xl pt-6 mt-10">{location.state == null ? "افزودن محصول جدید" : "ویرایش محصول"}</h2>
 
           <div className="flex flex-col justify-center">
             <div className="flex flex-1 justify-center">
@@ -167,7 +201,7 @@ const ModalProduct = () => {
               title="دسته اصلی"
               selectValue="دسته ی مورد نظر را انتخاب کنید"
               formValue="category_ids"
-              setChildArray={setCategoryChildrens}
+              editArray={editCategorieChildren}
             />
           </div>
 
@@ -251,6 +285,7 @@ const ModalProduct = () => {
               title="رنگ"
               selectValue="رنگ مورد نظر را انتخاب کنید"
               formValue="color_ids"
+              editArray={editColors}
             />
           </div>
 
@@ -262,6 +297,7 @@ const ModalProduct = () => {
               title="گارانتی"
               selectValue="گارانتی مورد نظر را انتخاب کنید"
               formValue="guarantee_ids"
+              editArray={editGuatantee}
             />
           </div>
 
@@ -304,21 +340,23 @@ const ModalProduct = () => {
             ></FastField>
           </div>
 
-          <div className="flex flex-col justify-center items-center">
-            <div className='flex  w-full justify-center'>
-              <button type='button' className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">تصویر</button>
-              <FastField name="image" >
-                {props => {
-                  return <input onChange={(e) => { props.form.setFieldValue("image", e.target.files[0]) }} type="file" className=" file:bg-blue-300/50    w-3/4 md:w-1/2 bg-white file:border-0  file:py-[11px] focus:outline-none border border-gray-400" />
+          {location.state == null ?
+            <div className="flex flex-col justify-center items-center">
+              <div className='flex  w-full justify-center'>
+                <button type='button' className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">تصویر</button>
+                <FastField name="image" >
+                  {props => {
+                    return <input onChange={(e) => { props.form.setFieldValue("image", e.target.files[0]) }} type="file" className=" file:bg-blue-300/50    w-3/4 md:w-1/2 bg-white file:border-0  file:py-[11px] focus:outline-none border border-gray-400" />
+                  }}
+                </FastField>
+              </div>
+              <ErrorMessage name='image'>
+                {(error) => {
+                  return <span className="text-sm text-red-500 block">{error}</span>
                 }}
-              </FastField>
+              </ErrorMessage>
             </div>
-            <ErrorMessage name='image'>
-              {(error) => {
-                return <span className="text-sm text-red-500 block">{error}</span>
-              }}
-            </ErrorMessage>
-          </div>
+            : null}
 
           <div className="flex justify-center">
             <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
@@ -365,8 +403,8 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex justify-center gap-4 items-center">
-            {formik.isSubmitting ? <PulseLoader size={20} color="purple" />: <button type="submit" className="bg-blue-600 text-white px-10 py-2 rounded-md">
-              ذخیره
+            {formik.isSubmitting ? <PulseLoader size={20} color="purple" /> : <button type="submit" className="bg-blue-600 text-white px-10 py-2 rounded-md">
+              {location.state == null ? "ذخیره" : "ویرایش"}
             </button>}
             <button type="button" onClick={() => { navigate(-1) }} className="text-white bg-gray-600 px-8 rounded-md py-2">بازگشت</button>
           </div>
