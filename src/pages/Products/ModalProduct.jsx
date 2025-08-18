@@ -27,15 +27,33 @@ const initialValues = {
   discount: ""
 }
 const onSubmit = async (values, props, location) => {
+
   if (location.state != null) {
-    delete values.image ;
-    try {
-      const response = await put(`/admin/products/${values.id}`, values, { Authorization: `Bearer ${token}` })
-      if (response.status == 200) {
-        toast.success(response.data.message)
+    if (values.image == "") {
+      delete values.image;
+      try {
+        const response = await put(`/admin/products/${values.id}`, values, { Authorization: `Bearer ${token}` })
+        if (response.status == 200) {
+          toast.success(response.data.message)
+        }
+      } catch (error) {
+        console.log(error)
       }
-    } catch (error) {
-      console.log(error)
+    } else {
+      console.log(values)
+      const formData = new FormData();
+      for (let key in values) {
+        formData.append(key, values[key])
+      }
+      try {
+        const response = await put(`/admin/products/${values.id}`, formData, { Authorization: `Bearer ${token}` })
+        console.log(response)
+        if (response.status == 200) {
+          toast.success(response.data.message)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
 
   } else {
@@ -59,7 +77,7 @@ const onSubmit = async (values, props, location) => {
 }
 
 const validationSchema = object({
-  parent_ids: string().required("لطفا دسته ی والد را انتخاب کنبد"),
+  parent_ids: string(),
   category_ids: string().required("لطفا دسته ی محصول را انتخاب کنبد"),
   title: string().required('لطفا عنوان محصول را وارد کنید'),
   price: string().required("لطفا قیمت محصول را وارد کنید").matches(/^-?\d+\.?\d*$/, "لطفا عدد وارد کنید"),
@@ -114,6 +132,24 @@ const ModalProduct = () => {
       console.log(error)
     }
   }
+  async function getCategoryChildrens(e) {
+    setLoading(true)
+    if (e.target.value == "") {
+      setCategoryChildrens([])
+      setLoading(false)
+      return null;
+    }
+    try {
+      setCategoryChildrens([])
+      const response = await get("/admin/categories", e.target.value, { Authorization: `Bearer ${token}` })
+      setCategoryChildrens(response.data.data);
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     getCategoriesParents();
     getAllColors();
@@ -138,23 +174,6 @@ const ModalProduct = () => {
       setEditCategoreChildren(location.state.categories)
     }
   }, [location.state])
-  async function getCategoryChildrens(e) {
-    setLoading(true)
-    if (e.target.value == "") {
-      setCategoryChildrens([])
-      setLoading(false)
-      return null;
-    }
-    try {
-      setCategoryChildrens([])
-      const response = await get("/admin/categories", e.target.value, { Authorization: `Bearer ${token}` })
-      setCategoryChildrens(response.data.data);
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
-    }
-  }
 
   return (
     <Formik
@@ -340,23 +359,23 @@ const ModalProduct = () => {
             ></FastField>
           </div>
 
-          {location.state == null ?
-            <div className="flex flex-col justify-center items-center">
-              <div className='flex  w-full justify-center'>
-                <button type='button' className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">تصویر</button>
-                <FastField name="image" >
-                  {props => {
-                    return <input onChange={(e) => { props.form.setFieldValue("image", e.target.files[0]) }} type="file" className=" file:bg-blue-300/50    w-3/4 md:w-1/2 bg-white file:border-0  file:py-[11px] focus:outline-none border border-gray-400" />
-                  }}
-                </FastField>
-              </div>
-              <ErrorMessage name='image'>
-                {(error) => {
-                  return <span className="text-sm text-red-500 block">{error}</span>
+
+          <div className="flex flex-col justify-center items-center">
+            <div className='flex  w-full justify-center'>
+              <button type='button' className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">تصویر</button>
+              <FastField name="image" >
+                {props => {
+                  return <input onChange={(e) => { props.form.setFieldValue("image", e.target.files[0]) }} type="file" className=" file:bg-blue-300/50    w-3/4 md:w-1/2 bg-white file:border-0  file:py-[11px] focus:outline-none border border-gray-400" />
                 }}
-              </ErrorMessage>
+              </FastField>
             </div>
-            : null}
+            <ErrorMessage name='image'>
+              {(error) => {
+                return <span className="text-sm text-red-500 block">{error}</span>
+              }}
+            </ErrorMessage>
+          </div>
+
 
           <div className="flex justify-center">
             <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
