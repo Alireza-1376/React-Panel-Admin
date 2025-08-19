@@ -3,8 +3,7 @@ import Icon from '../../layouts/sidebar/Icons';
 import ModalProduct from './ModalProduct';
 import { ModalContext } from '../../contexts/ModalContext';
 import Tabel from '../../components/Tabel';
-import EditProduct from './EditProduct';
-import AddProduct from './AddProduct';
+
 import { Delete, get } from '../../services/httpRequest';
 import ProductTabel from '../../components/ProductTabel';
 import { elements } from 'chart.js';
@@ -14,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Products = () => {
-  const navigation =useNavigate();
+  const navigation = useNavigate();
   const token = JSON.parse(localStorage.getItem('token'))
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false)
@@ -99,12 +98,19 @@ const Products = () => {
       elements: (item) => {
         return (
           <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-            <button onClick={()=>{navigation('/products/add-product' ,{state:item})}} className="text-yellow-500">
-              <Icon name="pen" size={16} />
-            </button>
-            <button className="text-green-500">
-              <Icon name="plus" size={16} />
-            </button>
+
+            <Tooltip title="ویرایش " arrow>
+              <button onClick={() => { navigation('/products/add-product', { state: item }) }} className="text-yellow-500">
+                <Icon name="pen" size={16} />
+              </button>
+            </Tooltip>
+
+            <Tooltip title="افزودن ویژگی" arrow>
+              <button onClick={()=>{navigation('/products/set-attribute',{state:item})}} className="text-green-500">
+                <Icon name="plus" size={16} />
+              </button>
+            </Tooltip>
+
             <Tooltip title="حذف" arrow>
               <button onClick={() => handleDelete(item)} className="text-red-500">
                 <Icon name="xMark" size={16} />
@@ -135,7 +141,7 @@ const Products = () => {
         />
       </div>
 
-      
+
       {/* {editModal && <EditProduct />}
       {addProperty && <AddProduct />} */}
     </div>
