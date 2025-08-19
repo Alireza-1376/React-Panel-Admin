@@ -7,6 +7,7 @@ import { get, post, put } from "../../services/httpRequest";
 import { PulseLoader } from "react-spinners";
 import SelectItems from "./SelectItems";
 import toast from "react-hot-toast";
+import CKeditor from "../../components/CKEditor";
 const token = JSON.parse(localStorage.getItem('token'));
 const initialValues = {
   parent_ids: "",
@@ -188,7 +189,7 @@ const ModalProduct = () => {
 
           <div className="flex flex-col justify-center">
             <div className="flex flex-1 justify-center">
-              <span className="bg-blue-300/50 border border-gray-400 py-2 w-1/4 md:w-28 px-4">
+              <span className="bg-blue-300/50 border border-gray-400 py-2 w-1/4 md:w-[18%] px-4">
                 دسته والد
               </span>
               <Field name="parent_ids">
@@ -226,7 +227,7 @@ const ModalProduct = () => {
 
           <div className="flex flex-col justify-center">
             <div className="flex justify-center">
-              <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+              <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
                 عنوان
               </span>
               <FastField name="title"
@@ -244,7 +245,7 @@ const ModalProduct = () => {
 
           <div className="flex flex-col justify-center">
             <div className="flex justify-center">
-              <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+              <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
                 قیمت
               </span>
               <FastField name="price"
@@ -261,7 +262,7 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex justify-center">
-            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
               وزن
             </span>
             <FastField name="weight"
@@ -274,7 +275,7 @@ const ModalProduct = () => {
           <div className="flex justify-center">
             {brands.length > 0 ?
               <>
-                <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+                <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
                   برند
                 </span>
                 <div className=" w-3/4 flex md:w-1/2 border border-gray-400 bg-white">
@@ -320,21 +321,16 @@ const ModalProduct = () => {
             />
           </div>
 
-          <div className="flex justify-center">
-            <span className="bg-blue-300/50 border flex justify-center items-center border-gray-400 w-1/4 md:w-28 py-2 px-4">
-              توضیحات
-            </span>
-            <FastField name="descriptions"
-              as="textarea"
-              placeholder="توضیحات"
-              rows={2}
-              type="text"
-              className="focus:outline-none w-3/4 md:w-1/2 border border-gray-400 p-2"
-            ></FastField>
+          <div className="flex justify-center ">
+            <div className="w-full md:w-[68.1%]">
+              <CKeditor 
+              name="descriptions"
+              />
+            </div>
           </div>
 
           <div className="flex justify-center">
-            <span className="bg-blue-300/50 border flex justify-center items-center border-gray-400 w-1/4 md:w-28 py-2 px-4">
+            <span className="bg-blue-300/50 border flex justify-center items-center border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
               توضیحات کوتاه
             </span>
             <FastField name="short_descriptions"
@@ -347,7 +343,7 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex justify-center">
-            <span className="bg-blue-300/50 border flex justify-center items-center border-gray-400 w-1/4 md:w-28 py-2 px-4">
+            <span className="bg-blue-300/50 border flex justify-center items-center border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
               توضیحات سبد
             </span>
             <FastField name="cart_descriptions"
@@ -362,7 +358,7 @@ const ModalProduct = () => {
 
           <div className="flex flex-col justify-center items-center">
             <div className='flex  w-full justify-center'>
-              <button type='button' className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">تصویر</button>
+              <button type='button' className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">تصویر</button>
               <FastField name="image" >
                 {props => {
                   return <input onChange={(e) => { props.form.setFieldValue("image", e.target.files[0]) }} type="file" className=" file:bg-blue-300/50    w-3/4 md:w-1/2 bg-white file:border-0  file:py-[11px] focus:outline-none border border-gray-400" />
@@ -378,7 +374,7 @@ const ModalProduct = () => {
 
 
           <div className="flex justify-center">
-            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
               توضیح تصویر
             </span>
             <FastField name="alt_image"
@@ -389,7 +385,7 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex justify-center">
-            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
               کلمات کلیدی
             </span>
             <FastField name="keywords"
@@ -400,7 +396,7 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex justify-center">
-            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
               موجودی
             </span>
             <FastField name="stock"
@@ -411,7 +407,7 @@ const ModalProduct = () => {
           </div>
 
           <div className="flex justify-center">
-            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-28 py-2 px-4">
+            <span className="bg-blue-300/50 border border-gray-400 w-1/4 md:w-[18%] py-2 px-4">
               درصد تخفیف
             </span>
             <FastField name="discount"

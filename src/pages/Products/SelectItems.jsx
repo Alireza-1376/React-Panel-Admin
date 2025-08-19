@@ -70,7 +70,7 @@ const SelectItems = ({ title, selectValue, childeArray, editArray, loading, form
                 <>
                     <div className="flex flex-col justify-center">
                         <div className="flex flex-1 justify-center mx-auto w-full">
-                            <span className="bg-blue-300/50 border border-gray-400 py-2 w-1/4 md:w-28 px-4">
+                            <span className="bg-blue-300/50 border border-gray-400 py-2 w-1/4 md:w-[18%] px-4">
                                 {title}
                             </span>
                             <Field name={formValue}>

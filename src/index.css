@@ -13,3 +13,10 @@ body {
 .active{
   background-color: rgb(150, 150, 150);
 }
+.ck{
+  text-align: right;
+  direction: rtl;
+}
+.ck > p{
+  text-align: right;
+}
