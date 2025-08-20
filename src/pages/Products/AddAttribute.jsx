@@ -25,12 +25,10 @@ const AddAttribute = () => {
     const [attrs, setAttrs] = useState([]);
     const [initialValue, setInitialValue] = useState(null);
     const [validationSchema, setValidationSchema] = useState();
-    
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const categories = location.state.categories;
-
     function getAtrributes() {
         setLoading(true)
         let attrArray = [];
@@ -44,7 +42,11 @@ const AddAttribute = () => {
                     attrArray = [...attrArray, { title: item.title, data: response.data.data }]
                     setLoading(false)
                     for (let d of response.data.data) {
-                        initial = { ...initial, [d.id]: "" }
+                        const value =location.state.attributes.filter((item)=>{
+                            return item?.pivot.property_id==d.id
+                        })[0]?.pivot.value || ""
+                        console.log(value)
+                        initial = { ...initial, [d.id]:value }
                         validate = { ...validate, [d.id]: string() }
                     }
 
