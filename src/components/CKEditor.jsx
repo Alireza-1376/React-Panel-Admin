@@ -10,7 +10,6 @@ const CKeditor = ({name}) => {
     return (
         <Field>
             {(props) => {
-                console.log(props.form)
                 return <CKEditor
                     editor={ClassicEditor}
                     config={{

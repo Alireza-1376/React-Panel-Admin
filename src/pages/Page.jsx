@@ -21,6 +21,7 @@ import CategoriesChildren from "./Category/CategoriesChildren";
 import AddProperty from "./Category/AddProperty"
 import ModalProduct from "./Products/ModalProduct";
 import AddAttribute from "./Products/AddAttribute";
+import Gallery from "./Products/Gallery";
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
   return (
@@ -34,6 +35,7 @@ const Page = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/products/add-product" element={<ModalProduct />}/>
         <Route path="/products/set-attribute" element={<AddAttribute />}/>
+        <Route path="/products/gallery" element={<Gallery />}/>
         <Route path="/colors" element={<Colors />} />
         <Route path="/gurantys" element={<Guranty />} />
         <Route path="/brands" element={<Brands />} />

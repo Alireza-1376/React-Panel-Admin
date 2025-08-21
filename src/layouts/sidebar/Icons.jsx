@@ -5,6 +5,7 @@ import { BiSolidMessageRounded } from "react-icons/bi";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { MdMarkunread } from "react-icons/md";
 import { HiMiniPower } from "react-icons/hi2";
+import { FaRegImage ,FaRegTrashAlt ,FaCalendarCheck } from "react-icons/fa";
 import {FaCircleQuestion , FaCheck, FaBarsStaggered , FaPercent , FaPlus , FaPenToSquare ,FaShareNodes ,FaPalette,FaPagelines ,FaCube ,FaCopyright ,FaShieldHalved,FaBasketShopping ,FaMoneyCheckDollar } from "react-icons/fa6";
 const icons ={
     people : IoIosPeople ,
@@ -32,7 +33,10 @@ const icons ={
     message :BiSolidMessageRounded ,
     send :RiSendPlaneFill ,
     message :MdMarkunread ,
-    power :HiMiniPower
+    power :HiMiniPower,
+    image : FaRegImage,
+    trash :FaRegTrashAlt,
+    check :FaCalendarCheck
 }
 const Icon = ({name , size}) => {
     const IconComponent =icons[name]

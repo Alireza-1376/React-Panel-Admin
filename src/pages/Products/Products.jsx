@@ -60,7 +60,6 @@ const Products = () => {
       if (result.isConfirmed) {
         try {
           const response = await Delete(`/admin/products/${item.id}`, { Authorization: `Bearer ${token}` })
-          console.log(response)
           toast.success(response.data.message)
           getProductData(currentPage, countInPage, searchInput)
           Swal.fire({
@@ -108,6 +107,12 @@ const Products = () => {
             <Tooltip title="افزودن ویژگی" arrow>
               <button onClick={()=>{navigation('/products/set-attribute',{state:item})}} className="text-green-500">
                 <Icon name="plus" size={16} />
+              </button>
+            </Tooltip>
+
+            <Tooltip title="افزودن تصویر" arrow>
+              <button onClick={()=>{navigation('/products/gallery',{state:item})}} className="text-purple-500">
+                <Icon name="image" size={16}/>
               </button>
             </Tooltip>
 

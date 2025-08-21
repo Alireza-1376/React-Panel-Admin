@@ -27,7 +27,7 @@ const initialValues = {
   stock: "",
   discount: ""
 }
-const onSubmit = async (values, props, location) => {
+const onSubmit = async (values, location) => {
 
   if (location.state != null) {
     if (values.image == "") {
@@ -40,35 +40,21 @@ const onSubmit = async (values, props, location) => {
       } catch (error) {
         console.log(error)
       }
-    } else {
-      console.log(values)
+    } 
+
+  } else {
+    if (values.image) {
       const formData = new FormData();
       for (let key in values) {
         formData.append(key, values[key])
       }
-      try {
-        const response = await put(`/admin/products/${values.id}`, formData, { Authorization: `Bearer ${token}` })
-        console.log(response)
-        if (response.status == 200) {
-          toast.success(response.data.message)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-  } else {
-    const formData = new FormData();
-    for (let key in values) {
-      formData.append(key, values[key])
-    }
-    if (values.image) {
       const response = await post("/admin/products", formData, { Authorization: `Bearer ${token}` })
       if (response.status == 201) {
         toast.success(response.data.message)
       }
     } else {
       const response = await post("/admin/products", values, { Authorization: `Bearer ${token}` })
+      console.log(response)
       if (response.status == 201) {
         toast.success(response.data.message)
       }
@@ -81,7 +67,7 @@ const validationSchema = object({
   parent_ids: string(),
   category_ids: string().required("لطفا دسته ی محصول را انتخاب کنبد"),
   title: string().required('لطفا عنوان محصول را وارد کنید'),
-  price: string().required("لطفا قیمت محصول را وارد کنید").matches(/^-?\d+\.?\d*$/, "لطفا عدد وارد کنید"),
+  price: number().required("لطفا قیمت محصول را وارد کنید"),
   image: mixed().test("size", "سایز عکس بادید کمتر از 100 کیلوبایت باشد", (value) => {
     return !value ? true : value.size < 100 * 1024;
   })
@@ -179,7 +165,7 @@ const ModalProduct = () => {
   return (
     <Formik
       initialValues={reInitialValue || initialValues}
-      onSubmit={(values, props) => onSubmit(values, props, location)}
+      onSubmit={(values) => onSubmit(values, location)}
       validationSchema={validationSchema}
       enableReinitialize
     >
