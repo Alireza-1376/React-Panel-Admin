@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import Icon from "../layouts/sidebar/Icons";
 import { ModalContext } from "../contexts/ModalContext";
 import { PulseLoader } from "react-spinners";
@@ -36,12 +36,12 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
     if (Math.ceil(pages) != 0 && Math.ceil(pages) < currtPage) {
       setCurrPage((prev) => { return prev - 1 })
     }
-    
-    if ( data.length / numOfData <= 1 ) {
+
+    if (data.length / numOfData <= 1) {
       setCurrPage(1)
     }
-   
-  }, [data , pages])
+
+  }, [data, pages])
 
   useEffect(() => {
     let start = currtPage * numOfData - numOfData;
@@ -50,7 +50,7 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
   }, [currtPage, numOfData, newData]);
 
 
-// console.log(data)
+  // console.log(data)
   return (
     <>
       <div className="flex justify-between py-4">
@@ -58,9 +58,10 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
           <button className="bg-blue-300/50 border border-gray-400 py-2 px-4">{title}</button>
           <input onChange={(e) => { setSearchInput(e.target.value) }} placeholder={placeholder} type="text" className="focus:outline-none p-2 w-4/5 md:w-1/2 border border-gray-400" />
         </div>
-        {prev == true ? <PrevPage /> : addFields ? <div onClick={() => { setShowModal(true) }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
+        {prev == true ? <PrevPage /> : 
+        <div onClick={() => { setShowModal(true) }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
           <Icon name="plus" size={18} />
-        </div> : null}
+        </div>}
       </div>
 
 
@@ -98,12 +99,21 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
                   >
                     {dataInfo.map((i, index) => {
                       return (
-                        <td
-                          key={index + 1}
-                          className="border border-gray-300 text-center p-2"
-                        >
-                          {d[i.field]}
-                        </td>
+                        <Fragment key={index + 1}>
+                          {i.field ? <td
+                            key={index + 1}
+                            className="border border-gray-300 text-center "
+                          >
+                            {d[i.field]}
+                          </td> :
+                            <td
+                              key={index + 1}
+                              className="border border-gray-300 text-center "
+                            >
+                              {i.elements(d)}
+                            </td>
+                          }
+                        </Fragment>
                       );
                     })}
                     {colors ? <td className="p-2">{colors.colors(d.codeColor)}</td> : null}
@@ -134,7 +144,7 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
                 return (
                   <li
                     key={page}
-                    className={`p-2 px-4 border border-gray-100 text-blue-500 font-bold cursor-pointer ${page==currtPage ? "bg-gray-300 shadow" : ""}`}
+                    className={`p-2 px-4 border border-gray-100 text-blue-500 font-bold cursor-pointer ${page == currtPage ? "bg-gray-300 shadow" : ""}`}
                     onClick={() => {
                       setCurrPage(page);
                     }}

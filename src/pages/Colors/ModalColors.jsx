@@ -10,12 +10,12 @@ const initialValues = {
     code: "#000000"
 }
 const onSubmit = async (values, props, setData, reInitialValue, data) => {
-    console.log(values)
+   
     const token = JSON.parse(localStorage.getItem('token'))
     if (reInitialValue) {
         try {
             const response =await put(`/admin/colors/${reInitialValue.id}`,values,{ Authorization: `Bearer ${token}` })
-            console.log(response)
+            
             if(response.status==200){
                 toast.success(response.data.message)
                 let newArr =[...data]

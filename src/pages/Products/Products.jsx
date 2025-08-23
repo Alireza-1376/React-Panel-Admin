@@ -143,6 +143,7 @@ const Products = () => {
           numOfPage={numOfPage}
           dataInfo={dataInfo}
           handleSearchData={handleSearchData}
+          url="/products/add-product"
         />
       </div>
 
