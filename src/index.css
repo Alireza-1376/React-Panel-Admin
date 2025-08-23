@@ -20,3 +20,15 @@ body {
 .ck > p{
   text-align: right;
 }
+
+.rmdp-container{
+  width: 90%;
+}
+.rmdp-container > input{
+  width: 100%;
+  border-radius: 0;
+  padding: 20px;
+}
+.products > div > div > div{
+  width: 100%;
+}
