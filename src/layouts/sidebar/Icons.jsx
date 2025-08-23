@@ -36,7 +36,7 @@ const icons ={
     power :HiMiniPower,
     image : FaRegImage,
     trash :FaRegTrashAlt,
-    check :FaCalendarCheck
+    checkCalender :FaCalendarCheck
 }
 const Icon = ({name , size}) => {
     const IconComponent =icons[name]

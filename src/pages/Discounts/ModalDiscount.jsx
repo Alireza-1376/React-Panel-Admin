@@ -1,16 +1,20 @@
 import { ErrorMessage, FastField, Form, Formik } from "formik";
 import { PulseLoader } from "react-spinners";
-import { object, string } from "yup";
+import { boolean, object, string } from "yup";
 import Modal from "../../components/Modal";
 import Icon from "../../layouts/sidebar/Icons";
 import persian from "react-date-object/calendars/persian"
 import persian_fa from "react-date-object/locales/persian_fa"
+import gregorian from "react-date-object/calendars/gregorian";
+import gregorian_fa from "react-date-object/locales/gregorian_fa";
 import DatePicker from "react-multi-date-picker";
-import { space } from "postcss/lib/list";
 import SelectItems from "../Products/SelectItems";
 import { useEffect, useState } from "react";
-import { get } from "../../services/httpRequest";
+import { get, post } from "../../services/httpRequest";
+import DateObject from "react-date-object";
+import toast from "react-hot-toast";
 
+const token = JSON.parse(localStorage.getItem('token'))
 
 const initialValues = {
     title: "",
@@ -20,32 +24,65 @@ const initialValues = {
     for_all: false,
     product_ids: ""
 }
-const onSubmit = (values) => {
-    console.log(values)
+const onSubmit = async (values ,props ,setData) => {
+    try {
+        const response = await post("/admin/discounts", values, { Authorization: `Bearer ${token}` })
+        console.log(response)
+        if(response.status==201){
+            setData((prev)=>{
+                return [...prev ,response.data.data]
+            })
+            toast.success(response.data.message)
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }
 const validationSchema = object({
     title: string().required("لطفا این قسمت را پر کنید").matches(/[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأءًٌٍَُِّ\s]+$/, " لطفا فارسی تایپ کنید و از اعداد استفاده نکنید"),
     code: string().required("لطفا این قسمت را پر کنید").matches(/^[A-Za-z\s][A-Za-z0-9]/, "لطفا انگلیسی تایپ کنید"),
     percent: string().required("لطفا این قسمت را پر کنید").matches(/[0-9]/, "لطفا عدد وارد کنید"),
     expire_at: string().required("لطفا این قسمت را پر کنید"),
+    for_all: boolean(),
     product_ids: string().when("for_all", {
-        is: true,
+        is: false,
         then: () => {
             return string().required('لطفا این قسمت را پر کنید')
         }
     })
 })
 
-const ModalDiscount = ({ setShowModal }) => {
-    const token =JSON.parse(localStorage.getItem('token'))
-    const [product ,setProduct] =useState([])
-    const [loading ,setLoading] =useState(false)
+const ModalDiscount = ({ setShowModal ,setData }) => {
+    const [product, setProduct] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [state, setState] = useState({ format: "MM/DD/YYYY" })
+    const convert = (date, format, props) => {
+        let object = { date, format }
+        setState({
+            gregorian: new DateObject(object).convert(gregorian, gregorian_fa).format(),
+            ...object
+        })
+        let oldFormat = new DateObject(object).convert(gregorian, gregorian_fa).format()
+        const oldDate = oldFormat.split("/")
+        const year = oldDate[2]
+        const month = oldDate[0]
+        const day = oldDate[1]
+        let newFormat = year + "-" + month + "-" + day;
 
-    async function getProducts(){
+        function toEnDigit(s) {
+            return s.replace(/[\u0660-\u0669\u06f0-\u06f9]/g,    
+                function (a) { return a.charCodeAt(0) & 0xf }     
+            )
+        }
+
+        props.form.setFieldValue("expire_at", toEnDigit(newFormat))
+    }
+
+    async function getProducts() {
         setLoading(true)
         try {
-            const response =await get("/admin/products/all_titles" , "" ,{Authorization : `Bearer ${token}`})
-            if(response.status==200){
+            const response = await get("/admin/products/all_titles", "", { Authorization: `Bearer ${token}` })
+            if (response.status == 200) {
                 setProduct(response.data.data)
                 setLoading(false)
             }
@@ -54,19 +91,19 @@ const ModalDiscount = ({ setShowModal }) => {
             setLoading(false)
         }
     }
-
-    useEffect(()=>{
+    useEffect(() => {
         getProducts()
-    },[])
+    }, [])
 
-    
+
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={onSubmit}
+            onSubmit={(values,props)=>onSubmit(values,props ,setData)}
             validationSchema={validationSchema}
         >
             {formik => {
+                console.log(formik.values)
                 return <Modal
                     title=""
                     screen={false}
@@ -117,9 +154,11 @@ const ModalDiscount = ({ setShowModal }) => {
                                 <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 text-sm w-28 px-4">تاریخ اعتبار</button>
                                 <FastField name="expire_at" placeholder="مثلا : 1400/12/04" type="text" >
                                     {props => {
-                                        return <DatePicker onChange={(e) => { props.form.setFieldValue("expire_at", `${e.year}/${e.month < 10 ? "0" + e.month : e.month}/${e.day < 10 ? "0" + e.day : e.day}`) }} calendar={persian} locale={persian_fa} />
+                                        return <DatePicker onChange={(e) => {
+                                            convert(e, state.format, props);
+                                            
+                                        }} placeholder="جهت انتخاب تاریخ کلیک کنید" calendar={persian} locale={persian_fa} />
                                     }}
-                                    {/* e.year  e.month.number  e.day*/}
                                 </FastField>
                             </div>
                             <ErrorMessage name="expire_at">
@@ -142,39 +181,24 @@ const ModalDiscount = ({ setShowModal }) => {
                         </div>
 
                         {formik.values.for_all ?
-                            <div className="flex w-full flex-col justify-center products">
-                                {/* <div className='flex flex-1'>
-                                    <button type='button' className="bg-blue-300/50 border border-gray-400 py-2 text-sm w-28 px-4">برای </button>
-                                    <FastField name="product_ids" placeholder="قسمتی از نام محصول را وارد کنید" type="text" className="focus:outline-none p-2 w-[90%] border border-gray-400" />
-                                </div> */}
+                            null
+                            : <div className="flex w-full flex-col justify-center products">
                                 <SelectItems
                                     childeArray={product}
                                     loading={loading}
-                                    form={formik.setFieldValue}
+                                    form={formik}
                                     title="برای"
                                     selectValue="محصول مورد نظر را انتخاب کنید"
                                     formValue="product_ids"
                                 />
-                                <ErrorMessage name="product_ids">
-                                    {error => {
-                                        return <span className="text-sm text-red-500">{error}</span>
-                                    }}
-                                </ErrorMessage>
-                            </div>
-                            : null}
 
-                        {/* <div className="flex justify-start">
-                            <span className="bg-green-200 items-center p-1 px-2 rounded-full inline-flex text-start">
-                                <button className="text-red-500">
-                                    <Icon name="xMark" />
-                                </button>
-                                <span>محصول 1</span>
-                            </span>
-                        </div> */}
+                            </div>}
 
 
-                        <div className="flex gap-4 justify-center">
-                            <button type='submit' className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>
+
+
+                        <div className="flex gap-4 justify-center items-center">
+                            {formik.isSubmitting ? <PulseLoader size={20} color="purple" /> : <button type='submit' className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>}
                             <button className="text-white bg-gray-600 px-6 rounded-md py-2" type="button" onClick={() => { setShowModal(false) }}>انصراف</button>
                         </div>
                     </Form>

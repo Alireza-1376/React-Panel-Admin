@@ -203,7 +203,7 @@ const ModalProduct = () => {
             <SelectItems
               childeArray={categoryChildrens}
               loading={loading}
-              form={formik.setFieldValue}
+              form={formik}
               title="دسته اصلی"
               selectValue="دسته ی مورد نظر را انتخاب کنید"
               formValue="category_ids"
@@ -287,7 +287,7 @@ const ModalProduct = () => {
             <SelectItems
               childeArray={colors}
               loading={loading}
-              form={formik.setFieldValue}
+              form={formik}
               title="رنگ"
               selectValue="رنگ مورد نظر را انتخاب کنید"
               formValue="color_ids"
@@ -299,7 +299,7 @@ const ModalProduct = () => {
             <SelectItems
               childeArray={guarantee}
               loading={loading}
-              form={formik.setFieldValue}
+              form={formik}
               title="گارانتی"
               selectValue="گارانتی مورد نظر را انتخاب کنید"
               formValue="guarantee_ids"

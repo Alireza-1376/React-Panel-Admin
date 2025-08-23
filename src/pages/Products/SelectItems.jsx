@@ -19,7 +19,7 @@ const SelectItems = ({ title, selectValue, childeArray, editArray, loading, form
                     const selectId = newData.map((item) => {
                         return item.id;
                     })
-                    form(formValue, selectId.join("-"))
+                    form.setFieldValue(formValue, selectId.join("-"))
                     return newData;
                 } else {
                     return [...prev]
@@ -27,6 +27,17 @@ const SelectItems = ({ title, selectValue, childeArray, editArray, loading, form
             })
         }
     }
+
+    useEffect(() => {
+        const ids = form.values?.product_ids?.split("-")
+        Promise.all(
+            ids?.map((item)=>{
+                return selectChildrenCategory(item ,form)
+            })
+        )
+        
+    }, [])
+
     function deleteSelectChildren(id, form) {
         const filter = selectChildren.filter((item) => {
             return item.id != id;
@@ -35,7 +46,7 @@ const SelectItems = ({ title, selectValue, childeArray, editArray, loading, form
         const filterId = filter.map((item) => {
             return item.id
         })
-        form(formValue, filterId.join("-"))
+        form.setFieldValue(formValue, filterId.join("-"))
     }
     useEffect(() => {
         setFilteredArray(childeArray)
@@ -66,7 +77,7 @@ const SelectItems = ({ title, selectValue, childeArray, editArray, loading, form
 
     return (
         <Fragment>
-            {childeArray.length > 0 || editArray.length > 0 ?
+            {childeArray?.length > 0 || editArray?.length > 0 ?
                 <>
                     <div className="flex flex-col justify-center">
                         <div className="flex flex-1 justify-center mx-auto w-full">
@@ -76,8 +87,8 @@ const SelectItems = ({ title, selectValue, childeArray, editArray, loading, form
                             <Field name={formValue}>
                                 {props => {
                                     return (
-                                        <div className="relative w-3/4 md:w-1/2">
-                                            <div onClick={(e) => { e.stopPropagation(); setIsOpen((prev) => !prev) }} className=" bg-white text-start gap-1 flex items-center px-2 h-full text-gray-400">
+                                        <div className="relative w-3/4 md:w-1/2 border border-gray-400">
+                                            <div onClick={(e) => { e.stopPropagation(); setIsOpen((prev) => !prev) }} className=" bg-white  text-start gap-1 flex items-center px-2 h-full text-gray-400">
                                                 {selectChildren.length > 0 ?
                                                     <>
                                                         {
@@ -99,7 +110,7 @@ const SelectItems = ({ title, selectValue, childeArray, editArray, loading, form
                                             {isOpen && <div className={`focus:outline-none p-2 z-10 border shadow-2xl border-gray-400 absolute bg-gray-100 w-full top-11`}>
                                                 <input onClick={(e) => { e.stopPropagation() }} onChange={(e) => { filterChildArray(e.target.value) }} className="w-full border-0 outline-none bg-inherit border-b border-gray-300 pb-1" type="text" placeholder="قسمتی از عنوان مورد نظر را وارد کنید" />
                                                 {filteredArray.map((item) => {
-                                                    return <p onClick={() => { setIsOpen(false); selectChildrenCategory(item.id, form) }} key={item.id} className="w-full mb-0.5 hover:bg-gray-200 cursor-pointer py-1.5 text-start ">{item.title}</p>
+                                                    return <p onClick={() => { setIsOpen(false); selectChildrenCategory(item.id,form) }} key={item.id} className="w-full mb-0.5 hover:bg-gray-200 cursor-pointer py-1.5 text-start ">{item.title}</p>
                                                 })}
                                             </div>}
                                         </div>

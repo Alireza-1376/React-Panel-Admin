@@ -93,7 +93,7 @@ const Discounts = () => {
 
                 <div id="products-table" className="m-4 overflow-x-auto">
                     <Tabel
-                        numOfData={2}
+                        numOfData={8}
                         data={data}
                         loading={loading}
                         dataInfo={dataInfo}
@@ -101,7 +101,7 @@ const Discounts = () => {
                         placeholder="قسمتی از نام عنوان را وارد کنید" />
                 </div>
 
-                {showModal && <ModalDiscount setShowModal={setShowModal} />}
+                {showModal && <ModalDiscount setData={setData} setShowModal={setShowModal} />}
 
             </div>
         </div>

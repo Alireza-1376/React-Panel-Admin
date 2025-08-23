@@ -121,7 +121,7 @@ const Gallery = () => {
 
                                 {item.is_main == 1 ? null :
                                     <button title="انتخاب به عنوان تصویر اصلی" onClick={()=>{handleMainImage(item.id)}} className="text-green-500">
-                                        <Icon name="check" size={25} />
+                                        <Icon name="checkCalender" size={25} />
                                     </button>
                                 }
 

@@ -32,3 +32,6 @@ body {
 .products > div > div > div{
   width: 100%;
 }
+.products > div > div > span{
+  width: 120px;
+}
