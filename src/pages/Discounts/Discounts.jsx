@@ -3,8 +3,11 @@ import { ModalContext } from "../../contexts/ModalContext";
 import Tabel from "../../components/Tabel";
 import Icon from "../../layouts/sidebar/Icons";
 import ModalDiscount from "./ModalDiscount";
-import { get } from "../../services/httpRequest";
+import { Delete, get } from "../../services/httpRequest";
 import moment from "moment-jalaali";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import Tooltip from "@mui/material/Tooltip";
 
 
 
@@ -14,7 +17,45 @@ const Discounts = () => {
     const token = JSON.parse(localStorage.getItem("token"))
     const { showModal, setShowModal } = useContext(ModalContext);
     const [data, setData] = useState([]);
-    const [loading ,setLoading] =useState(false);
+    const[editData ,setEditData] =useState(null);
+    const [loading, setLoading] = useState(false);
+
+    async function handleDelete(item){
+        Swal.fire({
+            title: "حذف کردن",
+            text: `آیا از حذف ${item.title} مطمئن هستید ؟`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "بله",
+            cancelButtonText: "خیر"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await Delete(`/admin/discounts/${item.id}`, { Authorization: `Bearer ${token}` })
+                    if (response.status == 200) {
+                        toast.success(response.data.message)
+                        let filteredData = data.filter((d) => {
+                            return d.id != item.id
+                        })
+                        setData(filteredData)
+                    }
+                    Swal.fire({
+                        text: "با موفقیت حذف شد",
+                        icon: "success"
+                    });
+
+                } catch (error) {
+                    toast.error("خطا در حذف کد تخفیف ")
+                }
+            }
+        });
+    }
+    async function handleEdite(item){
+        setShowModal(true)
+        setEditData(item)
+    }
 
     async function getDiscountData() {
         setLoading(true)
@@ -44,8 +85,12 @@ const Discounts = () => {
             elements: (item) => {
                 const m = moment(item.expire_at)
                 const date = m.format('jYYYY/jM/jD')
+                const split =date.split("/")
+                const year =split[0]
+                const month =split[1]
+                const day =split[2]
                 return (
-                    <span>{date}</span>
+                    <span>{`${year}/${month < 10 ? "0"+month : month}/${day < 10 ? "0"+day : day}`}</span>
                 )
             }
         },
@@ -61,9 +106,9 @@ const Discounts = () => {
         {
             field: null,
             value: "مربوط به",
-            elements:(item)=>{
+            elements: (item) => {
                 return (
-                    <span>{item.for_all==1 ? "همه" : "تعدادی از محصولات"}</span>
+                    <span>{item.for_all == 1 ? "همه" : "تعدادی از محصولات"}</span>
                 )
             }
         },
@@ -73,13 +118,17 @@ const Discounts = () => {
             elements: (item) => {
                 return (
                     <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-                        <button className="text-yellow-500">
-                            <Icon name="pen" size={16} />
-                        </button>
-                        <button className="text-red-500 flex justify-center items-center">
-                            <Icon name="xMark" size={16} />
-                        </button>
-                    </div>
+                        <Tooltip title="ویرایش" arrow>
+                            <button onClick={() => { handleEdite(item) }} className="text-yellow-500">
+                                <Icon name="pen" size={16} />
+                            </button>
+                        </Tooltip>
+                        <Tooltip title="حذف" arrow>
+                            <button onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center">
+                                <Icon name="xMark" size={16} />
+                            </button>
+                        </Tooltip>
+                    </div >
                 )
             },
         }
@@ -101,7 +150,7 @@ const Discounts = () => {
                         placeholder="قسمتی از نام عنوان را وارد کنید" />
                 </div>
 
-                {showModal && <ModalDiscount setData={setData} setShowModal={setShowModal} />}
+                {showModal && <ModalDiscount editData={editData} setEditData={setEditData} setData={setData} data={data} setShowModal={setShowModal} />}
 
             </div>
         </div>

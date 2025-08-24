@@ -10,7 +10,7 @@ import gregorian_fa from "react-date-object/locales/gregorian_fa";
 import DatePicker from "react-multi-date-picker";
 import SelectItems from "../Products/SelectItems";
 import { useEffect, useState } from "react";
-import { get, post } from "../../services/httpRequest";
+import { get, post, put } from "../../services/httpRequest";
 import DateObject from "react-date-object";
 import toast from "react-hot-toast";
 
@@ -24,19 +24,38 @@ const initialValues = {
     for_all: false,
     product_ids: ""
 }
-const onSubmit = async (values ,props ,setData) => {
-    try {
-        const response = await post("/admin/discounts", values, { Authorization: `Bearer ${token}` })
-        console.log(response)
-        if(response.status==201){
-            setData((prev)=>{
-                return [...prev ,response.data.data]
-            })
-            toast.success(response.data.message)
+const onSubmit = async (values, props, setData, reInitialValue ,data ) => {
+
+    if (reInitialValue) {
+        try {
+            const response =await put(`/admin/discounts/${values.id}`,values ,{ Authorization: `Bearer ${token}` })
+            if(response.status==200){
+                toast.success(response.data.message)
+                let dataArray =[...data]
+                let findItem =dataArray.findIndex((item)=>{
+                    return item.id == response.data.data.id
+                })
+                dataArray[findItem]=response.data.data
+                setData(dataArray)
+            }
+        } catch (error) {
+            console.log(error)
         }
-    } catch (error) {
-        console.log(error)
+    } else {
+        try {
+            const response = await post("/admin/discounts", values, { Authorization: `Bearer ${token}` })
+            if (response.status == 201) {
+                setData((prev) => {
+                    return [...prev, response.data.data]
+                })
+                toast.success(response.data.message)
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
+
+
 }
 const validationSchema = object({
     title: string().required("لطفا این قسمت را پر کنید").matches(/[پچجحخهعغفقثصضشسیبلاتنمکگوئدذرزطظژؤإأءًٌٍَُِّ\s]+$/, " لطفا فارسی تایپ کنید و از اعداد استفاده نکنید"),
@@ -52,10 +71,12 @@ const validationSchema = object({
     })
 })
 
-const ModalDiscount = ({ setShowModal ,setData }) => {
+const ModalDiscount = ({ setShowModal, setData ,data, editData, setEditData }) => {
     const [product, setProduct] = useState([])
     const [loading, setLoading] = useState(false)
+    const [reInitialValue, setReInitialValue] = useState(null)
     const [state, setState] = useState({ format: "MM/DD/YYYY" })
+    const [editProduct, setEditProduct] = useState([]);
     const convert = (date, format, props) => {
         let object = { date, format }
         setState({
@@ -68,13 +89,15 @@ const ModalDiscount = ({ setShowModal ,setData }) => {
         const month = oldDate[0]
         const day = oldDate[1]
         let newFormat = year + "-" + month + "-" + day;
-
+    
         function toEnDigit(s) {
-            return s.replace(/[\u0660-\u0669\u06f0-\u06f9]/g,    
-                function (a) { return a.charCodeAt(0) & 0xf }     
+            return s.replace(/[\u0660-\u0669\u06f0-\u06f9]/g,
+                function (a) { return a.charCodeAt(0) & 0xf }
             )
         }
-
+        if (!reInitialValue) {
+            return props.form.setFieldValue("expire_at", toEnDigit(newFormat))
+        }
         props.form.setFieldValue("expire_at", toEnDigit(newFormat))
     }
 
@@ -91,21 +114,50 @@ const ModalDiscount = ({ setShowModal ,setData }) => {
             setLoading(false)
         }
     }
+
     useEffect(() => {
         getProducts()
+        if (editData) {
+            const productIds = editData.products.map((item) => {
+                return item.id;
+            }).join("-")
+            const expireAt = editData.expire_at.split(" ")[0]
+            const convertToPersian = new Date(expireAt).toLocaleString("fa-IR", {
+                year: "numeric",
+                month: '2-digit',
+                day: "2-digit"
+            })
+            setReInitialValue({
+                ...editData,
+                for_all: editData.for_all == 1 ? true : false,
+                product_ids: productIds,
+                expire_at: expireAt,
+                convertToPersian:convertToPersian
+            })
+            setEditProduct((prev) => {
+                const items = editData.products.map((item) => {
+                    return item;
+                })
+                return [...prev, ...items]
+            })
+            setEditData(null)
+        } else {
+            setReInitialValue(null)
+        }
     }, [])
+
 
 
     return (
         <Formik
-            initialValues={initialValues}
-            onSubmit={(values,props)=>onSubmit(values,props ,setData)}
+            initialValues={reInitialValue || initialValues}
+            onSubmit={(values, props) => onSubmit(values, props, setData, reInitialValue,data ,setData)}
             validationSchema={validationSchema}
+            enableReinitialize
         >
             {formik => {
-                console.log(formik.values)
                 return <Modal
-                    title=""
+                    title={`${reInitialValue == null ? "افزودن کد تخفیف" : "ویرایش کد تخفیف"}`}
                     screen={false}
                 >
                     <Form className="text-center space-y-4 mt-4 p-4">
@@ -156,8 +208,8 @@ const ModalDiscount = ({ setShowModal ,setData }) => {
                                     {props => {
                                         return <DatePicker onChange={(e) => {
                                             convert(e, state.format, props);
-                                            
-                                        }} placeholder="جهت انتخاب تاریخ کلیک کنید" calendar={persian} locale={persian_fa} />
+
+                                        }} placeholder="جهت انتخاب تاریخ کلیک کنید" calendar={persian} locale={persian_fa} value={reInitialValue ? reInitialValue.convertToPersian : initialValues.expire_at} />
                                     }}
                                 </FastField>
                             </div>
@@ -180,6 +232,7 @@ const ModalDiscount = ({ setShowModal ,setData }) => {
                             </label>
                         </div>
 
+
                         {formik.values.for_all ?
                             null
                             : <div className="flex w-full flex-col justify-center products">
@@ -190,6 +243,7 @@ const ModalDiscount = ({ setShowModal ,setData }) => {
                                     title="برای"
                                     selectValue="محصول مورد نظر را انتخاب کنید"
                                     formValue="product_ids"
+                                    editArray={editProduct}
                                 />
 
                             </div>}
@@ -197,8 +251,9 @@ const ModalDiscount = ({ setShowModal ,setData }) => {
 
 
 
+
                         <div className="flex gap-4 justify-center items-center">
-                            {formik.isSubmitting ? <PulseLoader size={20} color="purple" /> : <button type='submit' className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>}
+                            {formik.isSubmitting ? <PulseLoader size={20} color="purple" /> : <button type='submit' className="bg-blue-600 text-white px-10 py-2 rounded-md">{reInitialValue == null ? "ذخیره" : "ویرایش"}</button>}
                             <button className="text-white bg-gray-600 px-6 rounded-md py-2" type="button" onClick={() => { setShowModal(false) }}>انصراف</button>
                         </div>
                     </Form>
