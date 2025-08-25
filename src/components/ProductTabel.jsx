@@ -70,7 +70,7 @@ const ProductTabel = ({url , loading, data, numOfPage, currentPage, setCurrentPa
                                                 <Fragment key={index + 1}>
                                                     {i.field ? <td
                                                         key={index + 1}
-                                                        className="border border-gray-300 text-center "
+                                                        className="border border-gray-300 text-center p-2"
                                                     >
                                                         {d[i.field]}
                                                     </td> :
