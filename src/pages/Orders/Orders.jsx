@@ -11,6 +11,7 @@ import DetailOrders from "./DetailOrders";
 
 const Orders = () => {
     const { showModal ,showDetail, setShowDetail } = useContext(ModalContext)
+    
     const data = [
         {
             id: 1,

@@ -16,6 +16,7 @@ const Colors = () => {
     const [data, setData] = useState([]);
     const [loading ,setLoading] =useState(false)
     const [editData, setEditData] = useState(null);
+    const [showAddBtn , setShowAddBtn] =useState(true)
     async function getColorsData() {
         setLoading(true)
         try {
@@ -113,7 +114,7 @@ const Colors = () => {
                 <h2 className="text-center text-2xl py-6">مدیریت رنگ ها</h2>
 
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام رنگ را وارد کنید" />
+                    <Tabel showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام رنگ را وارد کنید" />
                 </div>
 
                 {showModal && <ModalColors editData={editData} setEditData={setEditData} data={data} setData={setData} />}

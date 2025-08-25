@@ -18,7 +18,7 @@ const Category = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
-
+  const [showAddBtn, setShowAddBtn] = useState(true)
   const { showModal, editModal, setEditModal } = useContext(ModalContext);
   const [data, setData] = useState([])
   const token = JSON.parse(localStorage.getItem("token"))
@@ -150,7 +150,7 @@ const Category = () => {
         <PrevPage />
       </div>
       <div className="p-4">
-        <Tabel update={update} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
+        <Tabel showAddBtn={showAddBtn} update={update} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
 
       {showModal && <ModalCategory setUpdate={setUpdate} parents={parents} setParents={setParents} />}

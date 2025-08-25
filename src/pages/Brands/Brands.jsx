@@ -19,6 +19,7 @@ const Brands = () => {
     const [data, setData] = useState([]);
     const [editData, setEditData] = useState();
     const [update, setUpdate] = useState(0)
+    const [showAddBtn , setShowAddBtn] =useState(true)
     async function getBrandsData() {
         setIsLoading(true)
         try {
@@ -119,7 +120,7 @@ const Brands = () => {
             <div className="mt-[72.5px] overflow-hidden">
                 <h2 className="text-center text-2xl py-6">مدیریت برند ها</h2>
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel loading={isLoading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
+                    <Tabel showAddBtn={showAddBtn} loading={isLoading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
                 </div>
 
                 {showModal && <ModalBrands setData={setData} />}

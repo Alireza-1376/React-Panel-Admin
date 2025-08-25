@@ -19,6 +19,7 @@ const Discounts = () => {
     const [data, setData] = useState([]);
     const[editData ,setEditData] =useState(null);
     const [loading, setLoading] = useState(false);
+    const [showAddBtn , setShowAddBtn] =useState(true)
 
     async function handleDelete(item){
         Swal.fire({
@@ -147,7 +148,9 @@ const Discounts = () => {
                         loading={loading}
                         dataInfo={dataInfo}
                         title="جستجو"
-                        placeholder="قسمتی از نام عنوان را وارد کنید" />
+                        placeholder="قسمتی از نام عنوان را وارد کنید" 
+                        showAddBtn={showAddBtn}
+                        />
                 </div>
 
                 {showModal && <ModalDiscount editData={editData} setEditData={setEditData} setData={setData} data={data} setShowModal={setShowModal} />}

@@ -15,6 +15,7 @@ const Guranty = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [editData, setEditData] = useState(null);
+    const [showAddBtn , setShowAddBtn] =useState(true)
     async function getGurantyData() {
         setLoading(true)
         try {
@@ -102,7 +103,7 @@ const Guranty = () => {
                 <h2 className="text-center text-2xl py-6">مدیریت گارانتی ها</h2>
 
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
+                    <Tabel showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
                 </div>
 
                 {showModal && <ModalGurantys data={data} setEditData={setEditData} editData={editData} setData={setData} />}

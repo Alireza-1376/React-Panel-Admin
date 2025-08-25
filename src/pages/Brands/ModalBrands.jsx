@@ -22,7 +22,7 @@ const onSubmit = async (values, props, setData) => {
     }
     try {
         const response = await post("/admin/brands", values, { Authorization: `Bearer ${token}` })
-        console.log(response)
+   
         if (response.status == 201) {
             let newData = response.data.data;
             newData.title = newData.original_name;
