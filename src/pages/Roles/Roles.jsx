@@ -17,6 +17,7 @@ const Roles = () => {
     const [loading, setLoading] = useState(false);
     const [showAddBtn, setShowAddBtn] = useState(true)
     const [editRoleItem, setEditRoleItem] = useState(null)
+    const [permissions ,setPermission] =useState();
     async function getRoleData() {
         setLoading(true)
         try {
@@ -30,16 +31,23 @@ const Roles = () => {
             console.log(error)
         }
     }
-
+    async function getAllPermission(){
+        try {
+            const response =await get("/admin/permissions","",{Authorization : `Bearer ${token}`})
+            setPermission(response.data.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
     useEffect(() => {
         getRoleData()
+        getAllPermission()
     }, [])
 
     function editRole(item) {
         setEditRoleItem(item)
         setShowModal(true)
     }
-
 
 
 
@@ -79,7 +87,7 @@ const Roles = () => {
                     <Tabel showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} title="جستجو" placeholder="قسمتی از نام نقش را وارد کنید" />
                 </div>
 
-                {showModal && <ModalRoles setEditRoleItem={setEditRoleItem} editRoleItem={editRoleItem} setShowModal={setShowModal} />}
+                {showModal && <ModalRoles setData={setData} permissions={permissions} setEditRoleItem={setEditRoleItem} editRoleItem={editRoleItem} setShowModal={setShowModal} />}
 
             </div>
         </div>
