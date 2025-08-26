@@ -18,6 +18,7 @@ const Roles = () => {
     const [showAddBtn, setShowAddBtn] = useState(true)
     const [editRoleItem, setEditRoleItem] = useState(null)
     const [permissions ,setPermission] =useState();
+
     async function getRoleData() {
         setLoading(true)
         try {
@@ -61,9 +62,14 @@ const Roles = () => {
             elements: (item) => {
                 return (
                     <div className="flex items-center justify-center gap-2">
-                        <Tooltip title="ویرایش" arrow>
-                            <button onClick={() => { editRole(item) }} className="text-yellow-500">
+                        <Tooltip title="ویرایش نقش" arrow>
+                            <button onClick={() => {editRole({...item , editPermission:false})  }} className="text-yellow-500">
                                 <Icon name="pen" size={16} />
+                            </button>
+                        </Tooltip>
+                        <Tooltip title="ویرایش دسترسی ها" arrow>
+                            <button onClick={() => { editRole({...item , editPermission:true}) }} className="text-blue-500">
+                                <Icon name="fingerPrint" size={16} />
                             </button>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
@@ -87,7 +93,7 @@ const Roles = () => {
                     <Tabel showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} title="جستجو" placeholder="قسمتی از نام نقش را وارد کنید" />
                 </div>
 
-                {showModal && <ModalRoles setData={setData} permissions={permissions} setEditRoleItem={setEditRoleItem} editRoleItem={editRoleItem} setShowModal={setShowModal} />}
+                {showModal && <ModalRoles data={data} setData={setData} permissions={permissions} setEditRoleItem={setEditRoleItem} editRoleItem={editRoleItem} setShowModal={setShowModal} />}
 
             </div>
         </div>

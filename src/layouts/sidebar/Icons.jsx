@@ -6,7 +6,7 @@ import { RiSendPlaneFill } from "react-icons/ri";
 import { MdMarkunread } from "react-icons/md";
 import { HiMiniPower } from "react-icons/hi2";
 import { FaRegImage ,FaRegTrashAlt ,FaCalendarCheck } from "react-icons/fa";
-import {FaCircleQuestion , FaCheck, FaBarsStaggered , FaPercent , FaPlus , FaPenToSquare ,FaShareNodes ,FaPalette,FaPagelines ,FaCube ,FaCopyright ,FaShieldHalved,FaBasketShopping ,FaMoneyCheckDollar } from "react-icons/fa6";
+import {FaCircleQuestion , FaCheck, FaBarsStaggered , FaPercent , FaPlus , FaPenToSquare ,FaShareNodes ,FaPalette,FaPagelines ,FaCube ,FaCopyright ,FaShieldHalved,FaBasketShopping ,FaMoneyCheckDollar,FaFingerprint } from "react-icons/fa6";
 const icons ={
     people : IoIosPeople ,
     person : IoIosPerson ,
@@ -36,7 +36,8 @@ const icons ={
     power :HiMiniPower,
     image : FaRegImage,
     trash :FaRegTrashAlt,
-    checkCalender :FaCalendarCheck
+    checkCalender :FaCalendarCheck ,
+    fingerPrint :FaFingerprint
 }
 const Icon = ({name , size}) => {
     const IconComponent =icons[name]
