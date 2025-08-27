@@ -2,9 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../contexts/ModalContext";
 import Tabel from "../../components/Tabel";
 import Icon from "../../layouts/sidebar/Icons";
-import { get } from "../../services/httpRequest";
+import { Delete, get } from "../../services/httpRequest";
 import ModalRoles from "./ModalRoles";
 import Tooltip from "@mui/material/Tooltip";
+import Swal from "sweetalert2";
 
 
 
@@ -17,7 +18,7 @@ const Roles = () => {
     const [loading, setLoading] = useState(false);
     const [showAddBtn, setShowAddBtn] = useState(true)
     const [editRoleItem, setEditRoleItem] = useState(null)
-    const [permissions ,setPermission] =useState();
+    const [permissions, setPermission] = useState();
 
     async function getRoleData() {
         setLoading(true)
@@ -32,9 +33,9 @@ const Roles = () => {
             console.log(error)
         }
     }
-    async function getAllPermission(){
+    async function getAllPermission() {
         try {
-            const response =await get("/admin/permissions","",{Authorization : `Bearer ${token}`})
+            const response = await get("/admin/permissions", "", { Authorization: `Bearer ${token}` })
             setPermission(response.data.data)
         } catch (error) {
             console.log(error)
@@ -50,6 +51,38 @@ const Roles = () => {
         setShowModal(true)
     }
 
+    async function handleDeleteRole(item) {
+        Swal.fire({
+            title: "حذف کردن",
+            text: `آیا از حذف ${item.title} مطمئن هستید ؟`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "بله",
+            cancelButtonText: "خیر"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await Delete(`/admin/roles/${item.id}`, { Authorization: `Bearer ${token}` })
+                    if(response.status==200){
+                        const filterData = data.filter((i)=>{
+                            return i.id!=item.id
+                        })
+                        setData(filterData)
+                    }
+                    Swal.fire({
+                        text: "با موفقیت حذف شد",
+                        icon: "success"
+                    });
+
+                } catch (error) {
+                    toast.error("خطا در حذف نقش ")
+                }
+            }
+        });
+
+    }
 
 
     const dataInfo = [
@@ -63,17 +96,17 @@ const Roles = () => {
                 return (
                     <div className="flex items-center justify-center gap-2">
                         <Tooltip title="ویرایش نقش" arrow>
-                            <button onClick={() => {editRole({...item , editPermission:false})  }} className="text-yellow-500">
+                            <button onClick={() => { editRole({ ...item, editPermission: false }) }} className="text-yellow-500">
                                 <Icon name="pen" size={16} />
                             </button>
                         </Tooltip>
                         <Tooltip title="ویرایش دسترسی ها" arrow>
-                            <button onClick={() => { editRole({...item , editPermission:true}) }} className="text-blue-500">
+                            <button onClick={() => { editRole({ ...item, editPermission: true }) }} className="text-blue-500">
                                 <Icon name="fingerPrint" size={16} />
                             </button>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button className="text-red-500 flex justify-center items-center">
+                            <button onClick={() => handleDeleteRole(item)} className="text-red-500 flex justify-center items-center">
                                 <Icon name="xMark" size={16} />
                             </button>
                         </Tooltip>
