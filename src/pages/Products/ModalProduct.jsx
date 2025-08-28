@@ -27,7 +27,7 @@ const initialValues = {
   stock: "",
   discount: ""
 }
-const onSubmit = async (values, location) => {
+const onSubmit = async (values ,props, location ,setSelectChildren ,setSelectChildrenColor ,setSelectChildrenGuranty) => {
 
   if (location.state != null) {
     if (values.image == "") {
@@ -51,12 +51,20 @@ const onSubmit = async (values, location) => {
       const response = await post("/admin/products", formData, { Authorization: `Bearer ${token}` })
       if (response.status == 201) {
         toast.success(response.data.message)
+        props.resetForm()
+        setSelectChildren([])
+        setSelectChildrenColor([])
+        setSelectChildrenGuranty([])
       }
     } else {
       const response = await post("/admin/products", values, { Authorization: `Bearer ${token}` })
       console.log(response)
       if (response.status == 201) {
         toast.success(response.data.message)
+        props.resetForm()
+        setSelectChildren([])
+        setSelectChildrenColor([])
+        setSelectChildrenGuranty([])
       }
     }
 
@@ -86,6 +94,10 @@ const ModalProduct = () => {
   const [editColors, setEditColors] = useState([]);
   const [editGuatantee, setEditGuarantie] = useState([]);
   const [editCategorieChildren, setEditCategoreChildren] = useState([]);
+  const [selectChildren, setSelectChildren] = useState([]);
+  const [selectChildrenColor, setSelectChildrenColor] = useState([]);
+  const [selectChildrenGuranty, setSelectChildrenGuranty] = useState([]);
+
 
   async function getCategoriesParents() {
     try {
@@ -165,7 +177,7 @@ const ModalProduct = () => {
   return (
     <Formik
       initialValues={reInitialValue || initialValues}
-      onSubmit={(values) => onSubmit(values, location)}
+      onSubmit={(values ,props) => onSubmit(values ,props, location ,setSelectChildren ,setSelectChildrenColor ,setSelectChildrenGuranty)}
       validationSchema={validationSchema}
       enableReinitialize
     >
@@ -208,6 +220,8 @@ const ModalProduct = () => {
               selectValue="دسته ی مورد نظر را انتخاب کنید"
               formValue="category_ids"
               editArray={editCategorieChildren}
+              selectChildren={selectChildren}
+              setSelectChildren={setSelectChildren}
             />
           </div>
 
@@ -292,6 +306,8 @@ const ModalProduct = () => {
               selectValue="رنگ مورد نظر را انتخاب کنید"
               formValue="color_ids"
               editArray={editColors}
+              selectChildren={selectChildrenColor}
+              setSelectChildren={setSelectChildrenColor}
             />
           </div>
 
@@ -304,6 +320,8 @@ const ModalProduct = () => {
               selectValue="گارانتی مورد نظر را انتخاب کنید"
               formValue="guarantee_ids"
               editArray={editGuatantee}
+              selectChildren={selectChildrenGuranty}
+              setSelectChildren={setSelectChildrenGuranty}
             />
           </div>
 

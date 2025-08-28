@@ -3,7 +3,7 @@ import Icon from "../layouts/sidebar/Icons";
 import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const ProductTabel = ({url , loading, data, numOfPage, currentPage, setCurrentPage, addFields, setSearchInput, placeholder, title, dataInfo, handleSearchData }) => {
+const ProductTabel = ({showModal ,setShowModal ,url , loading, data, numOfPage, currentPage, setCurrentPage, addFields, setSearchInput, placeholder, title, dataInfo, handleSearchData }) => {
     const [numOfPages, setNumOfPages] = useState([]);
     const pageRange = 2;
     useEffect(() => {
@@ -30,7 +30,7 @@ const ProductTabel = ({url , loading, data, numOfPage, currentPage, setCurrentPa
                     <button className="bg-blue-300/50 border border-gray-400 py-2 px-4">{title}</button>
                     <input onChange={(e) => { hanldeSearch(e.target.value) }} placeholder={placeholder} type="text" className="focus:outline-none p-2 w-4/5 md:w-1/2 border border-gray-400" />
                 </div>
-                <Link to={url} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
+                <Link to={url} onClick={(e)=>{if(!url){return setShowModal(true)}}} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
                     <Icon name="plus" size={18} />
                 </Link>
             </div>

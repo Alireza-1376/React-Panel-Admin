@@ -48,12 +48,6 @@ const onSubmit = async (values, props, setData , data, reInitialValue) => {
             }
         }
 
-
-
-
-
-
-
     } else {
         try {
             const response = await post("/admin/roles", values, { Authorization: `Bearer ${token}` })
@@ -102,7 +96,7 @@ const ModalRoles = ({ setShowModal, editRoleItem, setEditRoleItem, permissions, 
         }
     }, [])
 
-    console.log(reInitialValue)
+
 
     return (
         <Formik

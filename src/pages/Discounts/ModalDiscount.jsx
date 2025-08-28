@@ -24,18 +24,18 @@ const initialValues = {
     for_all: false,
     product_ids: ""
 }
-const onSubmit = async (values, props, setData, reInitialValue ,data ) => {
+const onSubmit = async (values, props, setData, reInitialValue, data, setSelectChildren ,setDateValue) => {
 
     if (reInitialValue) {
         try {
-            const response =await put(`/admin/discounts/${values.id}`,values ,{ Authorization: `Bearer ${token}` })
-            if(response.status==200){
+            const response = await put(`/admin/discounts/${values.id}`, values, { Authorization: `Bearer ${token}` })
+            if (response.status == 200) {
                 toast.success(response.data.message)
-                let dataArray =[...data]
-                let findItem =dataArray.findIndex((item)=>{
+                let dataArray = [...data]
+                let findItem = dataArray.findIndex((item) => {
                     return item.id == response.data.data.id
                 })
-                dataArray[findItem]=response.data.data
+                dataArray[findItem] = response.data.data
                 setData(dataArray)
             }
         } catch (error) {
@@ -49,7 +49,12 @@ const onSubmit = async (values, props, setData, reInitialValue ,data ) => {
                     return [...prev, response.data.data]
                 })
                 toast.success(response.data.message)
+                setDateValue(null)
+                setSelectChildren([]);
+                props.resetForm();
             }
+            props.resetForm()
+
         } catch (error) {
             console.log(error)
         }
@@ -71,12 +76,15 @@ const validationSchema = object({
     })
 })
 
-const ModalDiscount = ({ setShowModal, setData ,data, editData, setEditData }) => {
+const ModalDiscount = ({ setShowModal, setData, data, editData, setEditData }) => {
     const [product, setProduct] = useState([])
     const [loading, setLoading] = useState(false)
     const [reInitialValue, setReInitialValue] = useState(null)
     const [state, setState] = useState({ format: "MM/DD/YYYY" })
     const [editProduct, setEditProduct] = useState([]);
+    const [selectChildren, setSelectChildren] = useState([]);
+    const [dateValue, setDateValue] = useState(null);
+
     const convert = (date, format, props) => {
         let object = { date, format }
         setState({
@@ -89,7 +97,7 @@ const ModalDiscount = ({ setShowModal, setData ,data, editData, setEditData }) =
         const month = oldDate[0]
         const day = oldDate[1]
         let newFormat = year + "-" + month + "-" + day;
-    
+
         function toEnDigit(s) {
             return s.replace(/[\u0660-\u0669\u06f0-\u06f9]/g,
                 function (a) { return a.charCodeAt(0) & 0xf }
@@ -132,7 +140,7 @@ const ModalDiscount = ({ setShowModal, setData ,data, editData, setEditData }) =
                 for_all: editData.for_all == 1 ? true : false,
                 product_ids: productIds,
                 expire_at: expireAt,
-                convertToPersian:convertToPersian
+                convertToPersian: convertToPersian
             })
             setEditProduct((prev) => {
                 const items = editData.products.map((item) => {
@@ -151,7 +159,7 @@ const ModalDiscount = ({ setShowModal, setData ,data, editData, setEditData }) =
     return (
         <Formik
             initialValues={reInitialValue || initialValues}
-            onSubmit={(values, props) => onSubmit(values, props, setData, reInitialValue,data ,setData)}
+            onSubmit={(values, props) => onSubmit(values, props, setData, reInitialValue, data, setSelectChildren ,setDateValue)}
             validationSchema={validationSchema}
             enableReinitialize
         >
@@ -208,8 +216,8 @@ const ModalDiscount = ({ setShowModal, setData ,data, editData, setEditData }) =
                                     {props => {
                                         return <DatePicker onChange={(e) => {
                                             convert(e, state.format, props);
-
-                                        }} placeholder="جهت انتخاب تاریخ کلیک کنید" calendar={persian} locale={persian_fa} value={reInitialValue ? reInitialValue.convertToPersian : initialValues.expire_at} />
+                                            setDateValue(e)
+                                        }} placeholder="جهت انتخاب تاریخ کلیک کنید" calendar={persian} locale={persian_fa} value={reInitialValue ? reInitialValue.convertToPersian : dateValue} />
                                     }}
                                 </FastField>
                             </div>
@@ -244,6 +252,8 @@ const ModalDiscount = ({ setShowModal, setData ,data, editData, setEditData }) =
                                     selectValue="محصول مورد نظر را انتخاب کنید"
                                     formValue="product_ids"
                                     editArray={editProduct}
+                                    selectChildren={selectChildren}
+                                    setSelectChildren={setSelectChildren}
                                 />
 
                             </div>}
