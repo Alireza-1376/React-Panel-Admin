@@ -6,16 +6,20 @@ import AdminContext from "./contexts/SidebarContext";
 import "./index.css";
 import { Toaster } from "react-hot-toast";
 import useLogin from "./hooks/useLogin";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 const App = () => {
-  const location =useLocation();
-  const [isLoading ,isLogin] =useLogin()
+  const location = useLocation();
+
   return (
-    <ModalProvider>
-    <AdminContext>
-      <Toaster />
-      {location.pathname.includes('/auth/login') ? <Login/> :<Admin />}
-    </AdminContext>
-    </ModalProvider>
+    <Provider store={store}>
+      <ModalProvider>
+        <AdminContext>
+          <Toaster />
+          {location.pathname.includes('/auth/login') ? <Login /> : <Admin />}
+        </AdminContext>
+      </ModalProvider>
+    </Provider>
   );
 };
 
