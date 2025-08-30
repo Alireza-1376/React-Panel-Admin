@@ -7,9 +7,12 @@ import { SidebarContext } from "../../contexts/SidebarContext";
 import Icon from "../sidebar/Icons";
 import { ModalContext } from "../../contexts/ModalContext";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Navbar = () => {
   const { openSidebar, setOpenSidebar} = useContext(SidebarContext);
   const {gripVertical , setGripVertical} = useContext(ModalContext)
+  const state =useSelector(state =>state.user.user)
+
   return (
     <nav
       onClick={() => {
@@ -46,7 +49,7 @@ const Navbar = () => {
         <li onClick={(e)=>{setGripVertical(!gripVertical);e.stopPropagation()}} className=" relative">
           <FaGripVertical size={24} className="text-white cursor-pointer" />
           {gripVertical ? <div className="absolute bg-white w-40 left-0 top-[42px] rounded p-2 shadow-md">
-            <p className="text-center mb-4">علیرضا حبیبی</p>
+            <p className="text-center mb-4">{`${state.first_name} ${state.last_name}` || state.user_name}</p>
             <div className="flex items-center gap-6 hover:bg-gray-200 cursor-pointer mb-3">
               <Icon name="dashboard" size={20} />
               <span>داشبورد</span>

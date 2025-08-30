@@ -140,19 +140,19 @@ const ModalUser = ({ setShowModal, data, setData, editRoleData, setEditRoleData 
                 day : "2-digit"
             })
             setReInitialValue({
-                user_name: editRoleData.user_name,
-                first_name: editRoleData.first_name,
-                last_name: editRoleData.last_name,
-                phone: editRoleData.phone,
-                email: editRoleData.email,
+                user_name: editRoleData.user_name || "",
+                first_name: editRoleData.first_name || "",
+                last_name: editRoleData.last_name || "",
+                phone: editRoleData.phone || "",
+                email: editRoleData.email || "",
                 password: "",
-                birth_date: editRoleData.birth_date.split(" ")[0],
-                gender: editRoleData.gender,
-                roles_id: rolesId,
-                idEditiRoleData: true,
+                birth_date: editRoleData.birth_date?.split(" ")[0] || "",
+                gender: editRoleData.gender || 1,
+                roles_id: rolesId || [],
+                idEditiRoleData: true ,
                 birthDate :date ,
                 id :editRoleData.id ,
-                roles:editRoleData.roles
+                roles:editRoleData.roles 
             })
             setEditRoleData(null)
         } else {
@@ -168,7 +168,6 @@ const ModalUser = ({ setShowModal, data, setData, editRoleData, setEditRoleData 
             enableReinitialize
         >
             {formik => {
-           
                 return <Modal
                     title={reInitialValue != null ? "ویرایش کاربر" : "افزودن کاربر"}
                     screen={true}

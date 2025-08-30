@@ -12,8 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 const Admin = () => {
     const [isLoading ,isLogin] =useLogin() ;
     const {gripVertical , setGripVertical} = useContext(ModalContext)
-    const state =useSelector(state => state.roles)
-    console.log(state)
+    const state =useSelector(state => state.user)
+    
     
     return (
         <div className="overflow-hidden" onClick={()=>{setGripVertical(false)}}>

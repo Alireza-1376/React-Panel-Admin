@@ -1,6 +1,6 @@
-import { get } from "../../services/httpRequest";
-import { ERROR, REQUEST, RESPONSE } from "./typeRoles";
-const token = JSON.parse(localStorage.getItem('token'));
+// import { get } from "../../services/httpRequest";
+import { ERROR, REQUEST, RESPONSE } from "./typeUsers";
+// const token = JSON.parse(localStorage.getItem('token'));
 
 export function sendRequest(){
     return {

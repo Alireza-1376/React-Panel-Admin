@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import reducerRoles from "./roles.js/reducerRoles"
+import reducerUser from "./users/reducerUser"
 const store = configureStore({
     reducer : {
-        roles : reducerRoles ,
+        user : reducerUser ,
     }
 })
 export default store ;
