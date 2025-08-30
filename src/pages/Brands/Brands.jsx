@@ -33,6 +33,7 @@ const Brands = () => {
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
+            toast.error("شما به این صفحه دسترسی ندارید")
         }
     }
     useEffect(() => {

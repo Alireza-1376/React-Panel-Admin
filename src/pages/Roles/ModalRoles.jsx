@@ -4,7 +4,6 @@ import { array, object, string } from "yup";
 import { ErrorMessage, FastField, Field, Form, Formik } from "formik";
 import { post, put } from "../../services/httpRequest";
 import toast from "react-hot-toast";
-const token = JSON.parse(localStorage.getItem('token'))
 
 const initialValue = {
     title: "",
@@ -17,6 +16,7 @@ const onSubmit = async (values, props, setData , data, reInitialValue) => {
     if (reInitialValue) {
         if (values.editPermission == true) {
             try {
+                const token = JSON.parse(localStorage.getItem('token'))
                 const response = await put(`/admin/roles/${values.id}/permissions`, values, { Authorization: `Bearer ${token}` })
                 if(response.status==200){
                     toast.success(response.data.message)
@@ -32,6 +32,7 @@ const onSubmit = async (values, props, setData , data, reInitialValue) => {
             }
         } else {
             try {
+                const token = JSON.parse(localStorage.getItem('token'))
                 const response = await put(`/admin/roles/${values.id}`, values, { Authorization: `Bearer ${token}` })
                 console.log(response);
                 if(response.status==200){
@@ -50,6 +51,7 @@ const onSubmit = async (values, props, setData , data, reInitialValue) => {
 
     } else {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await post("/admin/roles", values, { Authorization: `Bearer ${token}` })
             if (response.status == 201) {
                 toast.success(response.data.message)

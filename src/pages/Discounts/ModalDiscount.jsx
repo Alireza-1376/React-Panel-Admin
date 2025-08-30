@@ -112,6 +112,7 @@ const ModalDiscount = ({ setShowModal, setData, data, editData, setEditData }) =
     async function getProducts() {
         setLoading(true)
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await get("/admin/products/all_titles", "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 setProduct(response.data.data)

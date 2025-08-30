@@ -32,7 +32,7 @@ const Category = () => {
       }
       setLoading(false)
     } catch (error) {
-      console.log(error)
+      toast.error("شما به این صفحه دسترسی ندارید")
       setLoading(false)
     }
   }
@@ -47,7 +47,7 @@ const Category = () => {
         return { id: item.id, value: item.title }
       }))
     } catch (error) {
-      console.log(error)
+  
     }
   }
   useEffect(() => {

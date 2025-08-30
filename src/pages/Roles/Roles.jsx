@@ -6,6 +6,7 @@ import { Delete, get } from "../../services/httpRequest";
 import ModalRoles from "./ModalRoles";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 
 
@@ -30,7 +31,7 @@ const Roles = () => {
             }
         } catch (error) {
             setLoading(false)
-            console.log(error)
+            toast.error("شما به این صفحه دسترسی ندارید")
         }
     }
     async function getAllPermission() {
@@ -38,7 +39,7 @@ const Roles = () => {
             const response = await get("/admin/permissions", "", { Authorization: `Bearer ${token}` })
             setPermission(response.data.data)
         } catch (error) {
-            console.log(error)
+           
         }
     }
     useEffect(() => {

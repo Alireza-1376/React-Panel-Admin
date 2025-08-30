@@ -12,7 +12,7 @@ import { get, post, put } from "../../services/httpRequest";
 import SelectItems from "../Products/SelectItems";
 import DateObject from "react-date-object";
 import toast from "react-hot-toast";
-const token = JSON.parse(localStorage.getItem('token'))
+
 
 const gender = [
     { id: 1, value: "مرد" },
@@ -33,6 +33,7 @@ const initialValue = {
 const onSubmit = async (values, props, data ,setData, reInitialValue ,setSelectChildren ,setDateValue) => {
     if (reInitialValue != null) {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response =await put(`/admin/users/${values.id}` , values , {Authorization : `Bearer ${token}`})
             if(response.status==200){
                 toast.success(response.data.message)
@@ -48,6 +49,7 @@ const onSubmit = async (values, props, data ,setData, reInitialValue ,setSelectC
         }
     } else {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await post(`/admin/users`, values, { Authorization: `Bearer ${token}` })
             if (response.status == 201) {
                 toast.success(response.data.message)
@@ -115,6 +117,7 @@ const ModalUser = ({ setShowModal, data, setData, editRoleData, setEditRoleData 
     async function getAllRoles() {
         setLoading(true)
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await get("/admin/roles", "", { Authorization: `Bearer ${token}` })
             setRoles(response.data.data)
             setLoading(false)

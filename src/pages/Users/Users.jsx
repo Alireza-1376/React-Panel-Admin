@@ -29,7 +29,7 @@ const Users = () => {
                 setNumOfPage(response.data.data.last_page)
             }
         } catch (error) {
-            console.log(error)
+            toast.error("شما به این صفحه دسترسی ندارید")
             setLoading(false)
         }
     }

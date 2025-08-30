@@ -23,7 +23,7 @@ const Guranty = () => {
             setData(response.data.data)
             setLoading(false)
         } catch (error) {
-            console.log(error)
+            toast.error("شما به این صفحه دسترسی ندارید")
             setLoading(false)
         }
     }

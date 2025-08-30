@@ -8,7 +8,7 @@ import { PulseLoader } from "react-spinners";
 import SelectItems from "./SelectItems";
 import toast from "react-hot-toast";
 import CKeditor from "../../components/CKEditor";
-const token = JSON.parse(localStorage.getItem('token'));
+// const token = JSON.parse(localStorage.getItem('token'));
 const initialValues = {
   parent_ids: "",
   category_ids: "",
@@ -33,6 +33,7 @@ const onSubmit = async (values ,props, location ,setSelectChildren ,setSelectChi
     if (values.image == "") {
       delete values.image;
       try {
+        const token = JSON.parse(localStorage.getItem('token'));
         const response = await put(`/admin/products/${values.id}`, values, { Authorization: `Bearer ${token}` })
         if (response.status == 200) {
           toast.success(response.data.message)
@@ -44,6 +45,7 @@ const onSubmit = async (values ,props, location ,setSelectChildren ,setSelectChi
 
   } else {
     if (values.image) {
+      const token = JSON.parse(localStorage.getItem('token'));
       const formData = new FormData();
       for (let key in values) {
         formData.append(key, values[key])
@@ -57,6 +59,7 @@ const onSubmit = async (values ,props, location ,setSelectChildren ,setSelectChi
         setSelectChildrenGuranty([])
       }
     } else {
+      const token = JSON.parse(localStorage.getItem('token'));
       const response = await post("/admin/products", values, { Authorization: `Bearer ${token}` })
       console.log(response)
       if (response.status == 201) {
@@ -101,6 +104,7 @@ const ModalProduct = () => {
 
   async function getCategoriesParents() {
     try {
+      const token = JSON.parse(localStorage.getItem('token'));
       const response = await get("/admin/categories", "", { Authorization: `Bearer ${token}` })
       setCategoryParents(response.data.data)
     } catch (error) {
@@ -109,6 +113,7 @@ const ModalProduct = () => {
   }
   async function getAllColors() {
     try {
+      const token = JSON.parse(localStorage.getItem('token'));
       const response = await get("/admin/colors", "", { Authorization: `Bearer ${token}` })
       setColors(response.data.data)
     } catch (error) {
@@ -117,6 +122,7 @@ const ModalProduct = () => {
   }
   async function getAllGuarantee() {
     try {
+      const token = JSON.parse(localStorage.getItem('token'));
       const response = await get("/admin/guarantees", "", { Authorization: `Bearer ${token}` })
       setGuarantee(response.data.data)
     } catch (error) {
@@ -125,6 +131,7 @@ const ModalProduct = () => {
   }
   async function getAllBrands() {
     try {
+      const token = JSON.parse(localStorage.getItem('token'));
       const response = await get("/admin/brands", "", { Authorization: `Bearer ${token}` })
       setBrands(response.data.data)
     } catch (error) {
@@ -139,6 +146,7 @@ const ModalProduct = () => {
       return null;
     }
     try {
+      const token = JSON.parse(localStorage.getItem('token'));
       setCategoryChildrens([])
       const response = await get("/admin/categories", e.target.value, { Authorization: `Bearer ${token}` })
       setCategoryChildrens(response.data.data);

@@ -15,9 +15,10 @@ const initialValue = {
     in_filter: 0,
 }
 const onSubmit = async (values,props, id, setData, editData, setEditData, data) => {
-    const token = JSON.parse(localStorage.getItem('token'))
+    // const token = JSON.parse(localStorage.getItem('token'))
     if (!editData) {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await post(`/admin/categories/${id}/attributes`, values, { Authorization: `Bearer ${token}` })
             if (response.status == 201) {
                 toast.success(response.data.message)
@@ -31,8 +32,8 @@ const onSubmit = async (values,props, id, setData, editData, setEditData, data) 
         }
     } else {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await put(`/admin/categories/attributes/${editData.id}`, values, { Authorization: `Bearer ${token}` })
-
             const newData = [...data]
             const findIndex = data.findIndex((i) => {
                 return i.id == response.data.data.id
@@ -57,13 +58,15 @@ const validationSchema = object({
 
 const AddProperty = () => {
     const location = useLocation();
-    const token = JSON.parse(localStorage.getItem('token'))
+    // const token = JSON.parse(localStorage.getItem('token'))
     const [prev, setPrev] = useState(true);
     const [loading, setIsLoading] = useState();
     const [data, setData] = useState([]);
     const [editData, setEditData] = useState(null);
     async function getAttributes() {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            console.log(token)
             const response = await get(`/admin${location.pathname}`, "", { Authorization: `Bearer ${token}` })
             setData(response.data.data)
         } catch (error) {
@@ -89,6 +92,7 @@ const AddProperty = () => {
         }).then( async(result) => {
             if (result.isConfirmed) {
                 try {
+                    const token = JSON.parse(localStorage.getItem('token'))
                     const response =await Delete(`/admin/categories/attributes/${item.id}`, { Authorization: `Bearer ${token}` })
                     console.log(response)
                     if (response.status == 200) {

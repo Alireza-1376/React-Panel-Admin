@@ -3,6 +3,7 @@ import { ModalContext } from "../../contexts/ModalContext";
 import Tabel from "../../components/Tabel";
 import Icon from "../../layouts/sidebar/Icons";
 import { get } from "../../services/httpRequest";
+import toast from "react-hot-toast";
 
 
 
@@ -20,7 +21,7 @@ const Permissions = () => {
                 setData(response.data.data)
             }
         } catch (error) {
-            console.log(error) ;
+            toast.error("شما به این صفحه دسترسی ندارید")
             setLoading(false) ;
         }
     }
