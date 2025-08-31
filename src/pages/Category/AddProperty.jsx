@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Tabel from "../../components/Tabel";
 import Icon from "../../layouts/sidebar/Icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { Delete, get, post, put } from "../../services/httpRequest";
 import { ErrorMessage, FastField, Form, Formik } from "formik";
@@ -58,7 +58,7 @@ const validationSchema = object({
 
 const AddProperty = () => {
     const location = useLocation();
-    // const token = JSON.parse(localStorage.getItem('token'))
+    const navigate =useNavigate();
     const [prev, setPrev] = useState(true);
     const [loading, setIsLoading] = useState();
     const [data, setData] = useState([]);
@@ -70,7 +70,8 @@ const AddProperty = () => {
             const response = await get(`/admin${location.pathname}`, "", { Authorization: `Bearer ${token}` })
             setData(response.data.data)
         } catch (error) {
-            console.log(error)
+            navigate(-1)
+            toast.error("شما به این صفحه دسترسی ندارید")
         }
     }
     useEffect(() => {

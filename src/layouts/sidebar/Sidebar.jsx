@@ -28,6 +28,7 @@ const Sidebar = () => {
       <Orders openSidebar={openSidebar} />
 
       <Users openSidebar={openSidebar} />
+      
       <Communications openSidebar={openSidebar}/>
     </div>
   );

@@ -1,20 +1,14 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
 import Icon from '../../layouts/sidebar/Icons';
-import ModalProduct from './ModalProduct';
-import { ModalContext } from '../../contexts/ModalContext';
-import Tabel from '../../components/Tabel';
-
 import { Delete, get } from '../../services/httpRequest';
 import ProductTabel from '../../components/ProductTabel';
-import { elements } from 'chart.js';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import Tooltip from '@mui/material/Tooltip';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 const Products = () => {
   const navigation = useNavigate();
-  const token = JSON.parse(localStorage.getItem('token'))
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false)
   const [searchInput, setSearchInput] = useState("");
@@ -26,6 +20,7 @@ const Products = () => {
   async function getProductData(currentPage, countInPage, searchInput) {
     setLoading(true)
     try {
+      const token = JSON.parse(localStorage.getItem('token'))
       const response = await get(`/admin/products?page=${currentPage}&count=${countInPage}&searchChar=${searchInput}`, "", { Authorization: `Bearer ${token}` })
       if (response.status == 200) {
         setData(response.data.data)
@@ -59,6 +54,7 @@ const Products = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          const token = JSON.parse(localStorage.getItem('token'))
           const response = await Delete(`/admin/products/${item.id}`, { Authorization: `Bearer ${token}` })
           toast.success(response.data.message)
           getProductData(currentPage, countInPage, searchInput)
@@ -105,14 +101,14 @@ const Products = () => {
             </Tooltip>
 
             <Tooltip title="افزودن ویژگی" arrow>
-              <button onClick={()=>{navigation('/products/set-attribute',{state:item})}} className="text-green-500">
+              <button onClick={() => { navigation('/products/set-attribute', { state: item }) }} className="text-green-500">
                 <Icon name="plus" size={16} />
               </button>
             </Tooltip>
 
             <Tooltip title="افزودن تصویر" arrow>
-              <button onClick={()=>{navigation('/products/gallery',{state:item})}} className="text-purple-500">
-                <Icon name="image" size={16}/>
+              <button onClick={() => { navigation('/products/gallery', { state: item }) }} className="text-purple-500">
+                <Icon name="image" size={16} />
               </button>
             </Tooltip>
 
@@ -130,7 +126,6 @@ const Products = () => {
   return (
     <div className="mt-[72.5px] overflow-hidden">
       <h2 className="text-center text-2xl py-6">مدیریت محصولات</h2>
-
       <div id="products-table" className="m-4 overflow-x-auto">
         <ProductTabel
           title="جستجو"
@@ -146,10 +141,6 @@ const Products = () => {
           url="/products/add-product"
         />
       </div>
-
-
-      {/* {editModal && <EditProduct />}
-      {addProperty && <AddProduct />} */}
     </div>
   );
 }

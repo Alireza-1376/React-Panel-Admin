@@ -3,7 +3,7 @@ import { SidebarContext } from "../contexts/SidebarContext";
 import Dashboard from "./Dashboard/Dashboard";
 import Category from "./Category/Category";
 import Products from "./Products/Products";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Colors from "./Colors/Colors";
 import Guranty from "./Gurantys/Gurantys";
 import Brands from "./Brands/Brands";
@@ -22,84 +22,57 @@ import AddProperty from "./Category/AddProperty"
 import ModalProduct from "./Products/ModalProduct";
 import AddAttribute from "./Products/AddAttribute";
 import Gallery from "./Products/Gallery";
-import { useSelector } from "react-redux";
+import { usePermissions } from "../hooks/usePermissions";
+
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
-  const state = useSelector(state => state.user.user.roles)
-  let permissions = [];
-  for (let role of state) {
-    // console.log(role)
-    permissions = [...permissions, ...role.permissions]
-  }
-  function findPermission(permission) {
-    const findIndex = permissions.findIndex((item) => {
-      return item.title.includes(permission);
-    })
-    return findIndex;
-  }
+  const permissionCategory =usePermissions("read_categories")
+  const permissionProduct =usePermissions("read_products")
+  const permissionColors =usePermissions("read_colors")
+  const permissionGuaranties =usePermissions("read_guarantees")
+  const permissionBrands =usePermissions("read_brands")
+  const permissionDiscount =usePermissions("read_discounts")
+  const permissionUsers =usePermissions("read_users")
+  const permissionRoles =usePermissions("read_roles")
+  const permissionPermissions =usePermissions("read_permissions")
 
 
-
+  
 
   return (
     <div id="content" onClick={() => { setOpenSidebar(false) }} className=" h-[100vh] overflow-x-auto bg-cover w-full">
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        {findPermission("read_categories") > -1 ?
-          <Route path="/categories" element={<Category />}>
-            <Route path=":id" element={<CategoriesChildren />} />
-          </Route>
-          :
-          null}
+        {permissionCategory &&
+        <Route path="/categories" element={<Category />}>
+          <Route path=":id" element={<CategoriesChildren />} />
+        </Route> 
+        }
 
         <Route path="/categories/:id/attributes" element={<AddProperty />} />
+        {permissionProduct && <Route path="/products" element={<Products />} />}
 
-        {findPermission("read_products") > -1 ?
-          <Route path="/products" element={<Products />} />
-          : null}
-
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="/products/add-product" element={<ModalProduct />} />
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="/products/set-attribute" element={<AddAttribute />} />
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="/products/gallery" element={<Gallery />} />
+
+        {permissionColors && <Route path="/colors" element={<Colors />} />}
+        {permissionGuaranties && <Route path="/gurantys" element={<Guranty />} />}
+        {permissionBrands && <Route path="/brands" element={<Brands />} />}
+        {permissionDiscount && <Route path="/discounts" element={<Discounts />} />}
         
-        {findPermission("read_colors") > -1 ?
-          <Route path="/colors" element={<Colors />} />
-          : null}
-
-        {findPermission("read_guarantees") > -1 ?
-          <Route path="/gurantys" element={<Guranty />} />
-          : null}
-
-        {findPermission("read_brands") > -1 ?
-          <Route path="/brands" element={<Brands />} />
-          : null}
-
-        {/* {findPermission("") > -1 ? : null} */}
-        <Route path="/discounts" element={<Discounts />} />
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="/baskets" element={<Baskets />} />
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="/orders" element={<Orders />} />
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="/sends" element={<Sends />} />
-        {/* {findPermission("") > -1 ? : null} */}
-        <Route path="/users" element={<Users />} />
-        {/* {findPermission("") > -1 ? : null} */}
-        <Route path="/roles" element={<Roles />} />
-        {/* {findPermission("") > -1 ? : null} */}
-        <Route path="/permissions" element={<Permissions />} />
-        {/* {findPermission("") > -1 ? : null} */}
+       
+        {permissionUsers &&  <Route path="/users" element={<Users />} />}
+        {permissionRoles && <Route path="/roles" element={<Roles />} />}
+        {permissionPermissions &&  <Route path="/permissions" element={<Permissions />} />}
+       
         <Route path="/questions" element={<Questions />} />
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="/comments" element={<Comments />} />
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="/logout" element={<LogOut />} />
-        {/* {findPermission("") > -1 ? : null} */}
         <Route path="*" element={<Dashboard />} />
-        {/* {findPermission("") > -1 ? : null} */}
       </Routes>
     </div>
   );

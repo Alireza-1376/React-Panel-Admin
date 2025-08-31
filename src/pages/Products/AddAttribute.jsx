@@ -14,6 +14,8 @@ const onSubmit = async (values, id) => {
         }
     }
     try {
+        const token = JSON.parse(localStorage.getItem("token"))
+
         const response = await post(`/admin/products/${id}/add_attr`, data, { Authorization: `Bearer ${token}` })
         toast.success(response.data.message)
     } catch (error) {
@@ -38,6 +40,7 @@ const AddAttribute = () => {
 
         Promise.all(
             categories.map(async (item) => {
+                const token = JSON.parse(localStorage.getItem("token"))
                 const response = await get(`/admin/categories/${item.id}/attributes`, "", { Authorization: `Bearer ${token}` })
                 if (response.data.data.length > 0) {
                     attrArray = [...attrArray, { title: item.title, data: response.data.data }]
@@ -112,7 +115,7 @@ const AddAttribute = () => {
                                             )
                                         })}</div>
                                         <div className="flex justify-center gap-4 items-center mt-10">
-                                            {formik.isSubmitting ? <PulseLoader size={20} color="purple" />: <button type="submit" className="bg-blue-600 text-white px-10 py-2 rounded-md">
+                                            {formik.isSubmitting ? <PulseLoader size={20} color="purple" /> : <button type="submit" className="bg-blue-600 text-white px-10 py-2 rounded-md">
                                                 ذخیره
                                             </button>}
                                             <button type="button" onClick={() => { navigate(-1) }} className="text-white bg-gray-600 px-8 rounded-md py-2">بازگشت</button>

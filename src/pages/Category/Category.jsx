@@ -6,7 +6,7 @@ import Tabel from "../../components/Tabel";
 import EditCategory from "./EditCategory";
 import { Delete, get } from "../../services/httpRequest";
 import Tooltip from "@mui/material/Tooltip";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Navigate, Outlet, useNavigate, useParams } from "react-router-dom";
 import PrevPage from "../../components/PrevPage";
 import moment from "moment-jalaali";
 import Swal from "sweetalert2";
@@ -23,6 +23,9 @@ const Category = () => {
   const [data, setData] = useState([])
   const token = JSON.parse(localStorage.getItem("token"))
   const [update, setUpdate] = useState(0)
+
+
+
   async function getCategories() {
     setLoading(true)
     try {
@@ -36,6 +39,7 @@ const Category = () => {
       setLoading(false)
     }
   }
+
   useEffect(() => {
     getCategories()
   }, [params.id, update])
@@ -47,17 +51,20 @@ const Category = () => {
         return { id: item.id, value: item.title }
       }))
     } catch (error) {
-  
+
     }
   }
+
   useEffect(() => {
     getParents()
   }, [data])
+
   const dataInfo = [
     { field: "id", value: "#" },
     { field: "title", value: "عنوان محصول" },
     { field: "parent_id", value: "والد" },
   ];
+
   function handleDeleteCategory(id, title) {
     Swal.fire({
       title: "حذف کردن",
@@ -88,8 +95,8 @@ const Category = () => {
     });
 
   }
-  function icons(item) {
 
+  function icons(item) {
     return (
       <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
         {!item.parent_id ? <Tooltip title="زیر مجموعه" arrow><button type="button" onClick={() => {
@@ -120,12 +127,14 @@ const Category = () => {
       </div>
     )
   }
+
   function showInMenu(item) {
 
     return <span className={`${item.show_in_menu == 1 ? "text-green-600" : "text-red-600"}`}>
       {item.show_in_menu == 1 ? "هست" : "نیست"}
     </span>
   }
+
   const addFields = [
     {
       title: "تاریخ",
@@ -144,6 +153,8 @@ const Category = () => {
 
   return (
     <div className="mt-[72.5px] overflow-hidden">
+
+
       <h2 className="text-center text-2xl py-6">مدیریت دسته بندی محصولات</h2>
       <div className="px-4 flex justify-between">
         <Outlet />
@@ -155,6 +166,8 @@ const Category = () => {
 
       {showModal && <ModalCategory setUpdate={setUpdate} parents={parents} setParents={setParents} />}
       {editModal && <EditCategory setUpdate={setUpdate} editId={editId} parents={parents} />}
+
+
     </div>
   );
 };
