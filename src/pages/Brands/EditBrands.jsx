@@ -12,7 +12,7 @@ const initialValue = {
     logo: "",
 }
 const onSubmit = async (values, props, setData, editData, data,setUpdate) => {
-    const token = JSON.parse(localStorage.getItem('token'))
+    
     if (values.logo) {
         const formData = new FormData();
         formData.append('original_name', values.original_name);
@@ -22,6 +22,7 @@ const onSubmit = async (values, props, setData, editData, data,setUpdate) => {
         values = formData;
     }
     try {
+        const token = JSON.parse(localStorage.getItem('token'))
         const response = await post(`/admin/brands/${editData.id}`, values, { Authorization: `Bearer ${token}` })
         if (response.status == 200) {
             let newData =[...data] ;

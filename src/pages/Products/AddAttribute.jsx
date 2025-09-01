@@ -5,7 +5,7 @@ import { PulseLoader } from "react-spinners";
 import { object, string } from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import toast from "react-hot-toast";
-const token = JSON.parse(localStorage.getItem("token"))
+
 const onSubmit = async (values, id) => {
     let data = {};
     for (let value in values) {

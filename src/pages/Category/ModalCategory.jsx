@@ -16,7 +16,7 @@ const initialValue = {
 }
 
 const onSubmit = async (values, props ,setUpdate) => {
-    const token = JSON.parse(localStorage.getItem("token"));
+    
     const formData = new FormData();
     formData.append("title", values.title)
     formData.append("descriptions", values.descriptions)
@@ -26,6 +26,7 @@ const onSubmit = async (values, props ,setUpdate) => {
     formData.append("image", values.image)
     values = formData;
     try {
+        const token = JSON.parse(localStorage.getItem("token"));
         const response = await post("/admin/categories", values, { Authorization: `Bearer ${token}` })
         if (response.status == 201) {
             toast.success(response.data.message)

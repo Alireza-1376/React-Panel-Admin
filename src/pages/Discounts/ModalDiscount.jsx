@@ -14,7 +14,7 @@ import { get, post, put } from "../../services/httpRequest";
 import DateObject from "react-date-object";
 import toast from "react-hot-toast";
 
-const token = JSON.parse(localStorage.getItem('token'))
+
 
 const initialValues = {
     title: "",
@@ -28,6 +28,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data, setSelectC
 
     if (reInitialValue) {
         try {
+            const token = JSON.parse(localStorage.getItem("token"))
             const response = await put(`/admin/discounts/${values.id}`, values, { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 toast.success(response.data.message)
@@ -43,6 +44,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data, setSelectC
         }
     } else {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await post("/admin/discounts", values, { Authorization: `Bearer ${token}` })
             if (response.status == 201) {
                 setData((prev) => {
@@ -112,6 +114,7 @@ const ModalDiscount = ({ setShowModal, setData, data, editData, setEditData }) =
     async function getProducts() {
         setLoading(true)
         try {
+            
             const token = JSON.parse(localStorage.getItem('token'))
             const response = await get("/admin/products/all_titles", "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {

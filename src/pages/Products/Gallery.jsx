@@ -15,7 +15,7 @@ const Gallery = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false)
     const location = useLocation();
-    const token = JSON.parse(localStorage.getItem('token'))
+    
     useEffect(() => {
         setGallery([...location.state.gallery])
     }, [])
@@ -37,6 +37,7 @@ const Gallery = () => {
         const formData = new FormData()
         formData.append("image", data)
         try {
+            const token =JSON.parse(localStorage.getItem("token"))
             const response = await post(`/admin/products/${location.state.id}/add_image`, formData, { Authorization: `Bearer ${token}` })
             if (response.status == 201) {
                 toast.success(response.data.message)
@@ -63,6 +64,7 @@ const Gallery = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
+                    const token =JSON.parse(localStorage.getItem("token"))
                     const response = await Delete(`/admin/products/gallery/${id}`, { Authorization: `Bearer ${token}` })
                     if (response.status == 200) {
                         toast.success(response.data.message)
@@ -87,6 +89,7 @@ const Gallery = () => {
 
     async function handleMainImage(id){
         try {
+            const token =JSON.parse(localStorage.getItem("token"))
             const response =await get(`/admin/products/gallery/set_main/${id}` , "" ,{ Authorization: `Bearer ${token}` })
             if(response.status==200){
                 toast.success(response.data.message)

@@ -14,7 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 
 const Discounts = () => {
-    const token = JSON.parse(localStorage.getItem("token"))
+    
     const { showModal, setShowModal } = useContext(ModalContext);
     const [data, setData] = useState([]);
     const[editData ,setEditData] =useState(null);
@@ -34,6 +34,7 @@ const Discounts = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
+                    const token = JSON.parse(localStorage.getItem("token"))
                     const response = await Delete(`/admin/discounts/${item.id}`, { Authorization: `Bearer ${token}` })
                     if (response.status == 200) {
                         toast.success(response.data.message)
@@ -61,6 +62,7 @@ const Discounts = () => {
     async function getDiscountData() {
         setLoading(true)
         try {
+            const token = JSON.parse(localStorage.getItem("token"))
             const response = await get("/admin/discounts", "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 setData(response.data.data)

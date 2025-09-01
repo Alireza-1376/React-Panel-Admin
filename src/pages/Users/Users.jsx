@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 
 const Users = () => {
     const { showModal, setShowModal, editModal, setEditModal } = useContext(ModalContext)
-    const token = JSON.parse(localStorage.getItem('token'))
+   
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,6 +22,7 @@ const Users = () => {
     async function getUsersData(page, count, searchChar) {
         setLoading(true)
         try {
+             const token = JSON.parse(localStorage.getItem('token'))
             const response = await get(`/admin/users?page=${page}&count=${count}&searchChar=${searchChar}`, "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 setData(response.data.data.data)
@@ -55,6 +56,7 @@ const Users = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
+                    const token = JSON.parse(localStorage.getItem('token'))
                     const response = await Delete(`/admin/users/${item.id}`, { Authorization: `Bearer ${token}` })
                     getUsersData(currentPage , countPerPage , searchChar)
                     Swal.fire({

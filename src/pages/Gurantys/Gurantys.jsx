@@ -10,7 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 
 const Guranty = () => {
-    const token = JSON.parse(localStorage.getItem('token'));
+    
     const { showModal, setShowModal } = useContext(ModalContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -19,6 +19,7 @@ const Guranty = () => {
     async function getGurantyData() {
         setLoading(true)
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await get("/admin/guarantees", "", { Authorization: `Bearer ${token}` })
             setData(response.data.data)
             setLoading(false)
@@ -52,6 +53,7 @@ const Guranty = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
+                    const token = JSON.parse(localStorage.getItem('token'));
                     const response = await Delete(`/admin/guarantees/${item.id}`, { Authorization: `Bearer ${token}` })
                     toast.success(response.data.message)
                     const filteredData = data.filter((i) => {

@@ -139,6 +139,7 @@ const Products = () => {
           dataInfo={dataInfo}
           handleSearchData={handleSearchData}
           url="/products/add-product"
+          pTitle="create_product"
         />
       </div>
     </div>

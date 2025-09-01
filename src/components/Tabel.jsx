@@ -4,10 +4,11 @@ import { ModalContext } from "../contexts/ModalContext";
 import { PulseLoader } from "react-spinners";
 import { useLocation } from "react-router-dom";
 import PrevPage from "./PrevPage";
+import { usePermissions } from "../hooks/usePermissions";
 
 
 
-const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, colors, title, placeholder ,showAddBtn}) => {
+const Tabel = ({ pTitle, prev, loading, numOfData, data, dataInfo, status, addFields, colors, title, placeholder, showAddBtn }) => {
   const { showModal, setShowModal } = useContext(ModalContext)
   const [currtPage, setCurrPage] = useState(1);
   const [dataRows, setDataRows] = useState([]);
@@ -15,7 +16,9 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
   const [numOfPages, setNumOfPages] = useState([]);
   const [seatchInput, setSearchInput] = useState("");
   const [newData, setNewData] = useState([]);
+  const permission = usePermissions(pTitle);
   const pageRange = 2;
+
 
   useEffect(() => {
     let newDataArray = data.filter((item) => {
@@ -51,7 +54,7 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
   }, [currtPage, numOfData, newData]);
 
 
-  // console.log(data)
+
   return (
     <>
       <div className="flex justify-between py-4">
@@ -60,9 +63,13 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
           <input onChange={(e) => { setSearchInput(e.target.value) }} placeholder={placeholder} type="text" className="focus:outline-none p-2 w-4/5 md:w-1/2 border border-gray-400" />
         </div>
         {prev == true ? <PrevPage /> : showAddBtn ?
-          <div onClick={() => { setShowModal(true) }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
-            <Icon name="plus" size={18} />
-          </div> : null}
+          (
+            <>
+              {permission && <div onClick={() => { setShowModal(true) }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
+                <Icon name="plus" size={18} />
+              </div>}
+            </>
+          ) : null}
       </div>
 
 
@@ -85,7 +92,7 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
                 })}
                 {colors ? <th className="border border-gray-300 text-center p-2">
                   {colors.bgColor}
-                </th> : null}  
+                </th> : null}
                 {addFields ? addFields.map((item, index) => {
                   return <th key={index + 1} className="border border-gray-300 text-center p-2">{item.title}</th>
                 }) : null}
@@ -171,7 +178,7 @@ const Tabel = ({ prev, loading, numOfData, data, dataInfo, status, addFields, co
                   : null
               })}
 
-              {currtPage < numOfPages.length-1 ?
+              {currtPage < numOfPages.length - 1 ?
                 <li
                   className={`p-2 px-4 border border-gray-100 text-blue-500 font-bold cursor-pointer ${currtPage == numOfPages.length ? "bg-gray-300 shadow" : ""}`}
                   onClick={() => {

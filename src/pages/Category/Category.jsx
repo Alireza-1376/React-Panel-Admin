@@ -11,6 +11,7 @@ import PrevPage from "../../components/PrevPage";
 import moment from "moment-jalaali";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import ActionIcon from "../../components/ActionIcon";
 
 const Category = () => {
   const [editId, setEditId] = useState();
@@ -21,7 +22,6 @@ const Category = () => {
   const [showAddBtn, setShowAddBtn] = useState(true)
   const { showModal, editModal, setEditModal } = useContext(ModalContext);
   const [data, setData] = useState([])
-  const token = JSON.parse(localStorage.getItem("token"))
   const [update, setUpdate] = useState(0)
 
 
@@ -29,6 +29,7 @@ const Category = () => {
   async function getCategories() {
     setLoading(true)
     try {
+      const token = JSON.parse(localStorage.getItem('token'))
       const response = await get("/admin/categories", params ? params.id : "", { Authorization: `Bearer ${token}` })
       if (response.status == 200) {
         setData(response.data.data)
@@ -46,6 +47,7 @@ const Category = () => {
 
   async function getParents() {
     try {
+      const token = JSON.parse(localStorage.getItem("token"))
       const response = await get("/admin/categories", "", { Authorization: `Bearer ${token}` })
       setParents(response.data.data.map((item) => {
         return { id: item.id, value: item.title }
@@ -78,6 +80,7 @@ const Category = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
+          const token = JSON.parse(localStorage.getItem("token"))
           Delete(`/admin/categories/${id}`, { Authorization: `Bearer ${token}` })
           const filteredData = data.filter((item) => {
             return item.id != id;
@@ -99,37 +102,33 @@ const Category = () => {
   function icons(item) {
     return (
       <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
-        {!item.parent_id ? <Tooltip title="زیر مجموعه" arrow><button type="button" onClick={() => {
-          navigate(`/categories/${item.id}`, { state: item.title });
-        }} className="text-blue-500">
-          <Icon name="share" size={16} />
-        </button></Tooltip> : null}
+
+        {!item.parent_id ?
+          <Tooltip title="زیر مجموعه" arrow>
+            <ActionIcon name="share" pTitle="read_category" onClick={() => { navigate(`/categories/${item.id}`, { state: item.title }) }} className={"text-blue-500"} />
+          </Tooltip> : null}
+
         <Tooltip title="ویرایش" arrow>
-          <button onClick={() => {
-            setEditModal(true)
-            setEditId(item.id)
-          }} className="text-yellow-500">
-            <Icon name="pen" size={16} />
-          </button>
+          <ActionIcon name="pen" pTitle="update_category" onClick={() => { setEditModal(true); setEditId(item.id) }} className={"text-yellow-500"} />
         </Tooltip>
+
         {params.id ? (
           <Tooltip title="افزودن ویژگی" arrow>
-            <button onClick={() => { navigate(`/categories/${item.id}/attributes`, { state: item }) }} className="text-green-500">
+            <button >
               <Icon name="plus" size={16} />
             </button>
+            <ActionIcon name="plus" pTitle="create_category_attr" onClick={() => { navigate(`/categories/${item.id}/attributes`, { state: item }) }} className={"text-green-500"}/>
           </Tooltip>
         ) : null}
+
         <Tooltip title="حذف" arrow>
-          <button type="submit" onClick={() => { handleDeleteCategory(item.id, item.title) }} className="text-red-500">
-            <Icon name="xMark" size={16} />
-          </button>
+          <ActionIcon name="xMark" pTitle="delete_category" onClick={() => { handleDeleteCategory(item.id, item.title) }} className={"text-red-500"}/>
         </Tooltip>
       </div>
     )
   }
 
   function showInMenu(item) {
-
     return <span className={`${item.show_in_menu == 1 ? "text-green-600" : "text-red-600"}`}>
       {item.show_in_menu == 1 ? "هست" : "نیست"}
     </span>
@@ -161,7 +160,7 @@ const Category = () => {
         <PrevPage />
       </div>
       <div className="p-4">
-        <Tabel showAddBtn={showAddBtn} update={update} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
+        <Tabel pTitle="create_category" showAddBtn={showAddBtn} update={update} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
 
       {showModal && <ModalCategory setUpdate={setUpdate} parents={parents} setParents={setParents} />}

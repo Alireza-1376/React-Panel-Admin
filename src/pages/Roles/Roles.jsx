@@ -14,7 +14,7 @@ import toast from "react-hot-toast";
 
 const Roles = () => {
     const { showModal, setShowModal, editModal, setEditModal } = useContext(ModalContext)
-    const token = JSON.parse(localStorage.getItem("token"))
+    
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false);
     const [showAddBtn, setShowAddBtn] = useState(true)
@@ -24,6 +24,7 @@ const Roles = () => {
     async function getRoleData() {
         setLoading(true)
         try {
+            const token = JSON.parse(localStorage.getItem("token"))
             const response = await get("/admin/roles", "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 setLoading(false)
@@ -36,6 +37,7 @@ const Roles = () => {
     }
     async function getAllPermission() {
         try {
+            const token = JSON.parse(localStorage.getItem("token"))
             const response = await get("/admin/permissions", "", { Authorization: `Bearer ${token}` })
             setPermission(response.data.data)
         } catch (error) {
@@ -65,6 +67,7 @@ const Roles = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
+                    const token = JSON.parse(localStorage.getItem("token"))
                     const response = await Delete(`/admin/roles/${item.id}`, { Authorization: `Bearer ${token}` })
                     if(response.status==200){
                         const filterData = data.filter((i)=>{

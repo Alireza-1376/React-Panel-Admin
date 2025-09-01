@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import Tooltip from "@mui/material/Tooltip";
 
 const Colors = () => {
-    const token = JSON.parse(localStorage.getItem('token'))
+    
     const { showModal, setShowModal } = useContext(ModalContext)
     const [data, setData] = useState([]);
     const [loading ,setLoading] =useState(false)
@@ -20,6 +20,7 @@ const Colors = () => {
     async function getColorsData() {
         setLoading(true)
         try {
+            const token = JSON.parse(localStorage.getItem("token"))
             const response = await get("/admin/colors", "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 setData(response.data.data)
@@ -47,6 +48,7 @@ const Colors = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
+                    const token = JSON.parse(localStorage.getItem('token'))
                     const response = await Delete(`/admin/colors/${item.id}`, { Authorization: `Bearer ${token}` })
                     toast.success(response.data.message)
                     const filteredData = data.filter((i) => {

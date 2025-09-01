@@ -9,11 +9,11 @@ import toast from "react-hot-toast";
 const Permissions = () => {
     const [data ,setData] =useState([]) ;
     const [loading ,setLoading] =useState(false);
-    const token =JSON.parse(localStorage.getItem("token"))
     const [showAddBtn , setShowAddBtn] =useState(false)
     async function getPermissionData(){
         setLoading(true)
         try {
+            const token =JSON.parse(localStorage.getItem("token"))
             const response =await get("/admin/permissions" , "" ,{Authorization : `Bearer ${token}`})
             if(response.status==200){
                 setLoading(false)

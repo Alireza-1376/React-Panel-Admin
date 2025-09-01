@@ -12,9 +12,10 @@ const initialValues = {
     length_unit: ""
 }
 const onSubmit = async (values, props, setData, reInitialValue, data) => {
-    const token = JSON.parse(localStorage.getItem('token'))
+    
     if (reInitialValue) {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await put(`/admin/guarantees/${values.id}`, values, { Authorization: `Bearer ${token}` })
             // console.log(response)
             if (response.status == 200) {
@@ -31,6 +32,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data) => {
         }
     } else {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await post("/admin/guarantees", values, { Authorization: `Bearer ${token}` })
             if (response.status == 201) {
                 toast.success(response.data.message)

@@ -11,11 +11,11 @@ const initialValues = {
 }
 const onSubmit = async (values, props, setData, reInitialValue, data) => {
    
-    const token = JSON.parse(localStorage.getItem('token'))
+    
     if (reInitialValue) {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response =await put(`/admin/colors/${reInitialValue.id}`,values,{ Authorization: `Bearer ${token}` })
-            
             if(response.status==200){
                 toast.success(response.data.message)
                 let newArr =[...data]
@@ -30,6 +30,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data) => {
         }
     } else {
         try {
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await post("/admin/colors", values, { Authorization: `Bearer ${token}` })
             if (response.status == 201) {
                 toast.success(response.data.message)

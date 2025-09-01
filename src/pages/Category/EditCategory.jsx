@@ -31,10 +31,11 @@ const validationSchema = object({
     }),
 })
 const EditCategory = ({ editId, parents ,setUpdate}) => {
-    const token = JSON.parse(localStorage.getItem("token"))
+    
     const [reInitialValue, setReInitialValue] = useState();
     async function getOneCategory() {
         try {
+            const token = JSON.parse(localStorage.getItem("token"));
             const response = await get(`/admin/categories/${editId}`, "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 setReInitialValue({

@@ -15,7 +15,6 @@ const initialValue = {
     in_filter: 0,
 }
 const onSubmit = async (values,props, id, setData, editData, setEditData, data) => {
-    // const token = JSON.parse(localStorage.getItem('token'))
     if (!editData) {
         try {
             const token = JSON.parse(localStorage.getItem('token'))

@@ -2,9 +2,11 @@ import { PulseLoader } from "react-spinners";
 import Icon from "../layouts/sidebar/Icons";
 import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { usePermissions } from "../hooks/usePermissions";
 
-const ProductTabel = ({showModal ,setShowModal ,url , loading, data, numOfPage, currentPage, setCurrentPage, addFields, setSearchInput, placeholder, title, dataInfo, handleSearchData }) => {
+const ProductTabel = ({ pTitle, showModal, setShowModal, url, loading, data, numOfPage, currentPage, setCurrentPage, addFields, setSearchInput, placeholder, title, dataInfo, handleSearchData }) => {
     const [numOfPages, setNumOfPages] = useState([]);
+    const permission = usePermissions(pTitle)
     const pageRange = 2;
     useEffect(() => {
         let newArr = [];
@@ -30,9 +32,11 @@ const ProductTabel = ({showModal ,setShowModal ,url , loading, data, numOfPage, 
                     <button className="bg-blue-300/50 border border-gray-400 py-2 px-4">{title}</button>
                     <input onChange={(e) => { hanldeSearch(e.target.value) }} placeholder={placeholder} type="text" className="focus:outline-none p-2 w-4/5 md:w-1/2 border border-gray-400" />
                 </div>
-                <Link to={url} onClick={(e)=>{if(!url){return setShowModal(true)}}} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
-                    <Icon name="plus" size={18} />
-                </Link>
+                {permission &&
+                    <Link to={url} onClick={(e) => { if (!url) { return setShowModal(true) } }} className="bg-green-700 text-white p-3 rounded-md cursor-pointer">
+                        <Icon name="plus" size={18} />
+                    </Link>
+                }
             </div>
 
 
@@ -135,7 +139,7 @@ const ProductTabel = ({showModal ,setShowModal ,url , loading, data, numOfPage, 
                                     : null
                             })}
 
-                            {currentPage < numOfPage-1 ? (<li
+                            {currentPage < numOfPage - 1 ? (<li
                                 className={`p-2 px-4 border border-gray-100 text-blue-500 font-bold cursor-pointer`}
                                 onClick={() => {
                                     setCurrentPage(numOfPage);

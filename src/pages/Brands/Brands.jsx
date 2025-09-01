@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 
 const Brands = () => {
-    const token = JSON.parse(localStorage.getItem('token'));
+    
     const { showModal, setShowModal, editModal, setEditModal } = useContext(ModalContext)
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
@@ -23,6 +23,7 @@ const Brands = () => {
     async function getBrandsData() {
         setIsLoading(true)
         try {
+            const token = JSON.parse(localStorage.getItem('token'));
             const response = await get("/admin/brands", "", { Authorization: `Bearer ${token}` })
             let newData = [];
             response.data.data.map((item) => {
@@ -63,6 +64,7 @@ const Brands = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
+                    const token = JSON.parse(localStorage.getItem('token'));
                     const response = await Delete(`/admin/brands/${item.id}`, { Authorization: `Bearer ${token}` })
                     toast.success(response.data.message)
                     const filteredData = data.filter((i) => {
