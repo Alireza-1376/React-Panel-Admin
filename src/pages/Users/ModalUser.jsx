@@ -45,7 +45,7 @@ const onSubmit = async (values, props, data ,setData, reInitialValue ,setSelectC
                 setData(newData)
             }
         } catch (error) {
-            console.log(error)
+            
         }
     } else {
         try {
@@ -66,7 +66,7 @@ const onSubmit = async (values, props, data ,setData, reInitialValue ,setSelectC
                 toast.error(value)
             }
         } catch (error) {
-            console.log(error)
+         
         }
     }
 }
@@ -122,7 +122,7 @@ const ModalUser = ({ setShowModal, data, setData, editRoleData, setEditRoleData 
             setRoles(response.data.data)
             setLoading(false)
         } catch (error) {
-            console.log(error)
+           
             setLoading(false)
         }
     }

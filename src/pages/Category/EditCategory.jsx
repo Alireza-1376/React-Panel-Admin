@@ -21,7 +21,7 @@ const onSubmit = async (values, editId ,setUpdate) => {
             setUpdate(prev => prev+1)
         }
     } catch (error) {
-        console.log("خطا در ویرایش")
+        
     }
 }
 const validationSchema = object({
@@ -48,7 +48,7 @@ const EditCategory = ({ editId, parents ,setUpdate}) => {
                 })
             }
         } catch (error) {
-            console.log(error)
+            
         }
     }
     useEffect(() => {

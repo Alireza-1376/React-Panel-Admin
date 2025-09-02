@@ -46,7 +46,7 @@ const Gallery = () => {
                 setError("")
             }
         } catch (error) {
-            console.log(error)
+           
             setLoading(false)
         }
     }
@@ -104,7 +104,7 @@ const Gallery = () => {
                 setGallery(newArray)
             }
         } catch (error) {
-            console.log(error)
+            
         }
     }
 

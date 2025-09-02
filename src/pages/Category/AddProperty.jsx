@@ -27,7 +27,7 @@ const onSubmit = async (values,props, id, setData, editData, setEditData, data) 
                 props.resetForm();
             }
         } catch (error) {
-            console.log(error)
+            
         }
     } else {
         try {
@@ -45,7 +45,7 @@ const onSubmit = async (values,props, id, setData, editData, setEditData, data) 
                 setData(newData)
             }
         } catch (error) {
-            console.log(error)
+            
         }
     }
 }
@@ -65,7 +65,7 @@ const AddProperty = () => {
     async function getAttributes() {
         try {
             const token = JSON.parse(localStorage.getItem('token'))
-            console.log(token)
+           
             const response = await get(`/admin${location.pathname}`, "", { Authorization: `Bearer ${token}` })
             setData(response.data.data)
         } catch (error) {
@@ -94,7 +94,7 @@ const AddProperty = () => {
                 try {
                     const token = JSON.parse(localStorage.getItem('token'))
                     const response =await Delete(`/admin/categories/attributes/${item.id}`, { Authorization: `Bearer ${token}` })
-                    console.log(response)
+                    
                     if (response.status == 200) {
                         toast.success(response.data.message)
                         setData(data.filter((item) => {
@@ -102,7 +102,7 @@ const AddProperty = () => {
                         }))
                     }
                 } catch (error) {
-                    console.log(error)
+     
                 }
             }
         });

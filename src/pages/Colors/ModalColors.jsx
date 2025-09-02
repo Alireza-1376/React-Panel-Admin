@@ -26,7 +26,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data) => {
                 setData(newArr)
             }
         } catch (error) {
-            console.log(error)
+            
         }
     } else {
         try {
@@ -41,7 +41,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data) => {
                 props.setSubmitting(false)
             }
         } catch (error) {
-            console.log(error)
+            
             props.setSubmitting(false)
         }
     }
@@ -51,12 +51,12 @@ const validationSchema = object({
 })
 const ModalColors = ({ data, setData, editData, setEditData }) => {
     const [reInitialValue, setReInitialValue] = useState(null);
-    const [color, setColor] = useState("#000000")
+    
 
     useState(() => {
         if (editData) {
             setReInitialValue(editData)
-            // setColor(editData.code)
+            
             setEditData(null)
         } else {
             setReInitialValue(null)

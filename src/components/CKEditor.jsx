@@ -1,5 +1,5 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { Alignment, ClassicEditor, ColorGridView, FontColor, FontFamily, Heading } from "ckeditor5";
+import { Alignment, ClassicEditor, FontColor, FontFamily, Heading } from "ckeditor5";
 import { Essentials, Paragraph, Bold, Italic } from "ckeditor5";
 import "ckeditor5/ckeditor5.css";
 import { Field } from "formik";

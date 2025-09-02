@@ -14,14 +14,14 @@ import Tooltip from "@mui/material/Tooltip";
 
 
 const Discounts = () => {
-    
+
     const { showModal, setShowModal } = useContext(ModalContext);
     const [data, setData] = useState([]);
-    const[editData ,setEditData] =useState(null);
+    const [editData, setEditData] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [showAddBtn , setShowAddBtn] =useState(true)
+    const [showAddBtn, setShowAddBtn] = useState(true)
 
-    async function handleDelete(item){
+    async function handleDelete(item) {
         Swal.fire({
             title: "حذف کردن",
             text: `آیا از حذف ${item.title} مطمئن هستید ؟`,
@@ -54,7 +54,7 @@ const Discounts = () => {
             }
         });
     }
-    async function handleEdite(item){
+    async function handleEdite(item) {
         setShowModal(true)
         setEditData(item)
     }
@@ -88,12 +88,12 @@ const Discounts = () => {
             elements: (item) => {
                 const m = moment(item.expire_at)
                 const date = m.format('jYYYY/jM/jD')
-                const split =date.split("/")
-                const year =split[0]
-                const month =split[1]
-                const day =split[2]
+                const split = date.split("/")
+                const year = split[0]
+                const month = split[1]
+                const day = split[2]
                 return (
-                    <span>{`${year}/${month < 10 ? "0"+month : month}/${day < 10 ? "0"+day : day}`}</span>
+                    <span>{`${year}/${month < 10 ? "0" + month : month}/${day < 10 ? "0" + day : day}`}</span>
                 )
             }
         },
@@ -150,9 +150,9 @@ const Discounts = () => {
                         loading={loading}
                         dataInfo={dataInfo}
                         title="جستجو"
-                        placeholder="قسمتی از نام عنوان را وارد کنید" 
+                        placeholder="قسمتی از نام عنوان را وارد کنید"
                         showAddBtn={showAddBtn}
-                        />
+                    />
                 </div>
 
                 {showModal && <ModalDiscount editData={editData} setEditData={setEditData} setData={setData} data={data} setShowModal={setShowModal} />}

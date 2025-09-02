@@ -17,7 +17,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data) => {
         try {
             const token = JSON.parse(localStorage.getItem('token'))
             const response = await put(`/admin/guarantees/${values.id}`, values, { Authorization: `Bearer ${token}` })
-            // console.log(response)
+           
             if (response.status == 200) {
                 toast.success(response.data.message)
                 let newArr = [...data]
@@ -28,7 +28,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data) => {
                 setData(newArr)
             }
         } catch (error) {
-            console.log(error)
+           
         }
     } else {
         try {
@@ -43,7 +43,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data) => {
                 })
             }
         } catch (error) {
-            console.log(error)
+   
         }
     }
 }

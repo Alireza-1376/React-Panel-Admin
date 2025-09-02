@@ -28,13 +28,13 @@ const onSubmit = async (values, props, setData , data, reInitialValue) => {
                     setData(newData)
                 }
             } catch (error) {
-                console.log(error)
+                
             }
         } else {
             try {
                 const token = JSON.parse(localStorage.getItem('token'))
                 const response = await put(`/admin/roles/${values.id}`, values, { Authorization: `Bearer ${token}` })
-                console.log(response);
+           
                 if(response.status==200){
                     toast.success(response.data.message)
                     let newData =[...data]
@@ -45,7 +45,7 @@ const onSubmit = async (values, props, setData , data, reInitialValue) => {
                     setData(newData)
                 }
             } catch (error) {
-                console.log(error)
+               
             }
         }
 
@@ -63,7 +63,7 @@ const onSubmit = async (values, props, setData , data, reInitialValue) => {
                 toast.error(response.data.title)
             }
         } catch (error) {
-            console.log(error)
+           
         }
 
     }

@@ -1,11 +1,11 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Admin from "./Auth/Admin";
 import Login from "./Auth/Login";
 import ModalProvider from "./contexts/ModalContext";
 import AdminContext from "./contexts/SidebarContext";
 import "./index.css";
 import { Toaster } from "react-hot-toast";
-import useLogin from "./hooks/useLogin";
+
 import { Provider } from "react-redux";
 import store from "./redux/store";
 const App = () => {

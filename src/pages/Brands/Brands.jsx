@@ -4,7 +4,7 @@ import Tabel from "../../components/Tabel";
 import Icon from "../../layouts/sidebar/Icons";
 import ModalBrands from "./ModalBrands";
 import { Delete, get } from "../../services/httpRequest";
-import { PulseLoader } from "react-spinners";
+
 import EditBrands from "./EditBrands";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";

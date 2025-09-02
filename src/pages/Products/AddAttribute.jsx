@@ -19,7 +19,7 @@ const onSubmit = async (values, id) => {
         const response = await post(`/admin/products/${id}/add_attr`, data, { Authorization: `Bearer ${token}` })
         toast.success(response.data.message)
     } catch (error) {
-        console.log(error)
+    
     }
 }
 
@@ -49,7 +49,7 @@ const AddAttribute = () => {
                         const value = location.state.attributes.filter((item) => {
                             return item.pivot.property_id == d.id
                         })[0]?.pivot.value || ""
-                        console.log(value)
+                       
                         initial = { ...initial, [d.id]: value }
                         validate = { ...validate, [d.id]: string() }
                     }

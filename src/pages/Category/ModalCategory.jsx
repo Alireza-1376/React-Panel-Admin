@@ -2,7 +2,7 @@ import { ErrorMessage, FastField, Form, Formik } from "formik";
 import Modal from "../../components/Modal";
 import { mixed, object, string } from "yup"
 import { useEffect, useState } from "react";
-import { get, post } from "../../services/httpRequest";
+import {  post } from "../../services/httpRequest";
 import toast from "react-hot-toast";
 import { PulseLoader } from "react-spinners";
 import { useParams } from "react-router-dom";

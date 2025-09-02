@@ -1,11 +1,11 @@
-import { Fragment, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Icon from '../../layouts/sidebar/Icons';
 import { Delete, get } from '../../services/httpRequest';
 import ProductTabel from '../../components/ProductTabel';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import Tooltip from '@mui/material/Tooltip';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 const Products = () => {
   const navigation = useNavigate();
@@ -124,9 +124,9 @@ const Products = () => {
   ];
 
   return (
-    <div className="mt-[72.5px] overflow-hidden">
+    <div className="mt-[72.5px] overflow-hidden w-full ">
       <h2 className="text-center text-2xl py-6">مدیریت محصولات</h2>
-      <div id="products-table" className="m-4 overflow-x-auto">
+      <div id="products-table" className="m-4 ">
         <ProductTabel
           title="جستجو"
           placeholder="قسمتی از عنوان را وارد کنید"

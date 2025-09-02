@@ -34,7 +34,7 @@ const onSubmit = async (values, props, setData) => {
             toast.error(response.data.original_name[0])
         }
     } catch (error) {
-        console.log(error)
+       
     }
     props.isSubmitting(false)
 }

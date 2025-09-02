@@ -6,7 +6,7 @@ import Tabel from "../../components/Tabel";
 import EditCategory from "./EditCategory";
 import { Delete, get } from "../../services/httpRequest";
 import Tooltip from "@mui/material/Tooltip";
-import { Navigate, Outlet, useNavigate, useParams } from "react-router-dom";
+import {  Outlet, useNavigate, useParams } from "react-router-dom";
 import PrevPage from "../../components/PrevPage";
 import moment from "moment-jalaali";
 import Swal from "sweetalert2";
@@ -159,7 +159,7 @@ const Category = () => {
         <Outlet />
         <PrevPage />
       </div>
-      <div className="p-4">
+      <div className="p-4 w-full overflow-hidden">
         <Tabel pTitle="create_category" showAddBtn={showAddBtn} update={update} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="لطفا قسمتی از عنوان را وارد کنید" />
       </div>
 

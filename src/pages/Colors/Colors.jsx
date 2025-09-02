@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../contexts/ModalContext";
 import Tabel from "../../components/Tabel";
-import ModalProduct from "../Products/ModalProduct";
+
 import Icon from "../../layouts/sidebar/Icons";
 import ModalColors from "./ModalColors";
-import { elements } from "chart.js";
+
 import { Delete, get } from "../../services/httpRequest";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";

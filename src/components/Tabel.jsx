@@ -2,7 +2,6 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import Icon from "../layouts/sidebar/Icons";
 import { ModalContext } from "../contexts/ModalContext";
 import { PulseLoader } from "react-spinners";
-import { useLocation } from "react-router-dom";
 import PrevPage from "./PrevPage";
 import { usePermissions } from "../hooks/usePermissions";
 
@@ -77,62 +76,64 @@ const Tabel = ({ pTitle, prev, loading, numOfData, data, dataInfo, status, addFi
       {loading ? <PulseLoader className="text-center mt-4" size={30} color="purple" /> :
         <>
 
-          <table className="w-full bg-white shadow-md border border-gray-300">
-            <thead className="border border-gray-300 bg-gray-200">
-              <tr>
-                {dataInfo.map((item, i) => {
+          <div className="overflow-x-auto">
+            <table className=" bg-white shadow-md border border-gray-300 w-full">
+              <thead className="border border-gray-300 bg-gray-200">
+                <tr>
+                  {dataInfo.map((item, i) => {
+                    return (
+                      <th
+                        key={i + 1}
+                        className="border border-gray-300 text-center p-2"
+                      >
+                        {item.value}
+                      </th>
+                    );
+                  })}
+                  {colors ? <th className="border border-gray-300 text-center p-2">
+                    {colors.bgColor}
+                  </th> : null}
+                  {addFields ? addFields.map((item, index) => {
+                    return <th key={index + 1} className="border border-gray-300 text-center p-2">{item.title}</th>
+                  }) : null}
+                </tr>
+              </thead>
+              <tbody>
+                {dataRows.map((d) => {
                   return (
-                    <th
-                      key={i + 1}
-                      className="border border-gray-300 text-center p-2"
+                    <tr
+                      key={d.id}
+                      className="border hover:bg-gray-100 border-gray-300"
                     >
-                      {item.value}
-                    </th>
+                      {dataInfo.map((i, index) => {
+                        return (
+                          <Fragment key={index + 1}>
+                            {i.field ? <td
+                              key={index + 1}
+                              className="border border-gray-300 text-center p-2"
+                            >
+                              {d[i.field]}
+                            </td> :
+                              <td
+                                key={index + 1}
+                                className="border border-gray-300 text-center"
+                              >
+                                {i.elements(d)}
+                              </td>
+                            }
+                          </Fragment>
+                        );
+                      })}
+                      {colors ? <td className="p-2">{colors.colors(d.codeColor)}</td> : null}
+                      {addFields ? addFields.map((item, index) => {
+                        return <td key={index + 1} className="border border-gray-300 text-center">{item.elements(d)}</td>
+                      }) : null}
+                    </tr>
                   );
                 })}
-                {colors ? <th className="border border-gray-300 text-center p-2">
-                  {colors.bgColor}
-                </th> : null}
-                {addFields ? addFields.map((item, index) => {
-                  return <th key={index + 1} className="border border-gray-300 text-center p-2">{item.title}</th>
-                }) : null}
-              </tr>
-            </thead>
-            <tbody>
-              {dataRows.map((d) => {
-                return (
-                  <tr
-                    key={d.id}
-                    className="border hover:bg-gray-100 border-gray-300"
-                  >
-                    {dataInfo.map((i, index) => {
-                      return (
-                        <Fragment key={index + 1}>
-                          {i.field ? <td
-                            key={index + 1}
-                            className="border border-gray-300 text-center p-2"
-                          >
-                            {d[i.field]}
-                          </td> :
-                            <td
-                              key={index + 1}
-                              className="border border-gray-300 text-center"
-                            >
-                              {i.elements(d)}
-                            </td>
-                          }
-                        </Fragment>
-                      );
-                    })}
-                    {colors ? <td className="p-2">{colors.colors(d.codeColor)}</td> : null}
-                    {addFields ? addFields.map((item, index) => {
-                      return <td key={index + 1} className="border border-gray-300 text-center">{item.elements(d)}</td>
-                    }) : null}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
 
 
           {pages > 1 ? <div className="p-4 flex justify-center">

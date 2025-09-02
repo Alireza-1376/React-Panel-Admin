@@ -114,7 +114,7 @@ const Login = () => {
                                 </Form>
                             </div>
                             <div className="md:w-1/2 hidden md:flex md:h-full md:justify-center md:items-center">
-                                <img src="../public/images/Login.png" alt="" />
+                                <img src="/images/Login.png" alt="" />
                             </div>
                         </div>
 

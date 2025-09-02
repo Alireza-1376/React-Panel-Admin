@@ -43,61 +43,62 @@ const ProductTabel = ({ pTitle, showModal, setShowModal, url, loading, data, num
 
             {loading ? <PulseLoader className="text-center mt-4" size={30} color="purple" /> :
                 <>
-                    <table className="w-full bg-white shadow-md border border-gray-300">
-                        <thead className="border border-gray-300 bg-gray-200">
-                            <tr>
-                                {dataInfo.map((item, i) => {
+                    <div className="overflow-x-auto">
+                        <table className="w-full bg-white shadow-md border border-gray-300">
+                            <thead className="border border-gray-300 bg-gray-200">
+                                <tr>
+                                    {dataInfo.map((item, i) => {
+                                        return (
+                                            <th
+                                                key={i + 1}
+                                                className="border border-gray-300 text-center p-2"
+                                            >
+                                                {item.value}
+                                            </th>
+                                        );
+                                    })}
+
+                                    {addFields ? addFields.map((item, index) => {
+                                        return <th key={index + 1} className="border border-gray-300 text-center p-2">{item.title}</th>
+                                    }) : null}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.map((d) => {
                                     return (
-                                        <th
-                                            key={i + 1}
-                                            className="border border-gray-300 text-center p-2"
+                                        <tr
+                                            key={d.id}
+                                            className="border hover:bg-gray-100 border-gray-300"
                                         >
-                                            {item.value}
-                                        </th>
+                                            {dataInfo.map((i, index) => {
+                                                return (
+                                                    <Fragment key={index + 1}>
+                                                        {i.field ? <td
+                                                            key={index + 1}
+                                                            className="border border-gray-300 text-center p-2"
+                                                        >
+                                                            {d[i.field]}
+                                                        </td> :
+                                                            <td
+                                                                key={index + 1}
+                                                                className="border border-gray-300 text-center "
+                                                            >
+                                                                {i.elements(d)}
+                                                            </td>
+                                                        }
+                                                    </Fragment>
+                                                );
+                                            })}
+
+                                            {addFields ? addFields.map((item, index) => {
+                                                return <td key={index + 1} className="border border-gray-300 text-center">{item.elements(d)}</td>
+                                            }) : null}
+                                        </tr>
                                     );
                                 })}
-
-                                {addFields ? addFields.map((item, index) => {
-                                    return <th key={index + 1} className="border border-gray-300 text-center p-2">{item.title}</th>
-                                }) : null}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.map((d) => {
-                                return (
-                                    <tr
-                                        key={d.id}
-                                        className="border hover:bg-gray-100 border-gray-300"
-                                    >
-                                        {dataInfo.map((i, index) => {
-                                            return (
-                                                <Fragment key={index + 1}>
-                                                    {i.field ? <td
-                                                        key={index + 1}
-                                                        className="border border-gray-300 text-center p-2"
-                                                    >
-                                                        {d[i.field]}
-                                                    </td> :
-                                                        <td
-                                                            key={index + 1}
-                                                            className="border border-gray-300 text-center "
-                                                        >
-                                                            {i.elements(d)}
-                                                        </td>
-                                                    }
-                                                </Fragment>
-                                            );
-                                        })}
-
-                                        {addFields ? addFields.map((item, index) => {
-                                            return <td key={index + 1} className="border border-gray-300 text-center">{item.elements(d)}</td>
-                                        }) : null}
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-
+                            </tbody>
+                        </table>
+                    </div>
                     {numOfPage > 1 ? <div className="p-4 flex justify-center">
                         <ul
                             className="flex items-center border border-slate-300  divide-x-2 bg-white"

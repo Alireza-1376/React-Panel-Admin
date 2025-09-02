@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import Icon from "../../layouts/sidebar/Icons";
+
 import { FastField, Formik, Form, ErrorMessage, Field } from "formik";
 import { mixed, number, object, string } from "yup";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { PulseLoader } from "react-spinners";
 import SelectItems from "./SelectItems";
 import toast from "react-hot-toast";
 import CKeditor from "../../components/CKEditor";
-// const token = JSON.parse(localStorage.getItem('token'));
+
 const initialValues = {
   parent_ids: "",
   category_ids: "",
@@ -39,7 +39,7 @@ const onSubmit = async (values ,props, location ,setSelectChildren ,setSelectChi
           toast.success(response.data.message)
         }
       } catch (error) {
-        console.log(error)
+      
       }
     } 
 
@@ -61,7 +61,7 @@ const onSubmit = async (values ,props, location ,setSelectChildren ,setSelectChi
     } else {
       const token = JSON.parse(localStorage.getItem('token'));
       const response = await post("/admin/products", values, { Authorization: `Bearer ${token}` })
-      console.log(response)
+      
       if (response.status == 201) {
         toast.success(response.data.message)
         props.resetForm()
@@ -108,7 +108,7 @@ const ModalProduct = () => {
       const response = await get("/admin/categories", "", { Authorization: `Bearer ${token}` })
       setCategoryParents(response.data.data)
     } catch (error) {
-      console.log(error)
+    
     }
   }
   async function getAllColors() {
@@ -117,7 +117,7 @@ const ModalProduct = () => {
       const response = await get("/admin/colors", "", { Authorization: `Bearer ${token}` })
       setColors(response.data.data)
     } catch (error) {
-      console.log(error)
+     
     }
   }
   async function getAllGuarantee() {
@@ -126,7 +126,7 @@ const ModalProduct = () => {
       const response = await get("/admin/guarantees", "", { Authorization: `Bearer ${token}` })
       setGuarantee(response.data.data)
     } catch (error) {
-      console.log(error)
+      
     }
   }
   async function getAllBrands() {
@@ -135,7 +135,7 @@ const ModalProduct = () => {
       const response = await get("/admin/brands", "", { Authorization: `Bearer ${token}` })
       setBrands(response.data.data)
     } catch (error) {
-      console.log(error)
+      
     }
   }
   async function getCategoryChildrens(e) {
@@ -152,7 +152,7 @@ const ModalProduct = () => {
       setCategoryChildrens(response.data.data);
       setLoading(false)
     } catch (error) {
-      console.log(error)
+      
       setLoading(false)
     }
   }

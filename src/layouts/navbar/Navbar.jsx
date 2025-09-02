@@ -2,7 +2,7 @@ import { FaGripVertical } from "react-icons/fa";
 import { FaRegBell } from "react-icons/fa6";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { FaBars } from "react-icons/fa6";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import Icon from "../sidebar/Icons";
 import { ModalContext } from "../../contexts/ModalContext";
@@ -32,7 +32,7 @@ const Navbar = () => {
         />
         <img
           className="w-12 h-12 hidden md:inline rounded-full"
-          src="../public/images/admin.jpg"
+          src="/images/admin.jpg"
           alt=""
         />
       </div>

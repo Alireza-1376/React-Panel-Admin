@@ -31,11 +31,11 @@ const onSubmit = async (values, props, setData, editData, data,setUpdate) => {
             })
             newData[find]={...response.data.data , title :response.data.data.original_name};
             toast.success(response.data.message)
-            // setUpdate((prev)=>{return prev+1})
+         
             setData(newData)
         }
     } catch (error) {
-        console.log(error)
+        
     }
 }
 const validationSchema = object({

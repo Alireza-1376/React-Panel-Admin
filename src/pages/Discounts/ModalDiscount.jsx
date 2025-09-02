@@ -2,7 +2,7 @@ import { ErrorMessage, FastField, Form, Formik } from "formik";
 import { PulseLoader } from "react-spinners";
 import { boolean, object, string } from "yup";
 import Modal from "../../components/Modal";
-import Icon from "../../layouts/sidebar/Icons";
+
 import persian from "react-date-object/calendars/persian"
 import persian_fa from "react-date-object/locales/persian_fa"
 import gregorian from "react-date-object/calendars/gregorian";
@@ -40,7 +40,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data, setSelectC
                 setData(dataArray)
             }
         } catch (error) {
-            console.log(error)
+            
         }
     } else {
         try {
@@ -58,7 +58,7 @@ const onSubmit = async (values, props, setData, reInitialValue, data, setSelectC
             props.resetForm()
 
         } catch (error) {
-            console.log(error)
+            
         }
     }
 
@@ -122,7 +122,7 @@ const ModalDiscount = ({ setShowModal, setData, data, editData, setEditData }) =
                 setLoading(false)
             }
         } catch (error) {
-            console.log(error)
+            
             setLoading(false)
         }
     }
