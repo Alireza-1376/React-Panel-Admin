@@ -113,7 +113,7 @@ const Sends = () => {
                 <h2 className="text-center text-2xl py-6">مدیریت نحوه ارسال</h2>
 
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel loading={loading} showAddBtn={showAddBtn} numOfData={8} data={data} dataInfo={dataInfo} title="جستجو" placeholder="قسمتی از عنوان را وارد کنید" />
+                    <Tabel pTitle="create_delivery" loading={loading} showAddBtn={showAddBtn} numOfData={8} data={data} dataInfo={dataInfo} title="جستجو" placeholder="قسمتی از عنوان را وارد کنید" />
                 </div>
 
                 {showModal && <ModalDeliveries data={data} setData={setData} editDeliveries={editDeliveries} setEditDeliveries={setEditDeliveries} setShowModal={setShowModal} />}

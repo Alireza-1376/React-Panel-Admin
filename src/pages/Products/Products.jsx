@@ -17,6 +17,7 @@ const Products = () => {
   const [numOfPage, setNumOfPage] = useState();
 
 
+
   async function getProductData(currentPage, countInPage, searchInput) {
     setLoading(true)
     try {

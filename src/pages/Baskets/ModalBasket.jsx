@@ -1,5 +1,4 @@
 import Modal from "../../components/Modal";
-
 import Icon from "../../layouts/sidebar/Icons";
 
 
@@ -11,10 +10,10 @@ const ModalBasket = () => {
         >
             <form className="mt-4 p-4">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 justify-around  xl:max-w-screen-xl xl:mx-auto sm:justify-evenly gap-4 border-b pb-4">
-                    <input type="text" placeholder="نام مشتری" className=" px-4 py-2 rounded shadow focus:outline-none" />
-                    <input type="text" placeholder="عنوان محصول" className=" px-4 py-2 rounded shadow focus:outline-none" />
-                    <input type="text" placeholder="انتخاب رنگ" className=" px-4 py-2 rounded shadow focus:outline-none" />
-                    <input type="text" placeholder="انتخاب گارانتی" className=" px-4 py-2 rounded shadow focus:outline-none" />
+                    <input type="text" placeholder="آیدی مشتری" className=" px-4 py-2 rounded shadow focus:outline-none" />
+                    <input type="text" placeholder=" محصول" className=" px-4 py-2 rounded shadow focus:outline-none" />
+                    <input type="text" placeholder=" رنگ" className=" px-4 py-2 rounded shadow focus:outline-none" />
+                    <input type="text" placeholder=" گارانتی" className=" px-4 py-2 rounded shadow focus:outline-none" />
                     <input type="text" placeholder="تعداد" className=" px-4 py-2 rounded shadow focus:outline-none" />
                     <div className="flex justify-center">
                         <button className="bg-green-700 text-white p-2 px-3 rounded-full">

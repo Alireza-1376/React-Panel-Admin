@@ -35,8 +35,8 @@ const Page = () => {
   const permissionUsers =usePermissions("read_users")
   const permissionRoles =usePermissions("read_roles")
   const permissionPermissions =usePermissions("read_permissions")
-
-
+  const permissionDeliveries = usePermissions("read_deliveries")
+  const permissionBaskets =usePermissions("read_carts")
   
 
   return (
@@ -61,9 +61,9 @@ const Page = () => {
         {permissionBrands && <Route path="/brands" element={<Brands />} />}
         {permissionDiscount && <Route path="/discounts" element={<Discounts />} />}
         
-        <Route path="/baskets" element={<Baskets />} />
+        {permissionBaskets && <Route path="/baskets" element={<Baskets />} />}
         <Route path="/orders" element={<Orders />} />
-        <Route path="/sends" element={<Sends />} />
+        {permissionDeliveries && <Route path="/sends" element={<Sends />} />}
        
         {permissionUsers &&  <Route path="/users" element={<Users />} />}
         {permissionRoles && <Route path="/roles" element={<Roles />} />}
