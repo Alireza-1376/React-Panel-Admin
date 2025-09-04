@@ -2,11 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../contexts/ModalContext";
 import Icon from "../../layouts/sidebar/Icons";
 import ModalBasket from "./ModalBasket";
-import EditBasket from "./EditBasket";
 import ProductTabel from "../../components/ProductTabel";
 import { Delete, get } from "../../services/httpRequest";
 import Tooltip from "@mui/material/Tooltip";
-import { elements } from "chart.js";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 
@@ -133,6 +131,7 @@ const Baskets = () => {
                         setCurrentPage={setCurrentPage}
                         handleSearchData={handleSearchData}
                         setShowModal={setShowModal}
+                        url="/baskets/add"
                     />
                 </div>
 

@@ -23,6 +23,7 @@ import ModalProduct from "./Products/ModalProduct";
 import AddAttribute from "./Products/AddAttribute";
 import Gallery from "./Products/Gallery";
 import { usePermissions } from "../hooks/usePermissions";
+import ModalBasket from "./Baskets/ModalBasket";
 
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
@@ -37,6 +38,8 @@ const Page = () => {
   const permissionPermissions =usePermissions("read_permissions")
   const permissionDeliveries = usePermissions("read_deliveries")
   const permissionBaskets =usePermissions("read_carts")
+  const permissionCreateBaskets =usePermissions("create_cart")
+  
   
 
   return (
@@ -62,6 +65,7 @@ const Page = () => {
         {permissionDiscount && <Route path="/discounts" element={<Discounts />} />}
         
         {permissionBaskets && <Route path="/baskets" element={<Baskets />} />}
+        {permissionCreateBaskets && <Route path="/baskets/add" element={<ModalBasket />}/>}
         <Route path="/orders" element={<Orders />} />
         {permissionDeliveries && <Route path="/sends" element={<Sends />} />}
        

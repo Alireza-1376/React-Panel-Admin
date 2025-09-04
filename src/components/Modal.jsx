@@ -1,9 +1,13 @@
 import { useContext } from "react";
 import { ModalContext } from "../contexts/ModalContext";
 import Icon from "../layouts/sidebar/Icons";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Modal = ({ children, title ,screen}) => {
     const { setShowModal ,setEditModal ,setAddProperty ,setShowDetail } = useContext(ModalContext);
+    const location =useLocation()
+    const navigate = useNavigate();
+
     return (
         <>
         {screen==false ? <div onClick={()=>{setShowModal(false);setEditModal(false)}} className="w-screen h-screen bg-slate-600/50 z-20 right-0 left-0 absolute top-0"></div> : null}
@@ -16,6 +20,9 @@ const Modal = ({ children, title ,screen}) => {
                         setEditModal(false);
                         setAddProperty(false);
                         setShowDetail(false)
+                        if(location.pathname=="/baskets/add"){
+                            navigate(-1)
+                        }
                     }}
                 >
                     <Icon name="xMark" size={30} />
