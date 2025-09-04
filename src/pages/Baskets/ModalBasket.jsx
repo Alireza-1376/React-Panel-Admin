@@ -3,9 +3,9 @@ import Modal from "../../components/Modal";
 import Icon from "../../layouts/sidebar/Icons";
 import { number, object, string } from "yup";
 import { useEffect, useState } from "react";
-import { get, post } from "../../services/httpRequest";
+import { get, post, put } from "../../services/httpRequest";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const initialValue = {
     user_id: "",
@@ -16,14 +16,14 @@ const initialValue = {
 }
 
 const onSubmit = (values, props, setSelectedProducts, setSelectedProductInfo, products) => {
-    const randomNumber =Math.random() ;
+    const randomNumber = Math.random();
     setSelectedProducts((prev) => {
-        const newValue = {...values , id : randomNumber}
-        return [...prev, newValue ]
+        const newValue = { ...values, id: randomNumber }
+        return [...prev, newValue]
     })
     setSelectedProductInfo((prev) => {
         return [...prev, {
-            id : randomNumber,
+            id: randomNumber,
             productName: products.filter((item) => { return item.id == values.product_id })[0].title,
             price: products.filter((item) => { return item.id == values.product_id })[0].price,
             guranty: products.filter((item) => { return item.id == values.product_id })[0].guarantees[0]?.title,
@@ -44,13 +44,15 @@ const validationSchema = object({
 })
 
 const ModalBasket = () => {
+    const [reInitialValue, setReInitialValue] = useState(null);
     const [products, setProducts] = useState([]);
     const [colors, setColors] = useState([]);
     const [guranties, setGuranties] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [selectedProductInfo, setSelectedProductInfo] = useState([]);
-    const [totalPrice , setTotalPrice] = useState(0)
-    const navigate =useNavigate()
+    const [totalPrice, setTotalPrice] = useState(0)
+    const navigate = useNavigate()
+    const location = useLocation();
     
     async function getAllProducts() {
         const token = JSON.parse(localStorage.getItem("token"))
@@ -68,48 +70,104 @@ const ModalBasket = () => {
         }
     }
 
+    async function getCartToEdit(id) {
+        
+        const token = JSON.parse(localStorage.getItem('token'))
+        const response = await get(`/admin/carts/${id}`, "", { Authorization: `Bearer ${token}` })
+      
+        setReInitialValue({
+            user_id: response.data.data.user_id,
+            product_id: "",
+            color_id: "",
+            guarantee_id: "",
+            count: ""
+        })
+
+        let selectProduct = []
+        let selectProductInfo = [];
+        response.data.data.items.map((item) => {
+            selectProductInfo = [...selectProductInfo, {
+                id: item.id,
+                productName: item.product.title,
+                price: item.product.price,
+                guranty: item.guarantee?.title,
+                count: item.count,
+                color: item.color.code,
+            }]
+            selectProduct = [...selectProduct, {
+                id: item.id, 
+                user_id: response.data.data.user_id,
+                product_id: item.product_id,
+                color_id: item.color_id,
+                guarantee_id: item.guarantee_id,
+                count: item.count
+            }]
+        })
+        setSelectedProductInfo(selectProductInfo)
+        setSelectedProducts(selectProduct)
+    }
+
+
     useEffect(() => {
         getAllProducts()
+        if (location.state != null) {
+            getCartToEdit(location.state.id)
+        }
     }, [])
 
-    async function handleAddCarts(selectedProducts,formik){
-        const data ={
-            user_id : formik.values.user_id ,
-            products : selectedProducts,
-        }
-        const token = JSON.parse(localStorage.getItem("token"))
-        const response =await post("/admin/carts" , data , {Authorization : `Bearer ${token}`})
-        if(response.status==201){
-            toast.success(response.data.message)
-            navigate(-1)
+    async function handleAddCarts(selectedProducts, formik) {
+        if (reInitialValue != null) {
+            const data = {
+                user_id: formik.values.user_id,
+                products: selectedProducts,
+            }
+            const token = JSON.parse(localStorage.getItem("token"))
+            const response =await put(`/admin/carts/${location.state.id}`,data , {Authorization : `Bearer ${token}`})
+            
+            if(response.status==200){
+                toast.success(response.data.message)
+            }
+        } else {
+            const data = {
+                user_id: formik.values.user_id,
+                products: selectedProducts,
+            }
+            const token = JSON.parse(localStorage.getItem("token"))
+            const response = await post("/admin/carts", data, { Authorization: `Bearer ${token}` })
+            if (response.status == 201) {
+                toast.success(response.data.message)
+                navigate(-1)
+            }
         }
     }
 
-    function handleDeleteProduct(id){
-        const filteredSelectedProductInfo = selectedProductInfo.filter((item)=>{
+    function handleDeleteProduct(id) {
+
+        const filteredSelectedProductInfo = selectedProductInfo.filter((item) => {
             return item.id != id
         })
         setSelectedProductInfo(filteredSelectedProductInfo)
-        const filteredSelectedProducts =selectedProducts.filter((item)=>{
-            return item.id != id ;
+        const filteredSelectedProducts = selectedProducts.filter((item) => {
+            return item.id != id;
         })
         setSelectedProducts(filteredSelectedProducts)
     }
 
-    useEffect(()=>{
-        const totalPrice = selectedProductInfo?.reduce((acc , curr)=>{
-            return acc + (curr.price *curr.count)
-        } ,0)
+    useEffect(() => {
+        const totalPrice = selectedProductInfo?.reduce((acc, curr) => {
+            return acc + (curr.price * curr.count)
+        }, 0)
         setTotalPrice(totalPrice)
-    },[selectedProductInfo])
+    }, [selectedProductInfo])
+
 
     return (
         <Formik
-            initialValues={initialValue}
+            initialValues={reInitialValue || initialValue}
             onSubmit={(values, props) => onSubmit(values, props, setSelectedProducts, setSelectedProductInfo, products)}
             validationSchema={validationSchema}
+            enableReinitialize
         >
-
             {formik => {
                 return <Modal
                     title="جزئیات و افزودن سبد خرید"
@@ -120,8 +178,8 @@ const ModalBasket = () => {
 
                             <div className="flex flex-col">
                                 <Field name="user_id">
-                                    {props =>{
-                                        return <input onBlur={(e)=>{props.form.setFieldValue("user_id",e.target.value)}} disabled={formik.values.user_id} type="text" placeholder="آیدی مشتری" className=" px-4 py-2 rounded shadow focus:outline-none"/>
+                                    {props => {
+                                        return <input value={formik.values.user_id} onChange={(e) => { props.form.setFieldValue("user_id", e.target.value) }} type="text" placeholder="آیدی مشتری" className=" px-4 py-2 rounded shadow focus:outline-none" />
                                     }}
                                 </Field>
                                 <ErrorMessage name="user_id">
@@ -205,12 +263,12 @@ const ModalBasket = () => {
                     </Form>
 
 
-                    {selectedProductInfo.map((item , index) => {
+                    {selectedProductInfo.map((item, index) => {
                         return (
-                            <div key={index+1} className="flex justify-center px-4 sm:px-0 mb-1">
+                            <div key={index + 1} className="flex justify-center px-4 sm:px-0 mb-1">
                                 <div className="flex flex-col sm:flex-row items-center bg-gray-200 w-full sm:w-[90%] lg:w-[70%] border border-gray-300">
                                     <div className="flex-1 gap-1 flex items-center ">
-                                        <span onClick={()=>{handleDeleteProduct(item.id)}} className="text-red-500 font-bold pr-2 cursor-pointer">
+                                        <span onClick={() => { handleDeleteProduct(item.id) }} className="text-red-500 font-bold pr-2 cursor-pointer">
                                             <Icon name="xMark" size={16} />
                                         </span>
                                         <span>
@@ -220,7 +278,7 @@ const ModalBasket = () => {
                                             (گارانتی :{item.guranty})
                                         </span>
                                         <span>
-                                            <div style={{backgroundColor:item.color}} className="w-4 h-4 rounded-full "></div>
+                                            <div style={{ backgroundColor: item.color }} className="w-4 h-4 rounded-full "></div>
                                         </span>
                                     </div>
                                     <div className="sm:w-28 w-full bg-white text-center sm:p-2">{item.count}</div>
@@ -234,7 +292,7 @@ const ModalBasket = () => {
 
 
                     <div className="flex justify-center mt-8 gap-4">
-                        <button type="button" onClick={()=>{handleAddCarts(selectedProducts,formik)}} className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>
+                        <button type="button" onClick={() => { handleAddCarts(selectedProducts, formik) }} className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>
                         <div className="flex items-center bg-gray-200 rounded-md px-4 gap-2">
                             <span>جمع کل :</span>
                             <span>{totalPrice}</span>

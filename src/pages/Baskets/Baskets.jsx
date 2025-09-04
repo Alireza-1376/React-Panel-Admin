@@ -7,6 +7,7 @@ import { Delete, get } from "../../services/httpRequest";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -20,6 +21,7 @@ const Baskets = () => {
     const [searchChar, setSearchChar] = useState("");
     const [countInPage, setCountInPage] = useState(8)
     const [numOfPage, setNumOfPage] = useState()
+    const navigate = useNavigate();
 
     async function getAllCarts(currentPage, searchChar, countInPage) {
         setLoading(true)
@@ -100,7 +102,12 @@ const Baskets = () => {
             value: "عملیات",
             elements: (item) => {
                 return (
-                    <div className="flex justify-center">
+                    <div className="flex justify-center gap-2">
+                        <Tooltip title="ویرایش" arrow>
+                            <button onClick={() => {navigate("/baskets/add" , {state:item})}} className="text-yellow-500 flex justify-center items-center">
+                                <Icon name="pen" size={16} />
+                            </button>
+                        </Tooltip>
                         <Tooltip title="حذف" arrow>
                             <button onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center">
                                 <Icon name="xMark" size={16} />
