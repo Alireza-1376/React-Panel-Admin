@@ -1,11 +1,14 @@
+import { useLocation } from "react-router-dom";
 import Modal from "../../components/Modal";
 import Icon from "../../layouts/sidebar/Icons";
 
 
 const ModalOrders = () => {
+    const location = useLocation();
+    
     return (
         <Modal
-            title="افزودن سفارش"
+            title={location.state ==null ? "افزودن سفارش" : "جزئیات سفارش"}
             screen={true}
         >
             <form className="mt-4 p-4">

@@ -19,8 +19,11 @@ const Modal = ({ children, title ,screen}) => {
                         setShowModal(false);
                         setEditModal(false);
                         setAddProperty(false);
-                        setShowDetail(false)
+                        setShowDetail(false);
                         if(location.pathname=="/baskets/add"){
+                            navigate(-1)
+                        }
+                        if(location.pathname=="/orders/add"){
                             navigate(-1)
                         }
                     }}

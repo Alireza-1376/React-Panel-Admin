@@ -24,6 +24,7 @@ import AddAttribute from "./Products/AddAttribute";
 import Gallery from "./Products/Gallery";
 import { usePermissions } from "../hooks/usePermissions";
 import ModalBasket from "./Baskets/ModalBasket";
+import ModalOrders from "./Orders/ModalOrders";
 
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
@@ -39,8 +40,9 @@ const Page = () => {
   const permissionDeliveries = usePermissions("read_deliveries")
   const permissionBaskets =usePermissions("read_carts")
   const permissionCreateBaskets =usePermissions("create_cart")
-  
-  
+  const permissionOrders =usePermissions("read_orders")
+  const permissionCreateOrder =usePermissions("create_order")
+
 
   return (
     <div id="content" onClick={() => { setOpenSidebar(false) }} className=" h-[100vh] overflow-x-auto bg-cover w-full">
@@ -66,7 +68,8 @@ const Page = () => {
         
         {permissionBaskets && <Route path="/baskets" element={<Baskets />} />}
         {permissionCreateBaskets && <Route path="/baskets/add" element={<ModalBasket />}/>}
-        <Route path="/orders" element={<Orders />} />
+        {permissionOrders && <Route path="/orders" element={<Orders />} />}
+        {permissionCreateOrder && <Route path="/orders/add" element={<ModalOrders/>} />}
         {permissionDeliveries && <Route path="/sends" element={<Sends />} />}
        
         {permissionUsers &&  <Route path="/users" element={<Users />} />}
