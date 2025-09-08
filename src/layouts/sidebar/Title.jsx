@@ -10,7 +10,7 @@ const Title = ({ title ,pTitle}) => {
       {permission && <h2
         className={`${
           openSidebar == false ? "w-0 overflow-hidden opacity-0" : "w-full"
-        } text-center text-blue-400 mt-2 text-nowrap transition-all duration-300`}
+        } text-center text-blue-400 mt-1.5 text-nowrap transition-all duration-300`}
       >
         {title}
       </h2>}
