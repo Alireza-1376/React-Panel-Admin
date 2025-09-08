@@ -7,6 +7,7 @@ import { Delete, get } from "../../services/httpRequest";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import Tooltip from "@mui/material/Tooltip";
+import ActionIcon from "../../components/ActionIcon";
 
 
 const Guranty = () => {
@@ -85,14 +86,10 @@ const Guranty = () => {
                 return (
                     <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
                         <Tooltip title="ویرایش" arrow>
-                            <button onClick={() => { setShowModal(true); handleEdit(item) }} className="text-yellow-500">
-                                <Icon name="pen" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_guarantee" name="pen" onClick={() => { setShowModal(true); handleEdit(item) }} className="text-yellow-500"/>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => { handleDelete(item) }} className="text-red-500">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon pTitle="delete_guarantee" name="xMark" onClick={() => { handleDelete(item) }} className="text-red-500"/>
                         </Tooltip>
                     </div>
                 )
@@ -105,7 +102,7 @@ const Guranty = () => {
                 <h2 className="text-center text-2xl py-6">مدیریت گارانتی ها</h2>
 
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
+                    <Tabel pTitle="create_guarantee" showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
                 </div>
 
                 {showModal && <ModalGurantys data={data} setEditData={setEditData} editData={editData} setData={setData} />}

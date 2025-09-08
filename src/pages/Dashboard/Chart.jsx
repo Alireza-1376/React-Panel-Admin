@@ -20,7 +20,7 @@ let month = [
 const Chart = () => {
   const [chartMonth, setChartMonth] = useState([]);
   const [amountMonth, setAmountMonth] = useState([]);
-  const [loading , setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const options = {
     chart: {
@@ -43,7 +43,7 @@ const Chart = () => {
       tickAmount: 12,
     },
   };
-   const series = [
+  const series = [
     {
       name: "میلیون تومان",
       data: amountMonth,
@@ -52,41 +52,45 @@ const Chart = () => {
 
   async function getThisYearOrders() {
     setLoading(true)
-    const token = JSON.parse(localStorage.getItem("token"))
-    const response = await get("/admin/orders/this_year_orders", "", { Authorization: `Bearer ${token}` })
-    if (response.status == 200) {
+    try {
+      const token = JSON.parse(localStorage.getItem("token"))
+      const response = await get("/admin/orders/this_year_orders", "", { Authorization: `Bearer ${token}` })
+      if (response.status == 200) {
+        setLoading(false)
+        let monthArr = [];
+        let thisMonth = moment().jMonth()
+        for (let i = 0; i < 12; i++) {
+          if (thisMonth == -1) thisMonth = 11
+          monthArr.push({ month: thisMonth, amount: 0 })
+          thisMonth--;
+        }
+
+        const orders = response.data.data;
+        for (let order of orders) {
+          const monthIndex = moment(order.pay_at).jMonth()
+          const monthArrIndex = monthArr.findIndex((item) => {
+            return item.month == monthIndex;
+          })
+          monthArr[monthArrIndex].amount = monthArr[monthArrIndex].amount + parseInt((order.pay_amount / 1000000).toFixed(0))
+        }
+
+        const chartArray = monthArr.map((item) => {
+          return month[item.month]
+        }).reverse()
+
+        const amountArry = monthArr.map((item) => {
+          return item.amount
+        }).reverse()
+
+        setAmountMonth(amountArry)
+
+        setChartMonth(chartArray)
+
+      }
+    } catch (error) {
       setLoading(false)
-      let monthArr = [];
-      let thisMonth = moment().jMonth()
-      for (let i = 0; i < 12; i++) {
-        if (thisMonth == -1) thisMonth = 11
-        monthArr.push({ month: thisMonth, amount: 0 })
-        thisMonth--;
-      }
-
-      const orders = response.data.data;
-      for (let order of orders) {
-        const monthIndex = moment(order.pay_at).jMonth()
-        const monthArrIndex = monthArr.findIndex((item) => {
-          return item.month == monthIndex;
-        })
-        monthArr[monthArrIndex].amount = monthArr[monthArrIndex].amount + parseInt((order.pay_amount/1000000).toFixed(0))
-      }
-
-      const chartArray = monthArr.map((item) => {
-        return month[item.month]
-      }).reverse()
-
-      const amountArry = monthArr.map((item) => {
-        return item.amount
-      }).reverse()
-
-      setAmountMonth(amountArry)
-
-      setChartMonth(chartArray)
-
     }
-    setLoading(false)
+
   }
 
   useEffect(() => {
@@ -98,13 +102,13 @@ const Chart = () => {
 
   return (
     <>
-    {loading ?<div><PulseLoader size={20} color="purple"/></div> : <ReactApexChart
-      options={options}
-      series={series}
-      type="line"
-      height={300}
-      className="w-full"
-    />}
+      {loading ? <div><PulseLoader size={20} color="purple" /></div> : <ReactApexChart
+        options={options}
+        series={series}
+        type="line"
+        height={300}
+        className="w-full"
+      />}
     </>
   );
 };

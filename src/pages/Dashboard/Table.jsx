@@ -4,29 +4,34 @@ import { use, useEffect, useState } from "react";
 import { get } from "../../services/httpRequest";
 import { space } from "postcss/lib/list";
 import { PulseLoader } from "react-spinners";
+import ActionIcon from "../../components/ActionIcon";
 const Table = () => {
   const [completeProduct, setCompleteProduct] = useState([]);
   const [loading, setLoading] = useState(false);
 
   async function getCompleteProduct() {
     setLoading(true)
-    const token = JSON.parse(localStorage.getItem('token'))
-    const response = await get(`/admin/products/fewer_products`, "", { Authorization: `Bearer ${token}` })
-    if (response.data.data.length > 0) {
-      setCompleteProduct(response.data.data)
-      setLoading(false)
-    } else {
-      setCompleteProduct([])
+    try {
+      const token = JSON.parse(localStorage.getItem('token'))
+      const response = await get(`/admin/products/fewer_products`, "", { Authorization: `Bearer ${token}` })
+      if (response.data.data.length > 0) {
+        setCompleteProduct(response.data.data)
+        setLoading(false)
+      } else {
+        setCompleteProduct([])
+        setLoading(false)
+      }
+    } catch (error) {
       setLoading(false)
     }
   }
 
-  async function handleHide(id){
+  async function handleHide(id) {
     const token = JSON.parse(localStorage.getItem('token'))
-    const response = await get(`/admin/products/toggle_notification/${id}`,"",{ Authorization: `Bearer ${token}` })
-    if(response.status==200){
-      setCompleteProduct((prev)=>{
-        return prev.filter((p)=>{return p.id!=id})
+    const response = await get(`/admin/products/toggle_notification/${id}`, "", { Authorization: `Bearer ${token}` })
+    if (response.status == 200) {
+      setCompleteProduct((prev) => {
+        return prev.filter((p) => { return p.id != id })
       })
     }
   }
@@ -57,9 +62,9 @@ const Table = () => {
             </tr>
           </thead>
           <tbody>
-            {completeProduct.map((item) => {
+            {completeProduct.map((item , index) => {
               return (
-                <tr className="border border-gray-300">
+                <tr key={index+1} className="border border-gray-300">
                   <td className="border border-gray-300 text-center p-2">{item.id}</td>
                   <td className="border border-gray-300 text-center p-2">
                     {item.categories[0].title}
@@ -72,9 +77,7 @@ const Table = () => {
                   </td>
                   <td className="text-blue-500 flex justify-center p-3 items-center cursor-pointer">
                     <Tooltip arrow title="نادیده گرفتن">
-                      <button onClick={()=>{handleHide(item.id)}} className="hover:text-blue-800 font-bold text-lg rounded-full">
-                        <Icon name="eye" />
-                      </button>
+                      <ActionIcon pTitle="update_product_notification" name="eye" onClick={() => { handleHide(item.id) }} className="hover:text-blue-800 font-bold text-lg rounded-full" />
                     </Tooltip>
                   </td>
                 </tr>

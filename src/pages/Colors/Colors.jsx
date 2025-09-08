@@ -9,14 +9,15 @@ import { Delete, get } from "../../services/httpRequest";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import Tooltip from "@mui/material/Tooltip";
+import ActionIcon from "../../components/ActionIcon";
 
 const Colors = () => {
-    
+
     const { showModal, setShowModal } = useContext(ModalContext)
     const [data, setData] = useState([]);
-    const [loading ,setLoading] =useState(false)
+    const [loading, setLoading] = useState(false)
     const [editData, setEditData] = useState(null);
-    const [showAddBtn , setShowAddBtn] =useState(true)
+    const [showAddBtn, setShowAddBtn] = useState(true)
     async function getColorsData() {
         setLoading(true)
         try {
@@ -93,14 +94,10 @@ const Colors = () => {
                 return (
                     <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
                         <Tooltip title="ویرایش" arrow>
-                            <button onClick={() => handleEdit(item)} className="text-yellow-500">
-                                <Icon name="pen" size={16} />
-                            </button>
+                            <ActionIcon name="pen" pTitle="update_color" onClick={() => handleEdit(item)} className="text-yellow-500" />
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => { handleDelete(item) }} className="text-red-500">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon name="xMark" pTitle="delete_color" onClick={() => { handleDelete(item) }} className="text-red-500" />
                         </Tooltip>
                     </div>
                 )
@@ -116,7 +113,7 @@ const Colors = () => {
                 <h2 className="text-center text-2xl py-6">مدیریت رنگ ها</h2>
 
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام رنگ را وارد کنید" />
+                    <Tabel pTitle="create_color" showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام رنگ را وارد کنید" />
                 </div>
 
                 {showModal && <ModalColors editData={editData} setEditData={setEditData} data={data} setData={setData} />}

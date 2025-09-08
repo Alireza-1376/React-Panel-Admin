@@ -7,22 +7,23 @@ import ModalUser from "./ModalUser";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import ActionIcon from "../../components/ActionIcon";
 
 
 const Users = () => {
     const { showModal, setShowModal, editModal, setEditModal } = useContext(ModalContext)
-   
+
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const [countPerPage, setCountPerPage] = useState(8);
     const [searchChar, setSearchChar] = useState("")
     const [numOfPage, setNumOfPage] = useState();
-    const [editRoleData , setEditRoleData] =useState(null);
+    const [editRoleData, setEditRoleData] = useState(null);
     async function getUsersData(page, count, searchChar) {
         setLoading(true)
         try {
-             const token = JSON.parse(localStorage.getItem('token'))
+            const token = JSON.parse(localStorage.getItem('token'))
             const response = await get(`/admin/users?page=${page}&count=${count}&searchChar=${searchChar}`, "", { Authorization: `Bearer ${token}` })
             if (response.status == 200) {
                 setData(response.data.data.data)
@@ -58,7 +59,7 @@ const Users = () => {
                 try {
                     const token = JSON.parse(localStorage.getItem('token'))
                     const response = await Delete(`/admin/users/${item.id}`, { Authorization: `Bearer ${token}` })
-                    getUsersData(currentPage , countPerPage , searchChar)
+                    getUsersData(currentPage, countPerPage, searchChar)
                     Swal.fire({
                         text: "با موفقیت حذف شد",
                         icon: "success"
@@ -71,7 +72,7 @@ const Users = () => {
         });
     }
 
-    function handleEdit(item){
+    function handleEdit(item) {
         setEditRoleData(item)
         setShowModal(true)
     }
@@ -102,14 +103,10 @@ const Users = () => {
                 return (
                     <div className="flex items-center justify-center gap-2">
                         <Tooltip title="ویرایش" arrow>
-                            <button onClick={()=>{handleEdit(item)}} className="text-yellow-500">
-                                <Icon name="pen" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_user" name="pen" onClick={() => { handleEdit(item) }} className="text-yellow-500" />
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon pTitle="delete_user" name="xMark" onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center" />
                         </Tooltip>
                     </div>
                 )
@@ -124,7 +121,7 @@ const Users = () => {
                 <h2 className="text-center text-2xl py-6">مدیریت کاربران</h2>
 
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <ProductTabel showModal={showModal} setShowModal={setShowModal} numOfPage={numOfPage} currentPage={currentPage} setCurrentPage={setCurrentPage} handleSearchData={handleSearchData} loading={loading} data={data} dataInfo={dataInfo} title="جستجو" placeholder="قسمتی از ایمیل را وارد کنید" />
+                    <ProductTabel pTitle="create_user" showModal={showModal} setShowModal={setShowModal} numOfPage={numOfPage} currentPage={currentPage} setCurrentPage={setCurrentPage} handleSearchData={handleSearchData} loading={loading} data={data} dataInfo={dataInfo} title="جستجو" placeholder="قسمتی از ایمیل را وارد کنید" />
                 </div>
 
                 {showModal && <ModalUser editRoleData={editRoleData} setEditRoleData={setEditRoleData} data={data} setData={setData} setShowModal={setShowModal} />}

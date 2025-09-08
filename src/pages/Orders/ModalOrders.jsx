@@ -6,6 +6,7 @@ import { number, object, string } from "yup";
 import { get, post } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { PulseLoader } from "react-spinners";
 
 const initialValue = {
     cart_id: "",
@@ -286,7 +287,7 @@ const ModalOrders = () => {
 
                         {location.state == null ?
                             <div className="flex justify-center mt-8">
-                                <button type="submit" className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>
+                                {formik.isSubmitting ? <div><PulseLoader size={20} color="purple"/></div> : <button type="submit" className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>}
                             </div>
                             : null}
                     </Form>

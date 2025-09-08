@@ -5,7 +5,8 @@ import ProductTabel from '../../components/ProductTabel';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import Tooltip from '@mui/material/Tooltip';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import ActionIcon from '../../components/ActionIcon';
 
 const Products = () => {
   const navigation = useNavigate();
@@ -96,27 +97,19 @@ const Products = () => {
           <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
 
             <Tooltip title="ویرایش " arrow>
-              <button onClick={() => { navigation('/products/add-product', { state: item }) }} className="text-yellow-500">
-                <Icon name="pen" size={16} />
-              </button>
+              <ActionIcon name="pen" pTitle="update_product" onClick={() => { navigation('/products/add-product', { state: item }) }} className="text-yellow-500" />
             </Tooltip>
 
             <Tooltip title="افزودن ویژگی" arrow>
-              <button onClick={() => { navigation('/products/set-attribute', { state: item }) }} className="text-green-500">
-                <Icon name="plus" size={16} />
-              </button>
+              <ActionIcon name="plus" pTitle="read_product_attrs" onClick={() => { navigation('/products/set-attribute', { state: item }) }} className="text-green-500" />
             </Tooltip>
 
             <Tooltip title="افزودن تصویر" arrow>
-              <button onClick={() => { navigation('/products/gallery', { state: item }) }} className="text-purple-500">
-                <Icon name="image" size={16} />
-              </button>
+              <ActionIcon name="image" pTitle="create_product_image" onClick={() => { navigation('/products/gallery', { state: item }) }} className="text-purple-500" />
             </Tooltip>
 
             <Tooltip title="حذف" arrow>
-              <button onClick={() => handleDelete(item)} className="text-red-500">
-                <Icon name="xMark" size={16} />
-              </button>
+              <ActionIcon name="xMark" pTitle="delete_product" onClick={() => handleDelete(item)} className="text-red-500" />
             </Tooltip>
           </div>
         )

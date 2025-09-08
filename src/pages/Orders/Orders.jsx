@@ -6,6 +6,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import ActionIcon from "../../components/ActionIcon";
 
 
 
@@ -22,12 +23,16 @@ const Orders = () => {
 
     async function getAllOrders(currentPage, countInPage, searchChar) {
         setLoading(true)
-        const token = JSON.parse(localStorage.getItem("token"))
-        const response = await get(`/admin/orders?page=${currentPage}&count=${countInPage}&searchChar=${searchChar}`, "", { Authorization: `Bearer ${token}` })
-        if (response.status == 200) {
-            setData(response.data.data.data)
+        try {
+            const token = JSON.parse(localStorage.getItem("token"))
+            const response = await get(`/admin/orders?page=${currentPage}&count=${countInPage}&searchChar=${searchChar}`, "", { Authorization: `Bearer ${token}` })
+            if (response.status == 200) {
+                setData(response.data.data.data)
+                setLoading(false)
+                setNumOfPage(response.data.data.last_page)
+            }
+        } catch (error) {
             setLoading(false)
-            setNumOfPage(response.data.data.last_page)
         }
     }
 
@@ -92,14 +97,10 @@ const Orders = () => {
                 return (
                     <div className="flex items-center justify-center gap-2">
                         <Tooltip title="مشاهده سفارش" arrow>
-                            <button onClick={() => { navigate('/orders/add', { state: item }) }} className="text-blue-500">
-                                <Icon name="miniShopingCart" size={16} />
-                            </button>
+                            <ActionIcon pTitle="read_order" name="miniShopingCart" onClick={() => { navigate('/orders/add', { state: item }) }} className="text-blue-500"/>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => { handleDeleteOrder(item) }} className="text-red-500 flex justify-center items-center">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon pTitle="delete_order" name="xMark" onClick={() => { handleDeleteOrder(item) }} className="text-red-500 flex justify-center items-center"/>
                         </Tooltip>
                     </div>
                 )
@@ -126,6 +127,7 @@ const Orders = () => {
                         setCurrentPage={setCurrentPage}
                         handleSearchData={handleSearchData}
                         numOfPage={numOfPage}
+                        pTitle="create_order"
                         url="/orders/add"
                         title="جستجو"
                         placeholder="قسمتی از شماره موبایل را وارد کنید"

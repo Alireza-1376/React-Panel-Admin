@@ -8,6 +8,7 @@ import moment from "moment-jalaali";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import Tooltip from "@mui/material/Tooltip";
+import ActionIcon from "../../components/ActionIcon";
 
 
 
@@ -122,14 +123,10 @@ const Discounts = () => {
                 return (
                     <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
                         <Tooltip title="ویرایش" arrow>
-                            <button onClick={() => { handleEdite(item) }} className="text-yellow-500">
-                                <Icon name="pen" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_discount" name="pen" onClick={() => { handleEdite(item) }} className="text-yellow-500"/>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon pTitle="delete_discount" name="xMark" onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center"/>
                         </Tooltip>
                     </div >
                 )
@@ -152,6 +149,7 @@ const Discounts = () => {
                         title="جستجو"
                         placeholder="قسمتی از نام عنوان را وارد کنید"
                         showAddBtn={showAddBtn}
+                        pTitle="create_discount"
                     />
                 </div>
 

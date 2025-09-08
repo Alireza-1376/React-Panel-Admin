@@ -9,12 +9,18 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   async function getStatistics() {
     setLoading(true)
-    const token = JSON.parse(localStorage.getItem('token'))
-    const response = await get("/admin/orders/orders_statistics", "", { Authorization: `Bearer ${token}` })
-    if (response.status == 200) {
-      setStatistics(response.data.data)
+    try {
+      const token = JSON.parse(localStorage.getItem('token'))
+      const response = await get("/admin/orders/orders_statistics", "", { Authorization: `Bearer ${token}` })
+      if (response.status == 200) {
+        setStatistics(response.data.data)
+        setLoading(false)
+      } else {
+        setLoading(false)
+      }
+    } catch (error) {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import { SidebarContext } from "../contexts/SidebarContext";
 import Dashboard from "./Dashboard/Dashboard";
 import Category from "./Category/Category";
 import Products from "./Products/Products";
-import {  Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Colors from "./Colors/Colors";
 import Guranty from "./Gurantys/Gurantys";
 import Brands from "./Brands/Brands";
@@ -28,20 +28,22 @@ import ModalOrders from "./Orders/ModalOrders";
 
 const Page = () => {
   const { setOpenSidebar } = useContext(SidebarContext);
-  const permissionCategory =usePermissions("read_categories")
-  const permissionProduct =usePermissions("read_products")
-  const permissionColors =usePermissions("read_colors")
-  const permissionGuaranties =usePermissions("read_guarantees")
-  const permissionBrands =usePermissions("read_brands")
-  const permissionDiscount =usePermissions("read_discounts")
-  const permissionUsers =usePermissions("read_users")
-  const permissionRoles =usePermissions("read_roles")
-  const permissionPermissions =usePermissions("read_permissions")
+  const permissionCategory = usePermissions("read_categories")
+  const permissionProduct = usePermissions("read_products")
+  const permissionColors = usePermissions("read_colors")
+  const permissionGuaranties = usePermissions("read_guarantees")
+  const permissionBrands = usePermissions("read_brands")
+  const permissionDiscount = usePermissions("read_discounts")
+  const permissionUsers = usePermissions("read_users")
+  const permissionRoles = usePermissions("read_roles")
+  const permissionPermissions = usePermissions("read_permissions")
   const permissionDeliveries = usePermissions("read_deliveries")
-  const permissionBaskets =usePermissions("read_carts")
-  const permissionCreateBaskets =usePermissions("create_cart")
-  const permissionOrders =usePermissions("read_orders")
-  const permissionCreateOrder =usePermissions("create_order")
+  const permissionBaskets = usePermissions("read_carts")
+  const permissionCreateBaskets = usePermissions("create_cart")
+  const permissionOrders = usePermissions("read_orders")
+  const permissionCreateOrder = usePermissions("create_order")
+  const permissionProductAttr =usePermissions("create_product_attr")
+
 
 
   return (
@@ -49,12 +51,11 @@ const Page = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         {permissionCategory &&
-        <Route path="/categories" element={<Category />}>
-          <Route path=":id" element={<CategoriesChildren />} />
-        </Route> 
+          <Route path="/categories" element={<Category />}>
+            <Route path=":id" element={<CategoriesChildren />} />
+          </Route>
         }
-
-        <Route path="/categories/:id/attributes" element={<AddProperty />} />
+        {permissionProductAttr && <Route path="/categories/:id/attributes" element={<AddProperty />} />}
         {permissionProduct && <Route path="/products" element={<Products />} />}
 
         <Route path="/products/add-product" element={<ModalProduct />} />
@@ -65,17 +66,17 @@ const Page = () => {
         {permissionGuaranties && <Route path="/gurantys" element={<Guranty />} />}
         {permissionBrands && <Route path="/brands" element={<Brands />} />}
         {permissionDiscount && <Route path="/discounts" element={<Discounts />} />}
-        
+
         {permissionBaskets && <Route path="/baskets" element={<Baskets />} />}
-        {permissionCreateBaskets && <Route path="/baskets/add" element={<ModalBasket />}/>}
+        {permissionCreateBaskets && <Route path="/baskets/add" element={<ModalBasket />} />}
         {permissionOrders && <Route path="/orders" element={<Orders />} />}
-        {permissionCreateOrder && <Route path="/orders/add" element={<ModalOrders/>} />}
+        {permissionCreateOrder && <Route path="/orders/add" element={<ModalOrders />} />}
         {permissionDeliveries && <Route path="/sends" element={<Sends />} />}
-       
-        {permissionUsers &&  <Route path="/users" element={<Users />} />}
+
+        {permissionUsers && <Route path="/users" element={<Users />} />}
         {permissionRoles && <Route path="/roles" element={<Roles />} />}
-        {permissionPermissions &&  <Route path="/permissions" element={<Permissions />} />}
-       
+        {permissionPermissions && <Route path="/permissions" element={<Permissions />} />}
+
         <Route path="/questions" element={<Questions />} />
         <Route path="/comments" element={<Comments />} />
         <Route path="/logout" element={<LogOut />} />

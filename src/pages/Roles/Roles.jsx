@@ -7,6 +7,7 @@ import ModalRoles from "./ModalRoles";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import ActionIcon from "../../components/ActionIcon";
 
 
 
@@ -100,19 +101,13 @@ const Roles = () => {
                 return (
                     <div className="flex items-center justify-center gap-2">
                         <Tooltip title="ویرایش نقش" arrow>
-                            <button onClick={() => { editRole({ ...item, editPermission: false }) }} className="text-yellow-500">
-                                <Icon name="pen" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_role" name="pen" onClick={() => { editRole({ ...item, editPermission: false }) }} className="text-yellow-500"/>
                         </Tooltip>
                         <Tooltip title="ویرایش دسترسی ها" arrow>
-                            <button onClick={() => { editRole({ ...item, editPermission: true }) }} className="text-blue-500">
-                                <Icon name="fingerPrint" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_role_permissions" name="fingerPrint" onClick={() => { editRole({ ...item, editPermission: true }) }} className="text-blue-500"/>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => handleDeleteRole(item)} className="text-red-500 flex justify-center items-center">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_role_permissions" name="xMark" onClick={() => handleDeleteRole(item)} className="text-red-500 flex justify-center items-center"/>
                         </Tooltip>
                     </div>
                 )
@@ -127,7 +122,7 @@ const Roles = () => {
                 <h2 className="text-center text-2xl py-6">مدیریت نقش ها</h2>
 
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} title="جستجو" placeholder="قسمتی از نام نقش را وارد کنید" />
+                    <Tabel pTitle="create_role" showAddBtn={showAddBtn} loading={loading} numOfData={8} data={data} dataInfo={dataInfo} title="جستجو" placeholder="قسمتی از نام نقش را وارد کنید" />
                 </div>
 
                 {showModal && <ModalRoles data={data} setData={setData} permissions={permissions} setEditRoleItem={setEditRoleItem} editRoleItem={editRoleItem} setShowModal={setShowModal} />}

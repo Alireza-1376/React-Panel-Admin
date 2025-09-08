@@ -6,6 +6,7 @@ import { Delete, get } from "../../services/httpRequest";
 import Tooltip from "@mui/material/Tooltip";
 import ModalDeliveries from "./ModalDeliveries";
 import Swal from "sweetalert2";
+import ActionIcon from "../../components/ActionIcon";
 
 
 
@@ -91,14 +92,10 @@ const Sends = () => {
                 return (
                     <div className="flex items-center justify-center gap-2">
                         <Tooltip title="ویرایش" arrow>
-                            <button onClick={() => { handleEdit(item) }} className="text-yellow-500">
-                                <Icon name="pen" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_delivery" name="pen" onClick={() => { handleEdit(item) }} className="text-yellow-500"/>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon pTitle="delete_delivery" name="xMark" onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center"/>
                         </Tooltip>
                     </div>
                 )

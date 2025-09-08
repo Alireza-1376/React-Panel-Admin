@@ -114,9 +114,6 @@ const Category = () => {
 
         {params.id ? (
           <Tooltip title="افزودن ویژگی" arrow>
-            <button >
-              <Icon name="plus" size={16} />
-            </button>
             <ActionIcon name="plus" pTitle="create_category_attr" onClick={() => { navigate(`/categories/${item.id}/attributes`, { state: item }) }} className={"text-green-500"}/>
           </Tooltip>
         ) : null}

@@ -170,7 +170,7 @@ const ModalBasket = () => {
         >
             {formik => {
                 return <Modal
-                    title="جزئیات و افزودن سبد خرید"
+                    title={location.state!=null ? "ویرایش سبد خرید" : "جزئیات و افزودن سبد خرید"}
                     screen={true}
                 >
                     <Form className="mt-4 p-4">
@@ -292,7 +292,7 @@ const ModalBasket = () => {
 
 
                     <div className="flex justify-center mt-8 gap-4">
-                        <button type="button" onClick={() => { handleAddCarts(selectedProducts, formik) }} className="bg-blue-600 text-white px-10 py-2 rounded-md">ذخیره</button>
+                        <button type="button" onClick={() => { handleAddCarts(selectedProducts, formik) }} className="bg-blue-600 text-white px-10 py-2 rounded-md">{location.state!=null ? "ویرایش" : "ذخیره"}</button>
                         <div className="flex items-center bg-gray-200 rounded-md px-4 gap-2">
                             <span>جمع کل :</span>
                             <span>{totalPrice}</span>

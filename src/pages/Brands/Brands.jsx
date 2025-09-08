@@ -9,17 +9,18 @@ import EditBrands from "./EditBrands";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import Tooltip from "@mui/material/Tooltip";
+import ActionIcon from "../../components/ActionIcon";
 
 
 
 const Brands = () => {
-    
+
     const { showModal, setShowModal, editModal, setEditModal } = useContext(ModalContext)
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
     const [editData, setEditData] = useState();
     const [update, setUpdate] = useState(0)
-    const [showAddBtn , setShowAddBtn] =useState(true)
+    const [showAddBtn, setShowAddBtn] = useState(true)
     async function getBrandsData() {
         setIsLoading(true)
         try {
@@ -102,14 +103,10 @@ const Brands = () => {
                 return (
                     <div className=" border-gray-300 text-center py-3 flex justify-center gap-2 items-center">
                         <Tooltip title="ویرایش" arrow>
-                            <button onClick={() => { setEditModal(true); handleEdit(id) }} className="text-yellow-500 flex justify-center items-center">
-                                <Icon name="pen" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_brand" name="pen" onClick={() => { setEditModal(true); handleEdit(id) }} className="text-yellow-500 flex justify-center items-center" />
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => { handlDelete(id) }} className="text-red-500 flex justify-center items-center">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon pTitle="delete_brand" name="xMark" onClick={() => { handlDelete(id) }} className="text-red-500 flex justify-center items-center" />
                         </Tooltip>
                     </div>
                 )
@@ -123,7 +120,7 @@ const Brands = () => {
             <div className="mt-[72.5px] overflow-hidden">
                 <h2 className="text-center text-2xl py-6">مدیریت برند ها</h2>
                 <div id="products-table" className="m-4 overflow-x-auto">
-                    <Tabel showAddBtn={showAddBtn} loading={isLoading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
+                    <Tabel pTitle="create_brand" showAddBtn={showAddBtn} loading={isLoading} numOfData={8} data={data} dataInfo={dataInfo} addFields={addFields} title="جستجو" placeholder="قسمتی از نام عنوان را وارد کنید" />
                 </div>
 
                 {showModal && <ModalBrands setData={setData} />}

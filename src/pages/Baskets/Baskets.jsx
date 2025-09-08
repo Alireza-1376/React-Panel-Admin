@@ -8,6 +8,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import ActionIcon from "../../components/ActionIcon";
 
 
 
@@ -104,14 +105,10 @@ const Baskets = () => {
                 return (
                     <div className="flex justify-center gap-2">
                         <Tooltip title="ویرایش" arrow>
-                            <button onClick={() => {navigate("/baskets/add" , {state:item})}} className="text-yellow-500 flex justify-center items-center">
-                                <Icon name="pen" size={16} />
-                            </button>
+                            <ActionIcon pTitle="update_cart" name="pen" onClick={() => {navigate("/baskets/add" , {state:item})}} className="text-yellow-500 flex justify-center items-center"/>
                         </Tooltip>
                         <Tooltip title="حذف" arrow>
-                            <button onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center">
-                                <Icon name="xMark" size={16} />
-                            </button>
+                            <ActionIcon pTitle="delete_cart" name="xMark" onClick={() => { handleDelete(item) }} className="text-red-500 flex justify-center items-center"/>
                         </Tooltip>
                     </div>
                 )
